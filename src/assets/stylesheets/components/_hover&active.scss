@@ -1,0 +1,22 @@
+.btn-outline-light:hover{
+    color: $primaryDark;
+    font-weight: bold;
+  }
+
+.nav-link:hover, .nav-link:focus{
+  color: $white;
+  font-weight: bold;
+}
+.nav-link.active, .cart span:hover{
+   font-weight: bold;
+}
+
+// .page-link.active{
+//   color: $white;
+// }
+
+.hoverBoxShadow{
+  &:hover{
+      box-shadow: 2px 2px 10px rgba($dark,0.2) !important ;
+  }
+}

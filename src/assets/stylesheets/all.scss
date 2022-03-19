@@ -1,0 +1,18 @@
+// 變數
+@import "~bootstrap/scss/functions";
+@import "./helpers/variables"; //自定義變數
+@import "./helpers/utilities";
+
+@import "~bootstrap/scss/bootstrap";
+
+//全域設定
+@import "./setting/base";
+@import "./setting/util";
+
+//helpers
+@import "./helpers/helper";
+@import "./components/hover&active";
+@import "./components/navActive";
+@import "./components/swiper";
+@import "./components/input";
+
