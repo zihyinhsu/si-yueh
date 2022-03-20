@@ -48,11 +48,11 @@
                   <p class="fs-3 fw-bold vh-70 vh-md-auto py-4 w-100" v-if="filterProducts.length === 0">沒有相符的搜尋結果 Σ( ° △ °)</p>
                     <li class="bg-white mb-4 mb-md-8 hoverBoxShadow" v-for="item in filterProducts" :key="item.id">
                         <div class=" d-flex align-items-center w-100 p-3 p-md-5 h-100">
-                            <router-link class="text-primary me-4 me-md-5 w-45 w-md-30" :to="`/product/${item.id}`">
+                            <router-link class="text-primary me-4 me-md-5 w-42.5 w-md-30" :to="`/product/${item.id}`">
                                 <img class="ratio ratio-4x3 rounded-4"
                                     :src="item.imageUrl" :alt="item.title">
                                 </router-link>
-                                <div class="bookIntro border-end-md pe-md-1 w-55 w-md-50 me-md-4">
+                                <div class="bookIntro border-end-md pe-md-1 w-57.5 w-md-50 me-md-4">
                                     <p class="fw-bold fs-md-4 mb-2 mb-md-3">{{item.title}}</p>
                                     <p class="fs-small fs-md-5 mb-2 mb-md-3">作者 : {{item.author}}</p>
                                     <p class="fs-small fs-md-5 mb-2 mb-md-3">出版社 : {{item.publishing_house}}</p>

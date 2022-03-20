@@ -31,12 +31,12 @@
             <p class="text-primary fs-5 fs-md-4 fw-bold mb-2">定價 : <span class="text-decoration-line-through">NT$ {{product.origin_price}}</span></p>
             <p class="text-primary fs-5 fs-md-4 fw-bold">優惠價 : NT$ {{product.price}}</p>
           </div>
-          <div class="d-flex justify-content-between justify-content-md-start">
-            <div class="btn btn-outline-primary w-100 w-md-auto me-3">
+          <div class="d-flex justify-content-between justify-content-md-start w-100">
+            <div class="btn btn-outline-primary w-90 w-md-auto me-3">
               <i class="fa-solid fa-bookmark me-3"></i>加入收藏
               </div>
             <div class="btn btn-primary text-white w-100 w-md-auto" @click="addToCart(product.id)">
-              <i class="fa-solid fa-cart-plus me-3"></i>加入購物車<span v-show="isLoadingItem === product.id"><i class="fas fa-spinner fa-pulse ms-1"></i></span>
+              <i class="fa-solid fa-cart-plus me-3"></i>加入購書車<span v-show="isLoadingItem === product.id"><i class="fas fa-spinner fa-pulse ms-1"></i></span>
               </div>
           </div>
         </div>
