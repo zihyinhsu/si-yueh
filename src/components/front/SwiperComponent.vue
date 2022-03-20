@@ -1,5 +1,6 @@
 <template>
-<div class="container py-7">
+<!-- 如果一個類別中產品數為零，整行會自動消失 -->
+<div class="container py-7" v-if="products.length!==0">
     <h2 class="category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"
     :class="{'bg-light': titlebgColor }"
     v-if="showTitle" style="background:white"
@@ -20,6 +21,7 @@
     class="bookSwiper rounded-4 h-100 p-2">
     <swiper-slide class="swiperSlide" v-for="item in products" :key="item.id"
       :class="{'d-none': id === item.id }">
+      <!-- ↑若產品內頁的產品id與推薦書籍id相同則隱藏 -->
       <!-- <div v-show="isLoadingItem = 0"><img src="../../assets/images/loading.gif"></div> -->
         <div class="bookCoverImg position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow">
           <router-link :to="`/product/${item.id}`">
@@ -27,7 +29,8 @@
             </router-link>
             <div class="btn btn-primary position-absolute bottom-0 w-100 text-white"
             @click="addToCart(item.id)">
-                <i class="fa-solid fa-cart-plus me-3"></i>加入購物車 <span v-show="isLoadingItem === item.id"><i class="fas fa-spinner fa-pulse ms-1"></i></span>
+                <i class="fa-solid fa-cart-plus me-3"></i>加入購物車 <span v-show="isLoadingItem === item.id">
+                  <i class="fas fa-spinner fa-pulse ms-1"></i></span>
                 </div>
               <div class="bookMark btn btn-sm btn-primaryLight position-absolute top-0 end-0 rounded-circle m-2">
                 <span class="material-icons-outlined text-white fs-5 mt-1">bookmark_border</span>

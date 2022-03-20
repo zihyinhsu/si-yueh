@@ -8,7 +8,7 @@
           <li class="breadcrumb-item"><router-link class="text-secondaryDark fs-small fs-md-5" to="/">首頁</router-link></li>
           <li class="breadcrumb-item">
             <router-link class="text-secondaryDark fs-small fs-md-5" to="/search">{{product.category}}</router-link></li>
-          <li class="breadcrumb-item text-secondaryDark active" aria-current="page"><span class="fs-small fs-md-5">{{product.title}}</span></li>
+          <li class="breadcrumb-item text-secondaryDark active" aria-current="page"><span class="fs-small fw-bold fs-md-5">{{product.title}}</span></li>
         </ol>
       </nav>
       <!-- 書籍基本資料 -->
@@ -32,7 +32,7 @@
             <p class="text-primary fs-5 fs-md-4 fw-bold">優惠價 : NT$ {{product.price}}</p>
           </div>
           <div class="d-flex justify-content-between justify-content-md-start">
-            <div class="btn btn-outline-primary w-100 w-md-auto me-4">
+            <div class="btn btn-outline-primary w-100 w-md-auto me-3">
               <i class="fa-solid fa-bookmark me-3"></i>加入收藏
               </div>
             <div class="btn btn-primary text-white w-100 w-md-auto" @click="addToCart(product.id)">
@@ -87,7 +87,7 @@
 <script>
 import SwiperComponent from '@/components/front/SwiperComponent.vue'
 import swiperMixin from '@/mixins/swiperMixin'
-
+import emitter from '@/methods/emitter.js'
 export default {
   mixins: [swiperMixin],
   components: {
@@ -117,6 +117,7 @@ export default {
           qty
         }
       }).then((res) => {
+        emitter.emit('get-cart-list')
         alert(res.data.message)
         this.isLoadingItem = ''
       }).catch((err) => {

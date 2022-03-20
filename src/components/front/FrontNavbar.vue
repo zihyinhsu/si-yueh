@@ -8,7 +8,7 @@
         </h1>
       </router-link>
       <!-- cart -->
-      <div class="cart dropdown ms-auto order-lg-3" style="cursor:pointer">
+      <div class="cart dropdown ms-auto cursor-pointer order-lg-3">
         <div class="text-secondaryDark" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
           <div class="d-flex">
               <div class="position-relative me-md-2">

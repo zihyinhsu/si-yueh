@@ -11,9 +11,21 @@
    font-weight: bold;
 }
 
-// .page-link.active{
-//   color: $white;
-// }
+.text-secondary{
+  &:hover{
+    color: $secondaryDark !important;
+  }
+}
+.text-primary{
+  &:hover{
+    color: $primaryDark !important;
+  }
+}
+.btn{
+  &:hover{
+    color: $white;
+  }
+}
 
 .hoverBoxShadow{
   &:hover{

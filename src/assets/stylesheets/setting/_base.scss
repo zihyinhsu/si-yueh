@@ -2,9 +2,16 @@
     box-sizing: border-box;
     text-decoration: none;
     // outline: solid 1px;
+    transition: 0.1s;
   }
 
+  .fa,.far,.fas{
+    font-family: 'Font Awesome 5 Pro'
+  }
 
+  .fa,.fas{
+    font-weight:900;
+  }
   body{
     font-family: 'Noto Sans TC', sans-serif !important;
   }

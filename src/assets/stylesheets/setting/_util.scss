@@ -4,7 +4,9 @@
   background-attachment: fixed;
   }
 }
-
+.opacity-0\.9{
+  opacity: 0.9;
+}
 // text-shadow
 .text-shadow{
   text-shadow: 0 4px 4px rgba($dark,0.5);
@@ -13,8 +15,13 @@
 .box-shadow{
   box-shadow:0px 0px 15px rgba($dark,0.1) !important ;
 }
+
 .bg-dark-mask{
   background-color:rgba($dark,0.2)
+}
+
+.cursor-pointer{
+  cursor: pointer;
 }
 
 .btn-outline-primary{
@@ -29,7 +36,6 @@
 .dropdown-menu-end[data-bs-popper] {
   right: -245% !important;
   margin-top: 1rem;
-	// left: -1000% !important;
   @include media-breakpoint-up(md) {
     right: 0 !important;
   }
@@ -39,6 +45,7 @@
   width: 100px;
   height: 100px;
 }
+
 .accordion-button::after{
   background-image: url('https://icon-library.com/images/white-down-arrow-icon/white-down-arrow-icon-9.jpg') !important;
   background-position: center center;
@@ -67,9 +74,5 @@
   .accordion-button{
     pointer-events: none;
   }
-}
-
-@include media-breakpoint-up(lg) {
-
 }
 

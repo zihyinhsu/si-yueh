@@ -19,7 +19,7 @@
         </div>
 
         <div>
-            <div class="btn btn-outline-light d-flex justify-content-center align-items-center mb-4">
+            <div class="btn btn-outline-light d-flex justify-content-center align-items-center mb-4" @click="signOut">
             <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>登出
             </div>
 
@@ -30,3 +30,14 @@
         </div>
 </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    signOut () {
+      document.cookie = "zytoken=''; expires=''"
+      this.$router.push('/login')
+    }
+  }
+}
+</script>
