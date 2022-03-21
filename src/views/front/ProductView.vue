@@ -6,8 +6,7 @@
       <nav aria-label="breadcrumb ">
         <ol class="breadcrumb py-3 py-md-6 m-0">
           <li class="breadcrumb-item"><router-link class="text-secondaryDark fs-small fs-md-5" to="/">首頁</router-link></li>
-          <li class="breadcrumb-item">
-            <router-link class="text-secondaryDark fs-small fs-md-5" to="/search">{{product.category}}</router-link></li>
+          <li class="breadcrumb-item"><router-link class="text-secondaryDark fs-small fs-md-5" to="/search">全站搜尋</router-link></li>
           <li class="breadcrumb-item text-secondaryDark active" aria-current="page"><span class="fs-small fw-bold fs-md-5">{{product.title}}</span></li>
         </ol>
       </nav>
@@ -18,7 +17,10 @@
         </div>
         <div class="col-md-4 mb-4 mb-md-0 border-end-md-2">
           <div class="bookTitle mb-4">
-            <h2 class="fs-3 fw-bold mb-2">{{product.title}}</h2>
+            <div class="d-flex align-items-center mb-2">
+              <h2 class="fs-3 fw-bold">{{product.title}}</h2>
+              <p class="p-1 bg-primary text-white fs-5 ms-3">{{product.category}} </p>
+            </div>
             <p class="fs-4" v-if="product.subTitle">{{product.subTitle}}</p>
           </div>
           <div class="bookData mb-4">
@@ -42,7 +44,7 @@
         </div>
         <div class="col-md-5 mt-4 mt-md-0">
           <div class="bookIntroContent">
-            <p class="fs-5 fs-md-4 fw-bold text-center ">{{product.content}}</p>
+            <p class="fs-5 fs-md-4 fw-bold text-center " v-html="product.content"></p>
           </div>
         </div>
       </div>
@@ -53,29 +55,43 @@
     <div class="row px-0 pt-5 pb-9">
       <div class="col-md-7 mb-6 mb-md-0">
         <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 詳細書訊</h2>
-        <p>{{product.description}}</p>
+        <p v-html="product.description"></p>
       </div>
       <div class="col-md-5 mb-6">
-        <div class="col mb-6">
-          <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 目錄</h2>
-        <p>{{product.table_contents}}</p>
-        </div>
-        <div class="col mb-6">
-            <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 作者簡介</h2>
-            <p>{{product.author_intro}}</p>
-          </div>
+          <div class="col mb-6">
+              <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 作者簡介</h2>
+              <p v-html="product.author_intro"></p>
+            </div>
           <div class="col">
             <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"
             v-if="product.translator_intro"># 譯者簡介</h2>
-            <p>{{product.translator_intro}}</p>
+            <p v-html="product.translator_intro"></p>
           </div>
-          <div class="col">
+          <div class="col mb-6">
             <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"
             v-if="product.illustrator_intro"># 繪者簡介</h2>
-            <p>{{product.illustrator_intro}}</p>
+            <p v-html="product.illustrator_intro"></p>
           </div>
+
+          <div class="col">
+          <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 目錄</h2>
+          <p v-html="product.table_contents"></p>
+        </div>
       </div>
+
     </div>
+     <!-- <div class="row mb-6">
+          <div class="col-6">
+            <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"
+            v-if="product.translator_intro"># 譯者簡介</h2>
+            <p v-html="product.translator_intro"></p>
+          </div>
+          <div class="col-6">
+            <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold"
+            v-if="product.illustrator_intro"># 繪者簡介</h2>
+            <p v-html="product.illustrator_intro"></p>
+          </div>
+      </div> -->
   </div>
   <div class="container">
       <h2 class="category bg-white fs-3 d-inline-block text-primaryDark p-2 fw-bold"># 喜歡這本的人，也看了 ...</h2>

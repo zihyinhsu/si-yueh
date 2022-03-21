@@ -52,7 +52,7 @@
                                 <img class="ratio ratio-4x3 rounded-4"
                                     :src="item.imageUrl" :alt="item.title">
                                 </router-link>
-                                <div class="bookIntro border-end-md pe-md-1 w-57.5 w-md-50 me-md-4">
+                                <div class="bookIntro border-end-md pe-md-1 w-57.5 w-md-45 me-md-4">
                                     <p class="fw-bold fs-md-4 mb-2 mb-md-3">{{item.title}}</p>
                                     <p class="fs-small fs-md-5 mb-2 mb-md-3">作者 : {{item.author}}</p>
                                     <p class="fs-small fs-md-5 mb-2 mb-md-3">出版社 : {{item.publishing_house}}</p>
@@ -63,7 +63,8 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="bookContent w-50 d-none d-md-block">{{item.content}}
+                                <div class="bookContent w-55 d-none d-md-block">
+                                    <p v-html="item.content"></p>
                                     <br>
                                     <div class="text-end">
                                         <router-link class="text-primary w-100" :to="`/product/${item.id}`">繼續閱讀</router-link>
@@ -160,7 +161,7 @@ export default {
   computed: {
     filterProducts () {
       return this.products.filter((item) => {
-        const result = item.title.includes(this.search)
+        const result = item.title.includes(this.search) || item.author.includes(this.search)
         return result
       })
     }

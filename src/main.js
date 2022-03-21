@@ -10,6 +10,8 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 // material icon
 import 'material-icons'
+// ck editor5
+import CKEditor from '@ckeditor/ckeditor5-vue'
 
 // 匯入 vee-validate 主套件
 import {
@@ -43,6 +45,7 @@ setLocale('zh_TW')
 
 const app = createApp(App).use(router)
 app.use(VueAxios, axios)
+app.use(CKEditor)
 
 app.component('FormView', Form)
 app.component('FieldView', Field)

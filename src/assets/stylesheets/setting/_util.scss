@@ -4,6 +4,7 @@
   background-attachment: fixed;
   }
 }
+
 .opacity-0\.9{
   opacity: 0.9;
 }
@@ -33,6 +34,13 @@
   color: $dark;
 }
 
+.row label{
+  color: $secondaryDark;
+}
+.row input{
+  border: 1px solid $primary;
+}
+
 .dropdown-menu-end[data-bs-popper] {
   right: -245% !important;
   margin-top: 1rem;
@@ -40,6 +48,8 @@
     right: 0 !important;
   }
 }
+
+
 
 .size-100{
   width: 100px;
@@ -54,11 +64,15 @@
   }
 }
 
+.letter-md-spacing{
+  letter-spacing:1px;
+  @include media-breakpoint-up(md) {
+    letter-spacing:10px
+    }
+}
+
 // breakpoint
 @include media-breakpoint-up(md) {
-  .letter-md-spacing{
-    letter-spacing:10px
-  }
   .fs-md-display{
     font-size: 50px;
   }

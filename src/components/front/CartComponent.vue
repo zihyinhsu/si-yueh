@@ -20,7 +20,7 @@
                     <i class="fa-solid fa-book-open-reader ms-2"></i></router-link>
               </div>
               <!-- 購物車品項 -->
-                <li class="d-flex justify-content-between align-items-center border-bottom-1 p-3" v-for="item in tempCartData.carts" :key="item.id">
+                <li class="d-flex justify-content-between align-items-center border-bottom-1 p-3" v-for="item in tempCartData.carts" :key="item.product.id">
                     <div class="d-flex align-items-center w-100">
                         <router-link class="rounded-1 overflow-hidden me-2 cursor-pointer" :to="`/product/${item.product.id}`" style="width:80px;">
                             <img class="ratio ratio-3x4" :src="item.product.imageUrl" :alt="item.product.title">
@@ -31,7 +31,7 @@
                             <div class="input-group">
                                 <div class="input-group w-md-75">
                                     <button class="btn btn-outline-primary minus fs-small" type="button"
-                                    @click="updateCartItem(item, item.qty--)" :class="{'disabled':item.qty<=1}">
+                                    @click="updateCartItem(item.product.id, item.qty--)" :class="{'disabled':item.qty<=1}">
                                         <i class="fa-solid fa-minus"></i>
                                     </button>
                                     <input type="number" class="form-control text-center fs-small" min="1" max="10"

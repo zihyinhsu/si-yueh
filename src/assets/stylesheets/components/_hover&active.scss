@@ -3,12 +3,19 @@
     font-weight: bold;
   }
 
-.nav-link:hover, .nav-link:focus{
-  color: $white;
-  font-weight: bold;
+.nav-link{
+  color: $primary;
+  &:hover, &:focus{
+    color: $primaryDark;
+    font-weight: bold;
+  }
 }
 .nav-link.active, .cart span:hover{
    font-weight: bold;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link{
+  background: $primaryDark;
 }
 
 .text-secondary{
@@ -16,7 +23,8 @@
     color: $secondaryDark !important;
   }
 }
-.text-primary{
+
+.text-primary, .text-hover-primaryDark{
   &:hover{
     color: $primaryDark !important;
   }

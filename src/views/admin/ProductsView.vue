@@ -28,23 +28,22 @@
             <td>{{item.title}}</td>
             <td>NT$ {{item.origin_price}}</td>
             <td>NT$ {{item.price}}</td>
-            <td class="ps-4">
+            <td class="ps-5">
               <!-- ToggleSwitch -->
                     <label class="switch">
                       <input type="checkbox"
-                      @change="updateProducts(item.id, item)"
+                      @change="updateProducts(item,false)"
                       v-model="item.is_enabled"
                       :true-value="1" :false-value="0">
                       <span class="slider"></span>
                   </label>
                 <!-- ToggleSwitch -->
             </td>
-
-            <td class="d-flex">
-              <div class="editBtn" @click="openModal ('edit', item)">
+            <td class="d-flex" style="height:41px">
+              <div class="editBtn d-flex align-items-center h-100" @click="openModal ('edit', item)">
                 <i class="fa-solid fa-pencil cursor-pointer text-primary fs-4 me-6"></i>
               </div>
-              <div class="delBtn" @click="openModal ('delete', item)">
+              <div class="delBtn d-flex align-items-center h-100" @click="openModal ('delete', item)">
                 <i class="fa-solid fa-trash cursor-pointer text-primary fs-4"></i>
               </div>
             </td>
@@ -52,8 +51,10 @@
         </tbody>
       </table>
       <!-- productModal -->
-      <ProductModal ref="productModal"></ProductModal>
-      <DelModal ref="delModal"></DelModal>
+      <ProductModal ref="productModal"
+      :temp="temp" :isCreateNew="isCreateNew" @update-products="updateProducts"></ProductModal>
+      <!-- delModal -->
+      <DelModal ref="delModal" :temp="temp" @del-item="delProductItem"></DelModal>
       <!-- pagination -->
       <PagiNation class="d-flex justify-content-center mb-4 mb-md-6"
                   :pages="pagination"></PagiNation>
@@ -73,7 +74,7 @@ export default {
       category: [],
       pagination: [],
       selectAnswer: '',
-      isCreateNew: true
+      isCreateNew: false
     }
   },
   components: {
@@ -123,18 +124,27 @@ export default {
       // 過濾出重複的元素
       this.category = [...new Set(array)]
     },
-    updateProducts (id, product) {
-      this.$http.put(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product/${id}`,
-        { data: product })
+    updateProducts (product, isCreateNew) {
+      let url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product`
+      let method = 'post'
+      console.log(method, isCreateNew)
+      // 如果是編輯模式
+      if (isCreateNew === false) {
+        method = 'put'
+        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product/${product.id}`
+      }
+      this.$http[method](url, { data: product })
         .then((res) => {
           alert(res.data.message)
+          this.$refs.productModal.hideModal()
+          this.getProducts()
         }).catch((err) => {
-          console.log(err)
+          console.dir(err)
         })
     },
     openModal (status, product) {
       if (status === 'isCreateNew') {
-        this.temp = []
+        this.temp = {}
         this.$refs.productModal.openModal()
         this.isCreateNew = true
       } else if (status === 'edit') {
@@ -145,6 +155,16 @@ export default {
         this.temp = { ...product }
         this.$refs.delModal.openModal()
       }
+    },
+    delProductItem () {
+      this.$http.delete(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product/${this.temp.id}`)
+        .then((res) => {
+          alert(res.data.message)
+          this.$refs.delModal.hideModal()
+          this.getProducts()
+        }).catch((error) => {
+          alert(error.data.message)
+        })
     }
   },
   mounted () {
