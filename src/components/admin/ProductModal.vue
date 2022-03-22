@@ -3,7 +3,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content" style="background-color:transparent;">
       <div class="modal-header bg-primary">
-        <h4 class="modal-title text-white">{{isCreateNew ? '新增' : '編輯'}}商品</h4>
+        <h4 class="modal-title text-white">{{isCreateNew ? '新增' : '編輯'}}書籍</h4>
       </div>
       <div class="modal-body bg-white">
         <div class="d-flex justify-content-center align-items-center">
@@ -18,12 +18,12 @@
                 <div class="row">
                   <div class="mb-3 col-md-6">
                        <label for="title" class="form-label">標題</label>
-                    <input id="title" type="text" class="form-control" placeholder="請輸入標題" v-model="tempProduct.title">
+                    <input id="title" type="text" class="form-control" placeholder="請輸入標題" v-model.trim="tempProduct.title">
                     </div>
                     <div class="mb-3 col-md-6">
                       <label for="subtitle" class="form-label">副標題</label>
                       <input id="subtitle" type="text" class="form-control" placeholder="請輸入副標題"
-                              v-model="tempProduct.subTitle">
+                              v-model.trim="tempProduct.subTitle">
                     </div>
                   </div>
 
@@ -31,22 +31,22 @@
                     <div class="mb-3 col-3">
                       <label for="category" class="form-label">類別</label>
                       <input id="category" type="text" class="form-control" placeholder="請輸入類別"
-                              v-model="tempProduct.category">
+                              v-model.trim="tempProduct.category">
                     </div>
                     <div class="mb-3 col-3">
                       <label for="author" class="form-label">作者</label>
                       <input id="author" type="text" class="form-control" placeholder="請輸入作者"
-                      v-model="tempProduct.author">
+                      v-model.trim="tempProduct.author">
                     </div>
                     <div class="mb-3 col-3">
                       <label for="publishing_house" class="form-label">出版社</label>
                       <input id="publishing_house" type="text" class="form-control" placeholder="請輸入出版社"
-                             v-model="tempProduct.publishing_house">
+                             v-model.trim="tempProduct.publishing_house">
                     </div>
                     <div class="mb-3 col-3">
                       <label for="publication_date" class="form-label">出版日期</label>
                       <input id="publication_date" type="text" class="form-control" placeholder="請輸入出版日期"
-                      v-model="tempProduct.publication_date">
+                      v-model.trim="tempProduct.publication_date">
                     </div>
                   </div>
 
@@ -54,22 +54,22 @@
                     <div class="mb-3 col-md-3">
                       <label for="origin_price" class="form-label">定價</label>
                       <input id="origin_price" type="number" min="0" class="form-control" placeholder="請輸入定價"
-                      v-model="tempProduct.origin_price">
+                      v-model.number="tempProduct.origin_price">
                     </div>
                     <div class="mb-3 col-md-3">
                       <label for="price" class="form-label">售價</label>
                       <input id="price" type="number" min="0" class="form-control"
-                             placeholder="請輸入售價" v-model="tempProduct.price">
+                             placeholder="請輸入售價" v-model.number="tempProduct.price">
                     </div>
                     <div class="mb-3 col-md-3">
                       <label for="inventory" class="form-label">庫存</label>
                       <input id="inventory" type="number" min="0"  class="form-control" placeholder="請輸入庫存"
-                      v-model="tempProduct.inventory">
+                      v-model.trim="tempProduct.inventory">
                     </div>
                     <div class="mb-3 col-md-3">
                       <label for="unit" class="form-label">單位</label>
                       <input id="unit" type="text" class="form-control" placeholder="請輸入單位"
-                      v-model="tempProduct.unit">
+                      v-model.trim="tempProduct.unit">
                     </div>
                   </div>
             </div>
@@ -111,11 +111,11 @@
               <div class="d-flex align-items-center">
                 <div class="me-3" style="width:150px;">
                   <p class="fw-bold fs-4 text-center mb-2">書籍主圖</p>
-                  <img class="ratio ratio-4x3 rounded-4" :src="tempProduct.imageUrl" :alt="tempProduct.title">
+                  <img class="ratio ratio-3x4 rounded-4 bg-light" :src="tempProduct.imageUrl" :alt="tempProduct.title">
                 </div>
                 <div class="me-3" v-if="tempProduct.imgPreviewURL" style="width:150px;">
                   <p class="fw-bold fs-4 text-center mb-2">圖片預覽</p>
-                  <img class="ratio ratio-4x3 rounded-4" :src="tempProduct.imgPreviewURL">
+                  <img class="ratio ratio-3x4 rounded-4" :src="tempProduct.imgPreviewURL">
                 </div>
                 <div>
                    <p class="fw-bold fs-4 mb-2">圖片上傳</p>

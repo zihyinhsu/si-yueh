@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex justify-content-between align-items-center mb-6">
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="d-flex align-items-center">
             <h2 class="category bg-white fs-3 text-primaryDark p-2 fw-bold me-4"># 後台商品管理</h2>
             <select class="form-select form-select-sm bg-light w-auto" aria-label=".form-select-sm example" style="box-shadow:none"
@@ -56,8 +56,8 @@
       <!-- delModal -->
       <DelModal ref="delModal" :temp="temp" @del-item="delProductItem"></DelModal>
       <!-- pagination -->
-      <PagiNation class="d-flex justify-content-center mb-4 mb-md-6"
-                  :pages="pagination"></PagiNation>
+      <PagiNation class="d-flex justify-content-center"
+                  :pages="pagination" @update-page="getProducts"></PagiNation>
 </template>
 
 <script>
@@ -85,23 +85,24 @@ export default {
   watch: {
     selectAnswer: {
       handler (value) {
-        this.getProducts(value)
+        this.getProducts(value, 'category')
       },
       deep: true
     }
   },
   methods: {
-    getProducts (category, page = 1) {
-      let url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products/`
-      if (category) {
-        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products/?category=${category}`
-      } else if (page) {
-        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products/?page=${page}`
+    getProducts (params = 1, status) {
+      let url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products`
+      if (status === 'category') {
+        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products?category=${params}`
+      } else if (!status) {
+        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products?page=${params}`
       }
       this.$http.get(url)
         .then((res) => {
           this.products = res.data.products
           this.pagination = res.data.pagination
+          console.log(url)
         }).catch((err) => {
           console.log(err)
         })
@@ -127,7 +128,6 @@ export default {
     updateProducts (product, isCreateNew) {
       let url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product`
       let method = 'post'
-      console.log(method, isCreateNew)
       // 如果是編輯模式
       if (isCreateNew === false) {
         method = 'put'

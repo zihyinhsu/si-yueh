@@ -1,6 +1,6 @@
 <template>
 <div class="bg-light">
-    <div class="container p-md-0">
+    <div class="container">
       <div class="row justify-content-center">
          <!-- 麵包屑 -->
       <nav aria-label="breadcrumb ">
@@ -11,17 +11,15 @@
         </ol>
       </nav>
       <!-- 書籍基本資料 -->
-      <div class="row justify-content-center align-items-center border-bottom border-2 px-0 pt-5 pb-9">
-          <div class="col-8 col-md-3 mb-4 mb-md-0">
-          <img class="ratio ratio-4x3 rounded-4" :src="product.imageUrl" :alt="product.title">
+      <div class="row justify-content-center align-items-center border-bottom border-2 px-0 pt-3 pb-9">
+        <div class="col-8 col-md-3 mb-5 mb-md-0">
+          <img class="ratio ratio-3x4 rounded-4" :src="product.imageUrl" :alt="product.title">
         </div>
         <div class="col-md-4 mb-4 mb-md-0 border-end-md-2">
           <div class="bookTitle mb-4">
-            <div class="d-flex align-items-center mb-2">
-              <h2 class="fs-3 fw-bold">{{product.title}}</h2>
-              <p class="p-1 bg-primary text-white fs-5 ms-3">{{product.category}} </p>
-            </div>
-            <p class="fs-4" v-if="product.subTitle">{{product.subTitle}}</p>
+              <p class="bg-primary text-white fs-5 d-inline-block mb-2 px-2 py-1">{{product.category}}</p>
+              <h2 class="fs-3 fw-bold mb-2">{{product.title}}</h2>
+              <p class="fs-4" v-if="product.subTitle">{{product.subTitle}}</p>
           </div>
           <div class="bookData mb-4">
             <p class="fs-5 mb-2">作者 : {{product.author}}</p>
@@ -44,54 +42,44 @@
         </div>
         <div class="col-md-5 mt-4 mt-md-0">
           <div class="bookIntroContent">
-            <p class="fs-5 fs-md-4 fw-bold text-center " v-html="product.content"></p>
+            <p class="fs-5 fs-md-4 fw-bold text-center" v-html="product.content"></p>
           </div>
         </div>
       </div>
       </div>
   </div>
-
-  <div class="container p-md-0">
-    <div class="row px-0 pt-5 pb-9">
-      <div class="col-md-7 mb-6 mb-md-0">
-        <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 詳細書訊</h2>
-        <p v-html="product.description"></p>
-      </div>
-      <div class="col-md-5 mb-6">
-          <div class="col mb-6">
-              <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 作者簡介</h2>
-              <p v-html="product.author_intro"></p>
+  <!-- 詳細書籍資料 -->
+  <div class="container">
+      <div class="row pt-9 pb-9">
+        <div class="col-md-7 mb-6 mb-md-0">
+          <div class="mb-6">
+            <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 詳細書訊</h2>
+              <p v-html="product.description"></p>
+          </div>
+          <div>
+            <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 目錄</h2>
+            <p v-html="product.table_contents"></p>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="position-sticky top-15">
+            <div :class="{'mb-6': product.translator_intro}">
+                <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 作者簡介</h2>
+                <p v-html="product.author_intro"></p>
+              </div>
+            <div :class="{'mb-6': product.illustrator_intro}">
+              <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"
+              v-if="product.translator_intro"># 譯者簡介</h2>
+              <p v-html="product.translator_intro"></p>
             </div>
-          <div class="col">
-            <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"
-            v-if="product.translator_intro"># 譯者簡介</h2>
-            <p v-html="product.translator_intro"></p>
+            <div>
+              <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"
+              v-if="product.illustrator_intro"># 繪者簡介</h2>
+              <p v-html="product.illustrator_intro"></p>
+            </div>
           </div>
-          <div class="col mb-6">
-            <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"
-            v-if="product.illustrator_intro"># 繪者簡介</h2>
-            <p v-html="product.illustrator_intro"></p>
-          </div>
-
-          <div class="col">
-          <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 目錄</h2>
-          <p v-html="product.table_contents"></p>
         </div>
       </div>
-
-    </div>
-     <!-- <div class="row mb-6">
-          <div class="col-6">
-            <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"
-            v-if="product.translator_intro"># 譯者簡介</h2>
-            <p v-html="product.translator_intro"></p>
-          </div>
-          <div class="col-6">
-            <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold"
-            v-if="product.illustrator_intro"># 繪者簡介</h2>
-            <p v-html="product.illustrator_intro"></p>
-          </div>
-      </div> -->
   </div>
   <div class="container">
       <h2 class="category bg-white fs-3 d-inline-block text-primaryDark p-2 fw-bold"># 喜歡這本的人，也看了 ...</h2>

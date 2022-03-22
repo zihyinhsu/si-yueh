@@ -24,8 +24,8 @@
       <!-- ↑若產品內頁的產品id與推薦書籍id相同則隱藏 -->
       <!-- <div v-show="isLoadingItem = 0"><img src="../../assets/images/loading.gif"></div> -->
         <div class="bookCoverImg position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow">
-          <router-link :to="`/product/${item.id}`">
-            <img class="ratio ratio-4x3" :src="item.imageUrl" :alt="item.title">
+          <router-link :to="`/product/${item.id}`" @click="getPageId(item)">
+            <img class="ratio ratio-3x4" :src="item.imageUrl" :alt="item.title">
             </router-link>
             <div class="btn btn-primary position-absolute bottom-0 w-100 text-white"
             @click="addToCart(item.id)">
@@ -67,12 +67,13 @@ export default {
   mixins: [swiperMixin],
   data () {
     return {
+      pageId: '',
       products: [],
       isLoadingItem: ''
     }
   },
   methods: {
-    getProducts (category, id) {
+    getProducts (category) {
       let url = ''
       // this.isLoadingItem = 0
       if (category === '最新上架') {
@@ -102,6 +103,9 @@ export default {
       }).catch((err) => {
         alert(err)
       })
+    },
+    getPageId (item) {
+      this.pageId = item.id
     }
   },
   watch: {

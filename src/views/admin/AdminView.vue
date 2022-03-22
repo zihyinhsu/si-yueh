@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex">
     <AdminNavbar></AdminNavbar>
-    <div class="d-flex flex-column w-100 p-12 bg-light">
+    <div class="d-flex flex-column w-100 p-9 bg-light">
      <router-view v-if="checkSuccess"></router-view>
     </div>
   </div>

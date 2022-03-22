@@ -16,7 +16,8 @@
         <!-- mainContent -->
         <div class="row">
             <!-- sideBar -->
-            <div class="col-md-3 mb-5 mb-md-0 vh-md-70">
+            <div class="col-md-3 mb-5 mb-md-0" :class="{'vh-md-70':filterProducts.length <= 1}">
+              <div class="position-sticky top-15">
                 <div class="accordion" id="accordion" >
                     <div class="accordion-item border-0">
                         <h2 class="accordion-header" id="panelsStayOpen-headingOne">
@@ -32,15 +33,16 @@
                                 <li class="list-group-item"
                                     :class="isActive === 'all' ? 'active' : ''"
                                     @click="getProducts(), (isActive = 'all'), accordionCollapseBack()"
-                                >全部</li>
-                                <li class="list-group-item cateList" v-for="(item, i) in category" :key="i"
+                                >全部 ({{productsAll.length}})</li>
+                                <li class="list-group-item cateList" v-for="(item, i) in filterCategory" :key="i"
                                 :class="isActive === item ? 'active' : ''"
-                                 @click="getProducts(item), (isActive = item), accordionCollapseBack()" >{{item}}</li>
+                                 @click="getProducts(item,'category'),(isActive = item), accordionCollapseBack()" >{{item}} ({{filterCateNum[item]}})</li>
                             </ul>
                         </div>
                         </div>
                     </div>
                     </div>
+              </div>
             </div>
             <!-- content -->
             <div class="col-md-9">
@@ -49,7 +51,7 @@
                     <li class="bg-white mb-4 mb-md-8 hoverBoxShadow" v-for="item in filterProducts" :key="item.id">
                         <div class=" d-flex align-items-center w-100 p-3 p-md-5 h-100">
                             <router-link class="text-primary me-4 me-md-5 w-42.5 w-md-30" :to="`/product/${item.id}`">
-                                <img class="ratio ratio-4x3 rounded-4"
+                                <img class="ratio ratio-3x4 rounded-4"
                                     :src="item.imageUrl" :alt="item.title">
                                 </router-link>
                                 <div class="bookIntro border-end-md pe-md-1 w-57.5 w-md-45 me-md-4">
@@ -76,7 +78,7 @@
                 </ul>
                  <!-- pagination -->
                   <PagiNation class="d-flex justify-content-center mb-4 mb-md-6"
-                  :pages="pagination"></PagiNation>
+                  :pages="pagination" @update-page="getProducts"></PagiNation>
             </div>
         </div>
     </div>
@@ -92,7 +94,6 @@ export default {
     return {
       products: [],
       productsAll: [],
-      category: [],
       pagination: [],
       isActive: 'all',
       isLoadingItem: '',
@@ -103,17 +104,18 @@ export default {
     PagiNation
   },
   methods: {
-    getProducts (category, page = 1) {
+    getProducts (params = 1, status) {
       let url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products`
-      if (category) {
-        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?category=${category}`
-      } else if (page) {
-        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?page=${page}`
+      if (status === 'category') {
+        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?category=${params}`
+      } else if (!status) {
+        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?page=${params}`
       }
       this.$http.get(url)
         .then((res) => {
           this.products = res.data.products
           this.pagination = res.data.pagination
+          console.log(url)
         }).catch((err) => {
           console.log(err)
         })
@@ -122,17 +124,9 @@ export default {
       this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products/all`)
         .then((res) => {
           this.productsAll = res.data.products
-          this.filterCategory()
         }).catch((err) => {
           console.log(err)
         })
-    },
-    filterCategory () {
-      this.getAllProducts()
-      // 提取出category
-      const array = this.productsAll.map((item) => item.category)
-      // 過濾出重複的元素
-      this.category = [...new Set(array)]
     },
     addToCart (id, qty = 1) {
       this.isLoadingItem = id
@@ -160,15 +154,49 @@ export default {
   // 搜尋功能
   computed: {
     filterProducts () {
-      return this.products.filter((item) => {
-        const result = item.title.includes(this.search) || item.author.includes(this.search)
-        return result
+      const strArr = this.search.split(' ') // 以空白格切分字串
+      const arr = []
+      // 比對字串
+      strArr.forEach((str) => {
+        this.products.forEach((item) => {
+          if (item.title.includes(str) || item.author.includes(str)) {
+            arr.push(item)
+          }
+        })
       })
+      // 如果輸入兩個關鍵字就會出現重複的資料，所以需要刪除重複資料。
+      // 過濾出重複的元素
+      return [...new Set(arr)]
+      // 另一種方法 : findIndex
+      // const filterArr = arr.filter((item, i) => {
+      //   // 將 當前陣列的索引 與 findIndex() 回傳出的索引值進行比對，但 findIndex() 的方法 只會回傳 第一個 符合條件的陣列元素的索引
+      //   const index = arr.findIndex((book) => book.title === item.title)
+      //   return i === index
+      // })
+      // return filterArr
+    },
+    filterCategory () {
+      // 提取出category
+      const array = this.productsAll.map((item) => item.category)
+      // 過濾出重複的元素
+      return [...new Set(array)]
+    },
+    filterCateNum () {
+      // 取出每個category的數量
+      const cateNum = {}
+      this.productsAll.forEach((item) => {
+        if (!cateNum[item.category]) {
+          cateNum[item.category] = 1
+        } else {
+          cateNum[item.category] += 1
+        }
+      })
+      return cateNum
     }
   },
   mounted () {
     this.getProducts()
-    this.filterCategory()
+    this.getAllProducts()
   }
 }
 </script>

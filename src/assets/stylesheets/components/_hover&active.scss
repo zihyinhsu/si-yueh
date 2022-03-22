@@ -24,6 +24,23 @@
   }
 }
 
+.page-link{
+  background: $white;
+  color: $primary;
+  &:hover,&:active{
+    background: $white;
+    color: $primary;
+  }
+  .page-link.active{
+    background: $primary;
+    color: $white;
+  }
+  .page-link.disabled{
+    background: $light;
+  }
+}
+
+
 .text-primary, .text-hover-primaryDark{
   &:hover{
     color: $primaryDark !important;

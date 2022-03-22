@@ -41,11 +41,6 @@
             <i class="fa-solid fa-bookmark me-2"></i>我的收藏
             </router-link>
           </li>
-          <li class="nav-item me-5 py-1" @click="navCollapseBack">
-            <router-link class="nav-link text-secondaryDark" to="/login">
-            <i class="fa-solid fa-circle-user me-2"></i>登入
-            </router-link>
-          </li>
         </ul>
       </div>
 
