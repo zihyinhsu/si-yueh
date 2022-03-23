@@ -1,4 +1,7 @@
 <template>
+<LoadingView :active="isLoading">
+  <img src="../../assets/images/loading.gif" style="height:200px;width:200px">
+</LoadingView>
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="d-flex align-items-center">
             <h2 class="category bg-white fs-3 text-primaryDark p-2 fw-bold me-4"># 後台商品管理</h2>
@@ -74,7 +77,8 @@ export default {
       category: [],
       pagination: [],
       selectAnswer: '',
-      isCreateNew: false
+      isCreateNew: false,
+      isLoading: false
     }
   },
   components: {
@@ -98,11 +102,12 @@ export default {
       } else if (!status) {
         url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products?page=${params}`
       }
+      this.isLoading = true
       this.$http.get(url)
         .then((res) => {
           this.products = res.data.products
           this.pagination = res.data.pagination
-          console.log(url)
+          this.isLoading = false
         }).catch((err) => {
           console.log(err)
         })
@@ -133,8 +138,10 @@ export default {
         method = 'put'
         url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product/${product.id}`
       }
+      this.isLoading = true
       this.$http[method](url, { data: product })
         .then((res) => {
+          this.isLoading = false
           alert(res.data.message)
           this.$refs.productModal.hideModal()
           this.getProducts()

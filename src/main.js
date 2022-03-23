@@ -1,17 +1,28 @@
 import { createApp } from 'vue'
 // bootstrap
 import 'bootstrap'
+
 // axios
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+
 // fontawsome
-// import '@fortawesome/fontawesome-free'
+import '@fortawesome/fontawesome-free'
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
+
 // material icon
 import 'material-icons'
+
 // ck editor5
 import CKEditor from '@ckeditor/ckeditor5-vue'
+
+// vue-meta
+// import VueMeta from 'vue-meta'
+
+// vue-loading-overlay
+import Loading from 'vue-loading-overlay' // component
+import 'vue-loading-overlay/dist/vue-loading.css' // style
 
 // 匯入 vee-validate 主套件
 import {
@@ -43,10 +54,12 @@ configure({
 // 設定預設語系
 setLocale('zh_TW')
 
-const app = createApp(App).use(router)
+const app = createApp(App)
+app.use(router)
 app.use(VueAxios, axios)
 app.use(CKEditor)
-
+// app.use(VueMeta)
+app.component('LoadingView', Loading)
 app.component('FormView', Form)
 app.component('FieldView', Field)
 app.component('ErrorMessage', ErrorMessage)

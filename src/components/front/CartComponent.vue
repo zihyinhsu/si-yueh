@@ -22,7 +22,7 @@
               <!-- 購物車品項 -->
                 <li class="d-flex justify-content-between align-items-center border-bottom-1 p-3" v-for="item in tempCartData.carts" :key="item.id">
                     <div class="d-flex align-items-center w-100">
-                        <router-link class="rounded-1 overflow-hidden me-2 cursor-pointer" :to="`/product/${item.id}`" style="width:80px;">
+                        <router-link class="rounded-1 overflow-hidden me-2 cursor-pointer" :to="`/product/${item.product.id}`" style="width:80px;">
                             <img class="ratio ratio-3x4" :src="item.product.imageUrl" :alt="item.product.title">
                         </router-link>
                         <div class="cart-body w-100 me-4">
@@ -91,9 +91,9 @@ export default {
       } else if (item.qty >= item.product.inventory) {
         item.qty = item.product.inventory
       }
-      this.$http.put(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${item.product_id}`, {
+      this.$http.put(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${item.id}`, {
         data: {
-          product_id: item.product_id,
+          product_id: item.id,
           qty: Number(item.qty)
         }
       })

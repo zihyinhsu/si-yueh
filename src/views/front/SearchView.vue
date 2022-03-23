@@ -1,4 +1,7 @@
 <template>
+<LoadingView :active="isLoading">
+  <img src="../../assets/images/loading.gif" style="height:200px;width:200px">
+</LoadingView>
 <div class="bg-light">
     <div class="container h-100 vh-md-auto">
         <!-- 搜尋欄 -->
@@ -67,7 +70,6 @@
                                 <hr>
                                 <div class="bookContent w-55 d-none d-md-block">
                                     <p v-html="item.content"></p>
-                                    <br>
                                     <div class="text-end">
                                         <router-link class="text-primary w-100" :to="`/product/${item.id}`">繼續閱讀</router-link>
                                     </div>
@@ -97,7 +99,8 @@ export default {
       pagination: [],
       isActive: 'all',
       isLoadingItem: '',
-      search: ''
+      search: '',
+      isLoading: false
     }
   },
   components: {
@@ -111,11 +114,12 @@ export default {
       } else if (!status) {
         url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?page=${params}`
       }
+      this.isLoading = true
       this.$http.get(url)
         .then((res) => {
           this.products = res.data.products
           this.pagination = res.data.pagination
-          console.log(url)
+          this.isLoading = false
         }).catch((err) => {
           console.log(err)
         })

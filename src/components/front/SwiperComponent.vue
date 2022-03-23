@@ -1,6 +1,5 @@
 <template>
-<!-- 如果一個類別中產品數為零，整行會自動消失 -->
-<div class="container py-7" v-if="products.length!==0">
+<div class="container py-7" v-if="swiperShow">
     <h2 class="category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"
     :class="{'bg-light': titlebgColor }"
     v-if="showTitle" style="background:white"
@@ -22,9 +21,8 @@
     <swiper-slide class="swiperSlide" v-for="item in products" :key="item.id"
       :class="{'d-none': id === item.id }">
       <!-- ↑若產品內頁的產品id與推薦書籍id相同則隱藏 -->
-      <!-- <div v-show="isLoadingItem = 0"><img src="../../assets/images/loading.gif"></div> -->
         <div class="bookCoverImg position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow">
-          <router-link :to="`/product/${item.id}`" @click="getPageId(item)">
+          <router-link :to="`/product/${item.id}`">
             <img class="ratio ratio-3x4" :src="item.imageUrl" :alt="item.title">
             </router-link>
             <div class="btn btn-primary position-absolute bottom-0 w-100 text-white"
@@ -67,15 +65,15 @@ export default {
   mixins: [swiperMixin],
   data () {
     return {
-      pageId: '',
+      pageId: this.$route.params.id,
       products: [],
-      isLoadingItem: ''
+      isLoadingItem: '',
+      swiperShow: false
     }
   },
   methods: {
     getProducts (category) {
       let url = ''
-      // this.isLoadingItem = 0
       if (category === '最新上架') {
         url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products`
       } else if (category) {
@@ -84,7 +82,7 @@ export default {
       this.$http.get(url)
         .then((res) => {
           this.products = res.data.products
-          // this.isLoadingItem = 1
+          this.swiperShow = true
         }).catch((err) => {
           console.log(err)
         })
@@ -103,14 +101,17 @@ export default {
       }).catch((err) => {
         alert(err)
       })
-    },
-    getPageId (item) {
-      this.pageId = item.id
     }
   },
   watch: {
     // 監聽產品內頁的category變化
     category () {
+      this.getProducts(this.category)
+    },
+    // 監聽動態路由變化
+    $route (to) {
+      this.pageId = to.params.id
+      this.$emit('change-page')
       this.getProducts(this.category)
     }
   },

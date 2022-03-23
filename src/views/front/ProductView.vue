@@ -1,5 +1,9 @@
 <template>
-<div class="bg-light">
+<div>
+  <LoadingView :active="isLoading">
+    <img src="../../assets/images/loading.gif" style="height:200px;width:200px">
+  </LoadingView>
+  <div class="bg-light">
     <div class="container">
       <div class="row justify-content-center">
          <!-- 麵包屑 -->
@@ -17,9 +21,9 @@
         </div>
         <div class="col-md-4 mb-4 mb-md-0 border-end-md-2">
           <div class="bookTitle mb-4">
-              <p class="bg-primary text-white fs-5 d-inline-block mb-2 px-2 py-1">{{product.category}}</p>
-              <h2 class="fs-3 fw-bold mb-2">{{product.title}}</h2>
-              <p class="fs-4" v-if="product.subTitle">{{product.subTitle}}</p>
+              <h2 class="fs-3 fw-bold">{{product.title}}</h2>
+              <p class="fs-4 mb-2" v-if="product.subTitle">{{product.subTitle}}</p>
+              <span class="bg-primary text-white fs-5 px-2 py-1">{{product.category}}</span>
           </div>
           <div class="bookData mb-4">
             <p class="fs-5 mb-2">作者 : {{product.author}}</p>
@@ -52,11 +56,11 @@
   <div class="container">
       <div class="row pt-9 pb-9">
         <div class="col-md-7 mb-6 mb-md-0">
-          <div class="mb-6">
+          <div class="mb-12">
             <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 詳細書訊</h2>
               <p v-html="product.description"></p>
           </div>
-          <div>
+          <div v-if="product.table_contents">
             <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 目錄</h2>
             <p v-html="product.table_contents"></p>
           </div>
@@ -67,14 +71,12 @@
                 <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 作者簡介</h2>
                 <p v-html="product.author_intro"></p>
               </div>
-            <div :class="{'mb-6': product.illustrator_intro}">
-              <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"
-              v-if="product.translator_intro"># 譯者簡介</h2>
+            <div :class="{'mb-6': product.illustrator_intro}" v-if="product.translator_intro">
+              <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 譯者簡介</h2>
               <p v-html="product.translator_intro"></p>
             </div>
-            <div>
-              <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"
-              v-if="product.illustrator_intro"># 繪者簡介</h2>
+            <div v-if="product.illustrator_intro">
+              <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 繪者簡介</h2>
               <p v-html="product.illustrator_intro"></p>
             </div>
           </div>
@@ -84,11 +86,15 @@
   <div class="container">
       <h2 class="category bg-white fs-3 d-inline-block text-primaryDark p-2 fw-bold"># 喜歡這本的人，也看了 ...</h2>
   </div>
-  <SwiperComponent :category="product.category" :id="product.id" :showTitle="false"></SwiperComponent>
+    <SwiperComponent
+    :category="product.category" :id="product.id"
+    :showTitle="false" @change-page="getProduct"></SwiperComponent>
+</div>
 </div>
 </template>
 
 <script>
+
 import SwiperComponent from '@/components/front/SwiperComponent.vue'
 import swiperMixin from '@/mixins/swiperMixin'
 import emitter from '@/methods/emitter.js'
@@ -100,15 +106,18 @@ export default {
   data () {
     return {
       product: [],
-      isLoadingItem: ''
+      isLoadingItem: '',
+      isLoading: false
     }
   },
   methods: {
     getProduct () {
       const id = this.$route.params.id
+      this.isLoading = true
       this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/product/${id}`)
         .then((res) => {
           this.product = res.data.product
+          this.isLoading = false
         }).catch((err) => {
           console.log(err)
         })

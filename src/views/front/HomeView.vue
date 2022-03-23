@@ -1,4 +1,7 @@
 <template>
+<LoadingView :active="isLoading">
+    <img src="../../assets/images/loading.gif" style="height:200px;width:200px">
+  </LoadingView>
 <!-- banner swiper -->
 <div class="bg-light">
   <div class="container py-7">
@@ -48,7 +51,7 @@
     </div>
   </div>
 
-  <SwiperComponent category="人文史地" :titlebgColor="true" :showTitle="true"></SwiperComponent>
+  <SwiperComponent category="社會人文" :titlebgColor="true" :showTitle="true"></SwiperComponent>
     <div class="bg-light">
       <SwiperComponent category="其它" :showTitle="true"></SwiperComponent>
     </div>
@@ -56,13 +59,17 @@
 
 <script>
 import SwiperComponent from '@/components/front/SwiperComponent.vue'
-
 import swiperMixin from '@/mixins/swiperMixin'
 
 // import required modules
 import { Autoplay, Pagination } from 'swiper'
 export default {
   mixins: [swiperMixin],
+  data () {
+    return {
+      isLoading: false
+    }
+  },
   components: {
     SwiperComponent
   },
@@ -70,6 +77,12 @@ export default {
     return {
       modules: [Autoplay, Pagination]
     }
+  },
+  mounted () {
+    this.isLoading = true
+    setTimeout(() => {
+      this.isLoading = false
+    }, 1000)
   }
 }
 </script>

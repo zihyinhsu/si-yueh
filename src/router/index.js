@@ -8,28 +8,23 @@ const routes = [
       {
         path: '',
         name: 'home',
-        component: () => import('../views/front/HomeView.vue'),
-        meta: { title: '徙閱二手書' }
+        component: () => import('../views/front/HomeView.vue')
       },
       {
         path: 'search',
-        component: () => import('../views/front/SearchView.vue'),
-        meta: { title: '全站搜尋' }
+        component: () => import('../views/front/SearchView.vue')
       },
       {
         path: 'collection',
-        component: () => import('../views/front/MyCollection.vue'),
-        meta: { title: '我的收藏' }
+        component: () => import('../views/front/MyCollection.vue')
       },
       {
         path: 'product/:id',
-        component: () => import('../views/front/ProductView.vue'),
-        meta: { title: '單一產品內頁' }
+        component: () => import('../views/front/ProductView.vue')
       },
       {
         path: 'login',
-        component: () => import('../views/front/LoginView.vue'),
-        meta: { title: '登入頁面' }
+        component: () => import('../views/front/LoginView.vue')
       }
       // 結帳流程還沒做
     ]
@@ -37,29 +32,29 @@ const routes = [
   {
     path: '/admin',
     component: () => import('../views/admin/AdminView.vue'),
-    meta: { title: '後台管理' },
     children: [
       {
         path: 'products',
         component: () => import('../views/admin/ProductsView.vue'),
-        meta: { title: '商品管理' }
+        meta: {
+          metaInfo: {
+            title: '後台產品列表'
+          }
+        }
       },
       {
         path: 'orders',
-        component: () => import('../views/admin/OrdersView.vue'),
-        meta: { title: '訂單管理' }
+        component: () => import('../views/admin/OrdersView.vue')
       },
       {
         path: 'coupons',
-        component: () => import('../views/admin/CouponView.vue'),
-        meta: { title: '優惠券管理' }
+        component: () => import('../views/admin/CouponView.vue')
       }
     ]
   },
   {
     path: '/:pathMatch(.*)*',
-    component: () => import('../views/NotFound.vue'),
-    meta: { title: '找不到相關頁面' }
+    component: () => import('../views/NotFound.vue')
   }
 ]
 
@@ -67,12 +62,18 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
   // 讓選項變成啟用中的樣式
-  linkActiveClass: 'active'
-
+  linkActiveClass: 'active',
+  // 對於所有路由導航，簡單地讓頁面滾動到頂部
+  scrollBehavior (to, from, savedPosition) {
+    return {
+      top: 0,
+      behavior: 'smooth'
+    }
+  }
 })
 // router 命名
-router.beforeEach((to, from, next) => {
-  window.document.title = to.meta.title
-  next()
-})
+// router.beforeEach((to, from, next) => {
+//   window.document.title = to.meta.title
+//   next()
+// })
 export default router
