@@ -1,5 +1,6 @@
 <template>
     <FrontNavbar></FrontNavbar>
+    <ToastMsg></ToastMsg>
     <router-view/>
     <FooterComponent></FooterComponent>
 
@@ -8,10 +9,13 @@
 <script>
 import FrontNavbar from '@/components/front/FrontNavbar.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
+import ToastMsg from '@/components/ToastMsg.vue'
+
 export default {
   components: {
     FrontNavbar,
-    FooterComponent
+    FooterComponent,
+    ToastMsg
   }
 }
 </script>

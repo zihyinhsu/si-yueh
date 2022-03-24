@@ -58,6 +58,18 @@ $utilities: map-merge(
         auto: auto,
       )
     ),
+    "top": (
+      responsive: true,//new
+      rfs: true,
+      property: top,
+      values: $position-values
+    ),"start": (
+      responsive: true,//new
+      rfs: true,
+      property: left,
+      class: start,
+      values: $position-values
+    ),
     "border-end": (
       responsive: true,//new
       rfs: true,

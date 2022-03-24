@@ -62,9 +62,9 @@
                              placeholder="請輸入售價" v-model.number="tempProduct.price">
                     </div>
                     <div class="mb-3 col-md-3">
-                      <label for="inventory" class="form-label">庫存</label>
-                      <input id="inventory" type="number" min="0"  class="form-control" placeholder="請輸入庫存"
-                      v-model.trim="tempProduct.inventory">
+                      <label for="num" class="form-label">庫存</label>
+                      <input id="num" type="number" min="0"  class="form-control" placeholder="請輸入庫存"
+                      v-model.trim="tempProduct.num">
                     </div>
                     <div class="mb-3 col-md-3">
                       <label for="unit" class="form-label">單位</label>
@@ -130,7 +130,6 @@
                      <p class="fw-bold fs-4 mb-2">是否上架</p>
                     <label class="switch">
                       <input type="checkbox"
-                      @change="$emit('update-products',tempProduct,isCreateNew)"
                       v-model="tempProduct.is_enabled"
                       :true-value="1" :false-value="0">
                       <span class="slider"></span>
@@ -198,9 +197,11 @@ export default {
       formData.append('file-to-upload', file)
       this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/upload`, formData)
         .then(res => {
-          alert('圖片已成功上傳')
+          this.$StatusMsg(res, '上傳', '圖片已成功上傳')
           this.tempProduct.imageUrl = res.data.imageUrl
           this.tempProduct.imgPreviewURL = ''
+        }).catch((err) => {
+          this.$StatusMsg(err.response, '上傳', '圖片上傳失敗')
         })
     }
   }

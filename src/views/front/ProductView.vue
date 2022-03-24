@@ -10,8 +10,8 @@
       <nav aria-label="breadcrumb ">
         <ol class="breadcrumb py-3 py-md-6 m-0">
           <li class="breadcrumb-item"><router-link class="text-secondaryDark fs-small fs-md-5" to="/">首頁</router-link></li>
-          <li class="breadcrumb-item"><router-link class="text-secondaryDark fs-small fs-md-5" to="/search">全站搜尋</router-link></li>
-          <li class="breadcrumb-item text-secondaryDark active" aria-current="page"><span class="fs-small fw-bold fs-md-5">{{product.title}}</span></li>
+          <li class="breadcrumb-item ps-1 ps-md-1"><router-link class="text-secondaryDark fs-small fs-md-5" to="/search">全站搜尋</router-link></li>
+          <li class="breadcrumb-item ps-1 ps-md-1 text-secondaryDark active" aria-current="page"><span class="fs-small fw-bold fs-md-5">{{product.title}}</span></li>
         </ol>
       </nav>
       <!-- 書籍基本資料 -->
@@ -29,7 +29,7 @@
             <p class="fs-5 mb-2">作者 : {{product.author}}</p>
             <p class="fs-5 mb-2">出版社 : {{product.publishing_house}}</p>
             <p class="fs-5 mb-2">出版日期 : {{product.publication_date}}</p>
-            <p class="fs-5">庫存 : {{product.inventory}} {{product.unit}}</p>
+            <p class="fs-5">庫存 : {{product.num}} {{product.unit}}</p>
           </div>
           <div class="bookPrice mb-4">
             <p class="text-primary fs-5 fs-md-4 fw-bold mb-2">定價 : <span class="text-decoration-line-through">NT$ {{product.origin_price}}</span></p>
@@ -119,6 +119,7 @@ export default {
           this.product = res.data.product
           this.isLoading = false
         }).catch((err) => {
+          this.isLoading = false
           console.log(err)
         })
     },
@@ -131,10 +132,10 @@ export default {
         }
       }).then((res) => {
         emitter.emit('get-cart-list')
-        alert(res.data.message)
+        this.$StatusMsg(res, '加入', '已成功加入購書車')
         this.isLoadingItem = ''
       }).catch((err) => {
-        alert(err)
+        this.$StatusMsg(err.response, '加入', '加入購書車失敗')
       })
     }
   },

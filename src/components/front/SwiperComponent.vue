@@ -95,11 +95,11 @@ export default {
           qty
         }
       }).then((res) => {
-        alert(res.data.message)
+        this.$StatusMsg(res, '加入', '已成功加入購物車')
         this.isLoadingItem = ''
         emitter.emit('get-cart-list')
       }).catch((err) => {
-        alert(err)
+        this.$StatusMsg(err.response, '加入', '加入購物車失敗')
       })
     }
   },
@@ -115,7 +115,7 @@ export default {
       this.getProducts(this.category)
     }
   },
-  mounted () {
+  created () {
     this.getProducts(this.category)
   }
 

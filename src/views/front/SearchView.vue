@@ -63,8 +63,8 @@
                                     <p class="fs-small fs-md-5 mb-2 mb-md-3">出版社 : {{item.publishing_house}}</p>
                                     <p class="fs-small fs-md-5 mb-2 mb-md-3">出版日期 : {{item.publication_date}}</p>
                                     <p class="fs-md-3 fw-bold text-primary mb-2 mb-md-3">NT$ {{item.price}}</p>
-                                    <div class="btn btn-primary text-white w-100 w-md-auto" @click="addToCart(item.id)">
-                                        <i class="fa-solid fa-cart-plus me-3"></i>加入購物車<span v-show="isLoadingItem === item.id"><i class="fas fa-spinner fa-pulse ms-1"></i></span>
+                                    <div class="btn btn-primary text-white w-100 w-md-auto" @click="addToCart(item)">
+                                        <i class="fa-solid fa-cart-plus me-3"></i>加入購書車<span v-show="isLoadingItem === item.id"><i class="fas fa-spinner fa-pulse ms-1"></i></span>
                                     </div>
                                 </div>
                                 <hr>
@@ -122,6 +122,7 @@ export default {
           this.isLoading = false
         }).catch((err) => {
           console.log(err)
+          this.isLoading = false
         })
     },
     getAllProducts () {
@@ -132,19 +133,19 @@ export default {
           console.log(err)
         })
     },
-    addToCart (id, qty = 1) {
-      this.isLoadingItem = id
+    addToCart (item, qty = 1) {
+      this.isLoadingItem = item.id
       this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
         data: {
-          product_id: id,
+          product_id: item.id,
           qty
         }
       }).then((res) => {
         emitter.emit('get-cart-list')
-        alert(res.data.message)
+        this.$StatusMsg(res, '加入', '已成功加入購書車')
         this.isLoadingItem = ''
       }).catch((err) => {
-        alert(err)
+        this.$StatusMsg(err.response, '加入', '加入購書車失敗')
       })
     },
     // 判斷當螢幕為手機版時，點擊選單自動收合

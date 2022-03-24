@@ -1,4 +1,9 @@
 import { createApp } from 'vue'
+
+// vue-meta
+// import { createMemoryHistory } from 'vue-router'
+import { createMetaManager } from 'vue-meta'
+
 // bootstrap
 import 'bootstrap'
 
@@ -17,13 +22,14 @@ import 'material-icons'
 // ck editor5
 import CKEditor from '@ckeditor/ckeditor5-vue'
 
-// vue-meta
-// import VueMeta from 'vue-meta'
+// methods > statusMsg
+import $StatusMsg from '@/methods/StatusMsg'
 
 // vue-loading-overlay
 import Loading from 'vue-loading-overlay' // component
 import 'vue-loading-overlay/dist/vue-loading.css' // style
 
+// vee-validate //
 // 匯入 vee-validate 主套件
 import {
   Field, Form, ErrorMessage, defineRule, configure
@@ -54,8 +60,15 @@ configure({
 // 設定預設語系
 setLocale('zh_TW')
 
+// vee-validate //
+
 const app = createApp(App)
+// vue-meta
+app.use(createMetaManager)
+
 app.use(router)
+app.config.globalProperties.$StatusMsg = $StatusMsg
+
 app.use(VueAxios, axios)
 app.use(CKEditor)
 // app.use(VueMeta)

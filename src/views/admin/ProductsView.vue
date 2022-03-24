@@ -3,8 +3,8 @@
   <img src="../../assets/images/loading.gif" style="height:200px;width:200px">
 </LoadingView>
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="d-flex align-items-center">
-            <h2 class="category bg-white fs-3 text-primaryDark p-2 fw-bold me-4"># 後台商品管理</h2>
+        <div class="header d-flex align-items-center">
+            <h2 class="category bg-white text-primaryDark fw-bold fs-3 me-4 p-2"># 後台商品管理</h2>
             <select class="form-select form-select-sm bg-light w-auto" aria-label=".form-select-sm example" style="box-shadow:none"
             v-model="selectAnswer">
                 <option selected value =''>全部</option>
@@ -42,12 +42,14 @@
                   </label>
                 <!-- ToggleSwitch -->
             </td>
-            <td class="d-flex" style="height:41px">
-              <div class="editBtn d-flex align-items-center h-100" @click="openModal ('edit', item)">
-                <i class="fa-solid fa-pencil cursor-pointer text-primary fs-4 me-6"></i>
-              </div>
-              <div class="delBtn d-flex align-items-center h-100" @click="openModal ('delete', item)">
-                <i class="fa-solid fa-trash cursor-pointer text-primary fs-4"></i>
+            <td>
+              <div class="d-flex">
+                  <div class="editBtn d-flex align-items-center" @click="openModal ('edit', item)">
+                  <i class="fa-solid fa-pencil cursor-pointer text-primary fs-4 me-6"></i>
+                </div>
+                <div class="delBtn d-flex align-items-center" @click="openModal ('delete', item)">
+                  <i class="fa-solid fa-trash cursor-pointer text-primary fs-4"></i>
+                </div>
               </div>
             </td>
           </tr>
@@ -110,6 +112,7 @@ export default {
           this.isLoading = false
         }).catch((err) => {
           console.log(err)
+          this.isLoading = false
         })
     },
     getAllProducts () {
@@ -142,11 +145,12 @@ export default {
       this.$http[method](url, { data: product })
         .then((res) => {
           this.isLoading = false
-          alert(res.data.message)
+          this.$StatusMsg(res, '更新', '已成功更新書籍')
           this.$refs.productModal.hideModal()
           this.getProducts()
         }).catch((err) => {
-          console.dir(err)
+          this.isLoading = false
+          this.$StatusMsg(err.response, '更新', '更新書籍失敗')
         })
     },
     openModal (status, product) {
@@ -166,11 +170,11 @@ export default {
     delProductItem () {
       this.$http.delete(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product/${this.temp.id}`)
         .then((res) => {
-          alert(res.data.message)
+          this.$StatusMsg(res, '刪除', '已成功刪除書籍')
           this.$refs.delModal.hideModal()
           this.getProducts()
-        }).catch((error) => {
-          alert(error.data.message)
+        }).catch((err) => {
+          this.$StatusMsg(err.response, '刪除', '刪除書籍失敗')
         })
     }
   },
