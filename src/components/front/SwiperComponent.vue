@@ -26,7 +26,7 @@
             <img class="ratio ratio-3x4" :src="item.imageUrl" :alt="item.title">
             </router-link>
             <div class="btn btn-primary position-absolute bottom-0 w-100 text-white"
-            @click="addToCart(item.id)">
+            @click="addToCart(item)">
                 <i class="fa-solid fa-cart-plus me-3"></i>加入購物車 <span v-show="isLoadingItem === item.id">
                   <i class="fas fa-spinner fa-pulse ms-1"></i></span>
                 </div>
@@ -68,7 +68,8 @@ export default {
       pageId: this.$route.params.id,
       products: [],
       isLoadingItem: '',
-      swiperShow: false
+      swiperShow: false,
+      itemCartData: []
     }
   },
   methods: {
@@ -87,17 +88,22 @@ export default {
           console.log(err)
         })
     },
-    addToCart (id, qty = 1) {
-      this.isLoadingItem = id
+    addToCart (item, qty = 1) {
+      // 如果選擇的數量>=庫存就return
+      if (this.itemCartData.qty >= item.inventory) {
+        this.$StatusMsg(false, '加入', '已達選取上限')
+        return
+      }
+      this.isLoadingItem = item.id
       this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
         data: {
-          product_id: id,
+          product_id: item.id,
           qty
         }
       }).then((res) => {
+        emitter.emit('get-cart-list')
         this.$StatusMsg(res, '加入', '已成功加入購物車')
         this.isLoadingItem = ''
-        emitter.emit('get-cart-list')
       }).catch((err) => {
         this.$StatusMsg(err.response, '加入', '加入購物車失敗')
       })
@@ -115,8 +121,11 @@ export default {
       this.getProducts(this.category)
     }
   },
-  created () {
+  mounted () {
     this.getProducts(this.category)
+    emitter.on('push-cart-data', (itemCartData) => {
+      this.itemCartData = itemCartData
+    })
   }
 
 }

@@ -1,8 +1,7 @@
-<script>
 import emitter from '@/methods/emitter.js'
 
-export default function (res, title = '更新', content) {
-  if (res.data.success) {
+export default function (res = true, title = '更新', content) {
+  if (res) {
     emitter.emit('push-status-msg', {
       style: 'primary',
       title: `${title}成功`,
@@ -18,4 +17,3 @@ export default function (res, title = '更新', content) {
     })
   }
 }
-</script>

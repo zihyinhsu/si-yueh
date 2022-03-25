@@ -56,11 +56,20 @@ export default {
     return {
       cartData: {
         carts: []
-      }
+      },
+      itemCartData: []
     }
   },
   components: {
     CartComponent
+  },
+  watch: {
+    cartData: {
+      handler () {
+        this.getItemCartData()
+      },
+      deep: true
+    }
   },
   methods: {
     // 判斷當螢幕為手機版時，選單自動收合
@@ -71,12 +80,24 @@ export default {
       }
     },
     getCartList () {
+      // 如果選擇的數量>=庫存就return
+      if (this.itemCartData.qty >= this.itemCartData.inventory) {
+        this.$StatusMsg(false, '加入', '已達選取上限')
+        return
+      }
       this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`)
         .then((res) => {
           this.cartData = res.data.data
         }).catch((err) => {
           console.log(err)
         })
+    },
+    getItemCartData () {
+      this.cartData.carts.forEach((item) => {
+        this.itemCartData = item
+        emitter.emit('push-cart-data', item)
+        console.log('push')
+      })
     }
   },
   mounted () {

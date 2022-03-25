@@ -100,7 +100,8 @@ export default {
       isActive: 'all',
       isLoadingItem: '',
       search: '',
-      isLoading: false
+      isLoading: false,
+      itemCartData: []
     }
   },
   components: {
@@ -134,6 +135,11 @@ export default {
         })
     },
     addToCart (item, qty = 1) {
+      // 如果選擇的數量>=庫存就return
+      if (this.itemCartData.qty >= item.inventory) {
+        this.$StatusMsg(false, '加入', '已達選取上限')
+        return
+      }
       this.isLoadingItem = item.id
       this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
         data: {
@@ -202,6 +208,10 @@ export default {
   mounted () {
     this.getProducts()
     this.getAllProducts()
+    emitter.on('push-cart-data', (itemCartData) => {
+      this.itemCartData = itemCartData
+      console.log('receive')
+    })
   }
 }
 </script>

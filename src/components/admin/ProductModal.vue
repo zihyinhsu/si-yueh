@@ -62,9 +62,10 @@
                              placeholder="請輸入售價" v-model.number="tempProduct.price">
                     </div>
                     <div class="mb-3 col-md-3">
-                      <label for="num" class="form-label">庫存</label>
-                      <input id="num" type="number" min="0"  class="form-control" placeholder="請輸入庫存"
-                      v-model.trim="tempProduct.num">
+                      <label for="inventory" class="form-label">庫存</label>
+                      <input id="inventory" type="number" min="0"  class="form-control" placeholder="請輸入庫存"
+                      v-model.number="tempProduct.inventory">
+                      <!-- // 為何不是number -->
                     </div>
                     <div class="mb-3 col-md-3">
                       <label for="unit" class="form-label">單位</label>

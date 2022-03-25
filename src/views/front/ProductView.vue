@@ -10,8 +10,8 @@
       <nav aria-label="breadcrumb ">
         <ol class="breadcrumb py-3 py-md-6 m-0">
           <li class="breadcrumb-item"><router-link class="text-secondaryDark fs-small fs-md-5" to="/">首頁</router-link></li>
-          <li class="breadcrumb-item ps-1 ps-md-1"><router-link class="text-secondaryDark fs-small fs-md-5" to="/search">全站搜尋</router-link></li>
-          <li class="breadcrumb-item ps-1 ps-md-1 text-secondaryDark active" aria-current="page"><span class="fs-small fw-bold fs-md-5">{{product.title}}</span></li>
+          <li class="breadcrumb-item ps-1"><router-link class="text-secondaryDark fs-small fs-md-5" to="/search">全站搜尋</router-link></li>
+          <li class="breadcrumb-item ps-1 text-secondaryDark active" aria-current="page"><span class="fs-small fw-bold fs-md-5">{{product.title}}</span></li>
         </ol>
       </nav>
       <!-- 書籍基本資料 -->
@@ -29,7 +29,7 @@
             <p class="fs-5 mb-2">作者 : {{product.author}}</p>
             <p class="fs-5 mb-2">出版社 : {{product.publishing_house}}</p>
             <p class="fs-5 mb-2">出版日期 : {{product.publication_date}}</p>
-            <p class="fs-5">庫存 : {{product.num}} {{product.unit}}</p>
+            <p class="fs-5">庫存 : {{product.inventory}} {{product.unit}}</p>
           </div>
           <div class="bookPrice mb-4">
             <p class="text-primary fs-5 fs-md-4 fw-bold mb-2">定價 : <span class="text-decoration-line-through">NT$ {{product.origin_price}}</span></p>
@@ -39,7 +39,7 @@
             <div class="btn btn-outline-primary w-90 w-md-auto me-3">
               <i class="fa-solid fa-bookmark me-3"></i>加入收藏
               </div>
-            <div class="btn btn-primary text-white w-100 w-md-auto" @click="addToCart(product.id)">
+            <div class="btn btn-primary text-white w-100 w-md-auto" @click="addToCart(product)">
               <i class="fa-solid fa-cart-plus me-3"></i>加入購書車<span v-show="isLoadingItem === product.id"><i class="fas fa-spinner fa-pulse ms-1"></i></span>
               </div>
           </div>
@@ -107,7 +107,8 @@ export default {
     return {
       product: [],
       isLoadingItem: '',
-      isLoading: false
+      isLoading: false,
+      itemCartData: []
     }
   },
   methods: {
@@ -123,11 +124,16 @@ export default {
           console.log(err)
         })
     },
-    addToCart (id, qty = 1) {
-      this.isLoadingItem = id
+    addToCart (product, qty = 1) {
+      // 如果選擇的數量>=庫存就return
+      if (this.itemCartData.qty >= product.inventory) {
+        this.$StatusMsg(false, '加入', '已達選取上限')
+        return
+      }
+      this.isLoadingItem = product.id
       this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
         data: {
-          product_id: id,
+          product_id: product.id,
           qty
         }
       }).then((res) => {
@@ -141,6 +147,10 @@ export default {
   },
   mounted () {
     this.getProduct()
+    emitter.on('push-cart-data', (itemCartData) => {
+      this.itemCartData = itemCartData
+      console.log('receive')
+    })
   }
 }
 </script>

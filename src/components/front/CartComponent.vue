@@ -7,7 +7,7 @@
             <ul class="h-100">
               <div class="d-flex justify-content-end p-2" v-if="tempCartData.carts.length">
                 <div class="btn btn-outline-secondary"
-                @click="delAllCart(tempCartData.carts.id)">清空購物車
+                @click="delAllCart(tempCartData.carts)">清空購物車
                 <span v-show="isLoadingItem === tempCartData.carts.id">
                   <i class="fas fa-spinner fa-pulse ms-1"></i></span></div>
               </div>
@@ -28,7 +28,7 @@
                         <div class="cart-body w-100 me-4">
                             <p class="fw-bold">{{item.product.title}}</p>
                             <p class="fw-bold text-primaryDark">NT$ {{item.product.price}}
-                              <span class="text-danger fs-small" v-if="item.qty>=item.product.num">選取已達上限</span>
+                              <span class="text-danger fs-small" v-if="item.qty>=item.product.inventory">選取已達上限</span>
                             </p>
                             <div class="input-group">
                                 <div class="input-group w-md-75">
@@ -36,17 +36,17 @@
                                     @click="updateCartItem(item, item.qty--)" :class="{'disabled':item.qty<=1}">
                                         <i class="fa-solid fa-minus"></i>
                                     </button>
-                                    <input type="number" class="form-control text-center fs-small" min="1" :max="item.product.num"
-                                    v-model.lazy="item.qty" @change="updateCartItem(item)" :oninput="MaxInputNum(item)">
+                                    <input type="number" class="form-control text-center fs-small" min="1" :max="item.product.inventory"
+                                    v-model.lazy="item.qty" @change="updateCartItem(item)">
                                     <button class="btn btn-primary plus fs-small" type="button"
-                                     @click="updateCartItem(item,item.qty++)" :class="{'disabled':item.qty>=item.product.num}">
+                                     @click="updateCartItem(item,item.qty++)" :class="{'disabled':item.qty>=item.product.inventory}">
                                         <i class="fa-solid fa-plus text-white"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="delCartItem" @click="delCartItem(item.id)">
+                    <div class="delCartItem" @click="delCartItem(item)">
                       <i class="fa-solid fa-trash text-secondary cursor-pointer"></i>
                     </div>
                 </li>
@@ -90,12 +90,12 @@ export default {
     updateCartItem (item, qty = 1) {
       if (item.qty <= 1) {
         item.qty = 1
-      } else if (item.qty >= item.product.num) {
-        item.qty = item.product.num
+      } else if (item.qty >= item.product.inventory) {
+        item.qty = item.product.inventory
       }
       this.$http.put(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${item.id}`, {
         data: {
-          product_id: item.id,
+          product_id: item.product.id,
           qty: Number(item.qty)
         }
       })
@@ -106,30 +106,27 @@ export default {
           this.$StatusMsg(err.response, '更新', '更新購書車失敗')
         })
     },
-    delCartItem (id) {
-      this.$http.delete(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${id}`)
+    delCartItem (item) {
+      this.$http.delete(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${item.id}`)
         .then((res) => {
           emitter.emit('get-cart-list')
+          emitter.emit('push-cart-data', item)
           this.$StatusMsg(res, '刪除', '已成功刪除品項')
         }).catch((err) => {
           this.$StatusMsg(err.response, '刪除', '刪除品項失敗')
         })
     },
-    delAllCart (id) {
-      this.isLoadingItem = id
+    delAllCart (item) {
+      this.isLoadingItem = item.id
       this.$http.delete(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/carts`)
         .then((res) => {
           this.isLoadingItem = ''
           emitter.emit('get-cart-list')
+          emitter.emit('push-cart-data', item)
           this.$StatusMsg(res, '刪除', '已成功刪除所有品項')
         }).catch((err) => {
           this.$StatusMsg(err.response, '刪除', '刪除所有品項失敗')
         })
-    },
-    MaxInputNum (item) {
-      if (item.qty > item.product.num) {
-        item.qty = item.product.num
-      }
     }
   }
 }
