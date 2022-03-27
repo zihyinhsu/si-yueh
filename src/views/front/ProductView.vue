@@ -32,8 +32,8 @@
             <p class="fs-5">庫存 : {{product.inventory}} {{product.unit}}</p>
           </div>
           <div class="bookPrice mb-4">
-            <p class="text-primary fs-5 fs-md-4 fw-bold mb-2">定價 : <span class="text-decoration-line-through">NT$ {{product.origin_price}}</span></p>
-            <p class="text-primary fs-5 fs-md-4 fw-bold">優惠價 : NT$ {{product.price}}</p>
+            <!-- <p class="text-primary fs-5 fs-md-4 fw-bold mb-2">定價 : <span class="text-decoration-line-through">NT$ {{product.origin_price}}</span></p> -->
+            <p class="text-primary fs-5 fs-md-4 fw-bold">定價 : NT$ {{product.price}}</p>
           </div>
           <div class="d-flex justify-content-between justify-content-md-start w-100">
             <div class="btn btn-outline-primary w-90 w-md-auto me-3">
@@ -97,7 +97,6 @@
 
 import SwiperComponent from '@/components/front/SwiperComponent.vue'
 import swiperMixin from '@/mixins/swiperMixin'
-import emitter from '@/methods/emitter.js'
 export default {
   mixins: [swiperMixin],
   components: {
@@ -108,7 +107,9 @@ export default {
       product: [],
       isLoadingItem: '',
       isLoading: false,
-      itemCartData: []
+      cartData: {
+        carts: []
+      }
     }
   },
   methods: {
@@ -118,6 +119,8 @@ export default {
       this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/product/${id}`)
         .then((res) => {
           this.product = res.data.product
+          // 根據頁面切換，改變頁面title名稱
+          document.title = this.product.title
           this.isLoading = false
         }).catch((err) => {
           this.isLoading = false
@@ -126,10 +129,10 @@ export default {
     },
     addToCart (product, qty = 1) {
       // 如果選擇的數量>=庫存就return
-      if (this.itemCartData.qty >= product.inventory) {
-        this.$StatusMsg(false, '加入', '已達選取上限')
-        return
-      }
+      // if (this.itemCartData.qty >= product.inventory) {
+      //   this.$StatusMsg(false, '加入', '已達選取上限')
+      //   return
+      // }
       this.isLoadingItem = product.id
       this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
         data: {
@@ -137,19 +140,20 @@ export default {
           qty
         }
       }).then((res) => {
-        emitter.emit('get-cart-list')
+        this.$emitter.emit('get-cart-list')
         this.$StatusMsg(res, '加入', '已成功加入購書車')
         this.isLoadingItem = ''
-      }).catch((err) => {
-        this.$StatusMsg(err.response, '加入', '加入購書車失敗')
+      }).catch(() => {
+        this.$StatusMsg(false, '加入', '加入購書車失敗')
       })
     }
   },
   mounted () {
     this.getProduct()
-    emitter.on('push-cart-data', (itemCartData) => {
-      this.itemCartData = itemCartData
-      console.log('receive')
+    this.$emitter.emit('get-cart-list')
+    // 接收來自FrontNavbar的cartData資料
+    this.$emitter.on('push-cart-data', (cartData) => {
+      this.cartData = cartData
     })
   }
 }

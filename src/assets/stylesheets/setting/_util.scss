@@ -4,7 +4,9 @@
   background-attachment: fixed;
   }
 }
-
+.second-banner{
+  background-image: url('https://blog.libro.fm/wp-content/uploads/ashley-byrd-KVby0S0GaH4-unsplash.jpg"');
+}
 .opacity-0\.9{
   opacity: 0.9;
 }
@@ -49,7 +51,9 @@
   }
 }
 
-
+.form-control:disabled, .form-control[readonly]{
+  background-color: $light;
+}
 
 .size-100{
   width: 100px;

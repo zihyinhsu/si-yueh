@@ -11,7 +11,7 @@
                 <option :value="item" v-for="(item,i) in category" :key="i">{{item}}</option>
             </select>
         </div>
-        <div class="btn btn-primary text-white" @click="openModal ('isCreateNew', item)">
+        <div class="btn btn-primary text-white" @click="openModal ('isCreateNew')">
           <i class="fa-solid fa-book-medical me-3"></i>新增書籍</div>
     </div>
       <table class="table caption-top table-hover  text-primaryDark">
@@ -148,9 +148,9 @@ export default {
           this.$StatusMsg(res, '更新', '已成功更新書籍')
           this.$refs.productModal.hideModal()
           this.getProducts()
-        }).catch((err) => {
+        }).catch(() => {
           this.isLoading = false
-          this.$StatusMsg(err.response, '更新', '更新書籍失敗')
+          this.$StatusMsg(false, '更新', '更新書籍失敗')
         })
     },
     openModal (status, product) {
@@ -173,8 +173,8 @@ export default {
           this.$StatusMsg(res, '刪除', '已成功刪除書籍')
           this.$refs.delModal.hideModal()
           this.getProducts()
-        }).catch((err) => {
-          this.$StatusMsg(err.response, '刪除', '刪除書籍失敗')
+        }).catch(() => {
+          this.$StatusMsg(false, '刪除', '刪除書籍失敗')
         })
     }
   },

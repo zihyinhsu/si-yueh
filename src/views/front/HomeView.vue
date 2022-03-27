@@ -1,7 +1,7 @@
 <template>
 <LoadingView :active="isLoading">
     <img src="../../assets/images/loading.gif" style="height:200px;width:200px">
-  </LoadingView>
+</LoadingView>
 <!-- banner swiper -->
 <div class="bg-light">
   <div class="container py-7">
@@ -41,10 +41,11 @@
       <div class="banner rounded-4 overflow-hidden">
         <div class="position-relative">
           <div class="position-absolute w-100 h-100 d-inline-block bg-dark-mask"></div>
-        <img src="https://blog.libro.fm/wp-content/uploads/ashley-byrd-KVby0S0GaH4-unsplash.jpg" alt="">
+          <div class="second-banner bg-attachment-md-fixed" style="height:320px"></div>
           <div class="center w-75 w-md-auto">
-            <h2 class="text-white text-shadow fs-5 fs-md-1 fw-bold mb-3 mb-md-6 text-center">現在加入會員，立享八折優惠!</h2>
-            <div class="btn btn-primary fs-small fs-md-5 text-white fw-bold w-100">馬上領取<i class="fa-solid fa-arrow-pointer ms-2"></i></div>
+            <h2 class="text-white text-shadow fs-5 fs-md-1 fw-bold mb-3 mb-md-6 text-center">現在完成首購，立享八折優惠!</h2>
+            <p ref="cuponCode" class="position-absolute" :class="{'d-none':isCopied}" style="color: transparent">2022si-yueh</p>
+            <div class="btn btn-primary fs-small fs-md-5 text-white fw-bold w-100" @click.once="copyCuponCode">馬上領取<i class="fa-solid fa-arrow-pointer ms-2"></i></div>
           </div>
           </div>
       </div>
@@ -67,7 +68,8 @@ export default {
   mixins: [swiperMixin],
   data () {
     return {
-      isLoading: false
+      isLoading: false,
+      isCopied: false
     }
   },
   components: {
@@ -76,6 +78,22 @@ export default {
   setup () {
     return {
       modules: [Autoplay, Pagination]
+    }
+  },
+  methods: {
+    copyCuponCode () {
+      this.$StatusMsg(true, '複製', '您已成功複製優惠碼!')
+      // 建立 Range 物件
+      const range = document.createRange()
+      range.selectNode(this.$refs.cuponCode)
+      // 取得 Selection 物件
+      const selection = window.getSelection()
+      // 先清空當前選取範圍
+      selection.removeAllRanges()
+      // 加入 Range
+      selection.addRange(range)
+      document.execCommand('copy') // 執行瀏覽器複製命令
+      this.isCopied = true
     }
   },
   mounted () {

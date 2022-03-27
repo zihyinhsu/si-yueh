@@ -21,7 +21,7 @@
           </div>
           <!-- cart -->
           <div class="dropdown-menu dropdown-menu-end vw-87.5 vw-md-27.5 rounded-4 py-0">
-            <CartComponent :cart-data="cartData"></CartComponent>
+            <CartComponent :cart-data="cartData" @get-cart-list="getCartList"></CartComponent>
           </div>
       </div>
       <!-- 漢堡選單 -->
@@ -50,29 +50,20 @@
 
 <script>
 import CartComponent from '@/components/front/CartComponent.vue'
-import emitter from '@/methods/emitter.js'
 export default {
   data () {
     return {
       cartData: {
         carts: []
       },
-      itemCartData: []
+      itemCartData: {}
     }
   },
   components: {
     CartComponent
   },
-  watch: {
-    cartData: {
-      handler () {
-        this.getItemCartData()
-      },
-      deep: true
-    }
-  },
   methods: {
-    // 判斷當螢幕為手機版時，選單自動收合
+    // 判斷當螢幕為手機版時，點擊後選單自動收合
     navCollapseBack () {
       if (window.matchMedia('(max-width: 767px)').matches) {
         const navbarToggle = document.querySelector('.navbar-toggler')
@@ -80,29 +71,22 @@ export default {
       }
     },
     getCartList () {
-      // 如果選擇的數量>=庫存就return
-      if (this.itemCartData.qty >= this.itemCartData.inventory) {
-        this.$StatusMsg(false, '加入', '已達選取上限')
-        return
-      }
       this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`)
         .then((res) => {
           this.cartData = res.data.data
+          this.cartData.carts.forEach((item) => {
+            this.itemCartData = item
+          })
+          // 每次更新購物車時傳遞出cartData
+          this.$emitter.emit('push-cart-data', this.cartData)
         }).catch((err) => {
           console.log(err)
         })
-    },
-    getItemCartData () {
-      this.cartData.carts.forEach((item) => {
-        this.itemCartData = item
-        emitter.emit('push-cart-data', item)
-        console.log('push')
-      })
     }
   },
   mounted () {
     this.getCartList()
-    emitter.on('get-cart-list', () => {
+    this.$emitter.on('get-cart-list', () => {
       this.getCartList()
     })
   }

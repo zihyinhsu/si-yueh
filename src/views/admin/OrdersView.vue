@@ -8,7 +8,7 @@
       <table class="table caption-top table-hover  text-primaryDark">
         <thead>
           <tr>
-            <th class="fw-bold" scope="col">購買時間</th>
+            <th scope="col">購買時間</th>
             <th scope="col">Email</th>
             <th scope="col">購買款項</th>
             <th scope="col">應付金額</th>
@@ -18,7 +18,7 @@
         </thead>
         <tbody>
           <tr v-for="item in orders" :key="item.id">
-            <td >{{date(item.create_at)}}</td>
+            <td >{{this.$filters.date(item.create_at)}}</td>
             <td>{{item.user.email}}</td>
             <td>
                 <ul class="list-unstyled">
@@ -27,7 +27,7 @@
                     </li>
                 </ul>
             </td>
-            <td>NT$ {{item.total}}</td>
+            <td>NT$ {{Math.round(item.total)}}</td>
             <td class="ps-5">
               <!-- ToggleSwitch -->
                     <label class="switch">
@@ -64,7 +64,6 @@
 import PagiNation from '@/components/front/PagiNation'
 import OrderModal from '@/components/admin/OrderModal'
 import DelModal from '@/components/admin/DelModal'
-import { date } from '@/methods/filters.js'
 export default {
   data () {
     return {
@@ -80,7 +79,6 @@ export default {
     DelModal
   },
   methods: {
-    date,
     getOrders (page = 1) {
       this.isLoading = true
       this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/orders?page=${page}`)
@@ -88,8 +86,7 @@ export default {
           this.orders = res.data.orders
           this.pagination = res.data.pagination
           this.isLoading = false
-        }).catch((err) => {
-          console.log(err)
+        }).catch(() => {
           this.isLoading = false
         })
     },
@@ -112,8 +109,8 @@ export default {
           this.isLoading = false
           this.$refs.orderModal.hideModal()
           this.getOrders()
-        }).catch((err) => {
-          this.$StatusMsg(err.response, '更新', '更新付款狀態失敗')
+        }).catch(() => {
+          this.$StatusMsg(false, '更新', '更新付款狀態失敗')
           this.isLoading = false
         })
     },
@@ -125,8 +122,8 @@ export default {
           this.isLoading = false
           this.$refs.delModal.hideModal()
           this.getOrders()
-        }).catch((err) => {
-          this.$StatusMsg(err.response, '更新', '刪除訂單失敗')
+        }).catch(() => {
+          this.$StatusMsg(false, '更新', '刪除訂單失敗')
           this.isLoading = false
         })
     }

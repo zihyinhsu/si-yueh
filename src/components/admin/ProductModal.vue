@@ -201,8 +201,8 @@ export default {
           this.$StatusMsg(res, '上傳', '圖片已成功上傳')
           this.tempProduct.imageUrl = res.data.imageUrl
           this.tempProduct.imgPreviewURL = ''
-        }).catch((err) => {
-          this.$StatusMsg(err.response, '上傳', '圖片上傳失敗')
+        }).catch(() => {
+          this.$StatusMsg(false, '上傳', '圖片上傳失敗')
         })
     }
   }

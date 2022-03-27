@@ -1,9 +1,5 @@
 import { createApp } from 'vue'
 
-// vue-meta
-// import { createMemoryHistory } from 'vue-router'
-import { createMetaManager } from 'vue-meta'
-
 // bootstrap
 import 'bootstrap'
 
@@ -43,6 +39,9 @@ import {
 // 匯入繁體中文語系檔案
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json'
 
+import { date } from '@/methods/filters.js'
+import emitter from '@/methods/emitter.js'
+
 import App from './App.vue'
 import router from './router'
 
@@ -63,15 +62,14 @@ setLocale('zh_TW')
 // vee-validate //
 
 const app = createApp(App)
-// vue-meta
-app.use(createMetaManager)
 
 app.use(router)
 app.config.globalProperties.$StatusMsg = $StatusMsg
+app.config.globalProperties.$emitter = emitter
+app.config.globalProperties.$filters = { date }
 
 app.use(VueAxios, axios)
 app.use(CKEditor)
-// app.use(VueMeta)
 app.component('LoadingView', Loading)
 app.component('FormView', Form)
 app.component('FieldView', Field)

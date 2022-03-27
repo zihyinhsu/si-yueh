@@ -4,7 +4,6 @@
     :class="{'bg-light': titlebgColor }"
     v-if="showTitle" style="background:white"
     ># {{category}}</h2>
-
     <swiper
     :slidesPerView="1.5"
     :spaceBetween="20"
@@ -44,7 +43,6 @@
 
 <script>
 import swiperMixin from '@/mixins/swiperMixin'
-import emitter from '@/methods/emitter.js'
 
 export default {
   // category、titlebgColor是在外層元件上自訂的屬性，用來篩選每個元件內的products資料
@@ -69,7 +67,9 @@ export default {
       products: [],
       isLoadingItem: '',
       swiperShow: false,
-      itemCartData: []
+      cartData: {
+        carts: []
+      }
     }
   },
   methods: {
@@ -88,24 +88,24 @@ export default {
           console.log(err)
         })
     },
-    addToCart (item, qty = 1) {
+    addToCart (product, qty = 1) {
       // 如果選擇的數量>=庫存就return
-      if (this.itemCartData.qty >= item.inventory) {
-        this.$StatusMsg(false, '加入', '已達選取上限')
-        return
-      }
-      this.isLoadingItem = item.id
+      // if () {
+      //   this.$StatusMsg(false, '加入', '已達選取上限')
+      //   return
+      // }
+      this.isLoadingItem = product.id
       this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
         data: {
-          product_id: item.id,
+          product_id: product.id,
           qty
         }
       }).then((res) => {
-        emitter.emit('get-cart-list')
+        this.$emitter.emit('get-cart-list')
         this.$StatusMsg(res, '加入', '已成功加入購物車')
         this.isLoadingItem = ''
-      }).catch((err) => {
-        this.$StatusMsg(err.response, '加入', '加入購物車失敗')
+      }).catch(() => {
+        this.$StatusMsg(false, '加入', '加入購物車失敗')
       })
     }
   },
@@ -123,8 +123,10 @@ export default {
   },
   mounted () {
     this.getProducts(this.category)
-    emitter.on('push-cart-data', (itemCartData) => {
-      this.itemCartData = itemCartData
+    this.$emitter.emit('get-cart-list')
+    // 接收來自FrontNavbar的cartData資料
+    this.$emitter.on('push-cart-data', (cartData) => {
+      this.cartData = cartData
     })
   }
 

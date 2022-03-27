@@ -47,8 +47,8 @@ export default {
           document.cookie = `zyToken=${token}; expires=${new Date(expired)}`
           // 轉址
           this.$router.push('/admin/products')
-        }).catch((err) => {
-          this.$StatusMsg(err.response, '登入', '請重新登入')
+        }).catch(() => {
+          this.$StatusMsg(false, '登入', '請重新登入')
           this.user.password = ''
         })
     }

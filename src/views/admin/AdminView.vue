@@ -32,8 +32,8 @@ export default {
         .then((res) => {
           this.checkSuccess = true
           this.$StatusMsg(res, '登入', '已成功登入')
-        }).catch((err) => {
-          this.$StatusMsg(err.response, '登入', '請重新登入')
+        }).catch(() => {
+          this.$StatusMsg(false, '登入', '請重新登入')
           // 轉址到登入頁
           this.$router.push('/login')
         })

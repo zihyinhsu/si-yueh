@@ -89,7 +89,6 @@
 
 <script>
 import PagiNation from '@/components/front/PagiNation'
-import emitter from '@/methods/emitter.js'
 
 export default {
   data () {
@@ -101,7 +100,9 @@ export default {
       isLoadingItem: '',
       search: '',
       isLoading: false,
-      itemCartData: []
+      cartData: {
+        carts: []
+      }
     }
   },
   components: {
@@ -134,20 +135,20 @@ export default {
           console.log(err)
         })
     },
-    addToCart (item, qty = 1) {
+    addToCart (product, qty = 1) {
       // 如果選擇的數量>=庫存就return
-      if (this.itemCartData.qty >= item.inventory) {
-        this.$StatusMsg(false, '加入', '已達選取上限')
-        return
-      }
-      this.isLoadingItem = item.id
+      // if (this.itemCartData.qty >= product.inventory) {
+      //   this.$StatusMsg(false, '加入', '已達選取上限')
+      //   return
+      // }
+      this.isLoadingItem = product.id
       this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
         data: {
-          product_id: item.id,
+          product_id: product.id,
           qty
         }
       }).then((res) => {
-        emitter.emit('get-cart-list')
+        this.$emitter.emit('get-cart-list')
         this.$StatusMsg(res, '加入', '已成功加入購書車')
         this.isLoadingItem = ''
       }).catch((err) => {
@@ -169,7 +170,11 @@ export default {
       const arr = []
       // 比對字串
       strArr.forEach((str) => {
-        this.products.forEach((item) => {
+        let data = this.products
+        if (this.search !== '') {
+          data = this.productsAll
+        }
+        data.forEach((item) => {
           if (item.title.includes(str) || item.author.includes(str)) {
             arr.push(item)
           }
@@ -208,9 +213,10 @@ export default {
   mounted () {
     this.getProducts()
     this.getAllProducts()
-    emitter.on('push-cart-data', (itemCartData) => {
-      this.itemCartData = itemCartData
-      console.log('receive')
+    this.$emitter.emit('get-cart-list')
+    // 接收來自FrontNavbar的cartData資料
+    this.$emitter.on('push-cart-data', (cartData) => {
+      this.cartData = cartData
     })
   }
 }

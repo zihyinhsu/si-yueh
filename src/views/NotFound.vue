@@ -1,5 +1,4 @@
 <template>
-     <!-- <FrontNavbar></FrontNavbar> -->
      <div class="bg-light">
         <div class="container vh-100">
                 <div class="d-flex flex-column align-items-center center">
@@ -10,16 +9,10 @@
                 </div>
         </div>
     </div>
-    <!-- <FooterComponent></FooterComponent> -->
 </template>
 
 <script>
-// import FrontNavbar from '@/components/front/FrontNavbar.vue'
-// import FooterComponent from '@/components/FooterComponent.vue'
 export default {
-  components: {
-    // FrontNavbar,
-    // FooterComponent
-  }
+
 }
 </script>

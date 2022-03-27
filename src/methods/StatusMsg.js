@@ -8,6 +8,7 @@ export default function (res = true, title = '更新', content) {
       content: content,
       icon: 'fa-circle-check'
     })
+    // console.log(res)
   } else {
     emitter.emit('push-status-msg', {
       style: 'danger',

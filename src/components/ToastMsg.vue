@@ -9,7 +9,7 @@
                 @click="clearToast(i)"></button>
             </div>
                 <div class="toast-body d-flex flex-column align-items-center text-dark" >
-                    <i class="fa-solid fa-circle-check fa-2x mb-3" :class="`${msg.icon} text-${msg.style}`"></i>
+                    <i class="fa-solid fa-2x mb-3" :class="`${msg.icon} text-${msg.style}`"></i>
                     {{msg.content}}
                 </div>
         </div>

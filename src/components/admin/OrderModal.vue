@@ -28,7 +28,7 @@
                             <tbody>
                                 <tr class="text-start">
                                     <th class="text-secondaryDark" scope="row">下單時間</th>
-                                    <td class="text-secondaryDark">{{tempOrder.create_at}}</td>
+                                    <td class="text-secondaryDark">{{this.$filters.date(tempOrder.create_at)}}</td>
                                 </tr>
                                 <tr class="text-start">
                                     <th class="text-secondaryDark" scope="row">Email</th>
@@ -70,7 +70,7 @@
                             </div>
                             <p>x {{item.qty}}</p>
                         </li>
-                        <p class="fs-4 fw-bold text-end"> 總計金額:NT${{tempOrder.total}}</p>
+                        <p class="fs-4 fw-bold text-end"> 總計金額:NT${{Math.round(tempOrder.total)}}</p>
                     </ul>
                 </div>
             </div>
