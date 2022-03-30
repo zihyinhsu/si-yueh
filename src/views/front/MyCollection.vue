@@ -11,7 +11,7 @@
 
     <div class="row row-cols-2 row-cols-md-5">
         <div class="col mb-7" v-for="item in favorite" :key="item.id">
-            <div class="bookCoverImg position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow">
+            <div class="bookCoverImg collectionImg position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow">
                 <router-link :to="`/product/${item.id}`">
                     <img class="ratio ratio-3x4" :src="item.imageUrl" :alt="item.title">
                     </router-link>
