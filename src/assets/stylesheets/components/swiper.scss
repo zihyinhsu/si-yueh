@@ -1,21 +1,15 @@
 .bookCoverImg img{
     width: 100%;
     display: block;
-    height: 294px !important;
+    height: 256px !important;
     object-fit: cover;
     background-position: center center;
     background-size: cover;
-}
-@include media-breakpoint-up(md) {
-    .bookCoverImg-md img{
-        width: 100%;
-        display: block;
-        height: 294px !important;
-        object-fit: cover;
-        background-position: center center;
-        background-size: cover;
+    @include media-breakpoint-up(md) {
+      height: 294px !important;
     }
 }
+
 .swiper-pagination-bullet{
      background: #fff !important;
      opacity:0.8 !important;

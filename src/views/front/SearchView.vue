@@ -144,7 +144,7 @@ export default {
       temp = { ...temp[0] }
       const resultQty = temp.qty + qty
       if (resultQty > product.inventory) {
-        this.$StatusMsg(false, '加入', '加入購書車失敗')
+        this.$StatusMsg(false, '加入', '超過庫存數量')
         this.isLoadingItem = ''
       } else {
         this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {

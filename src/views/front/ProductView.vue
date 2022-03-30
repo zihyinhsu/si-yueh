@@ -10,7 +10,7 @@
       <nav aria-label="breadcrumb ">
         <ol class="breadcrumb py-3 py-md-6 m-0">
           <li class="breadcrumb-item"><router-link class="text-secondaryDark fs-small fs-md-5" to="/">首頁</router-link></li>
-          <li class="breadcrumb-item ps-1"><router-link class="text-secondaryDark fs-small fs-md-5" to="/search">全站搜尋</router-link></li>
+          <li class="breadcrumb-item ps-1"><router-link class="text-secondaryDark fs-small fs-md-5" to="/search">{{product.category}}</router-link></li>
           <li class="breadcrumb-item ps-1 text-secondaryDark active" aria-current="page"><span class="fs-small fw-bold fs-md-5">{{product.title}}</span></li>
         </ol>
       </nav>
@@ -148,7 +148,7 @@ export default {
       const resultQty = temp.qty + qty
       if (resultQty > product.inventory) {
         this.isLoadingItem = ''
-        this.$StatusMsg(false, '加入', '加入購書車失敗')
+        this.$StatusMsg(false, '加入', '超過庫存數量')
       } else {
         this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
           data: {

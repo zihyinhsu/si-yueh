@@ -1,5 +1,5 @@
 <template>
-<div class="container pt-7" :class="favorite.length===0 ? 'vh-70' : 'vh-auto'">
+<div class="container pt-7" :class="favoriteId.length <= 2 ? 'vh-70' : 'vh-auto'">
     <!-- 如果收藏夾為空 -->
     <div class="w-100 d-flex flex-column align-items-center py-5 center"
         v-if="favorite.length===0">
@@ -11,7 +11,7 @@
 
     <div class="row row-cols-2 row-cols-md-5">
         <div class="col mb-7" v-for="item in favorite" :key="item.id">
-            <div class="bookCoverImg-md position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow">
+            <div class="bookCoverImg position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow">
                 <router-link :to="`/product/${item.id}`">
                     <img class="ratio ratio-3x4" :src="item.imageUrl" :alt="item.title">
                     </router-link>
@@ -110,7 +110,6 @@ export default {
     this.$emitter.on('push-cart-data', (cartData) => {
       this.cartData = cartData
     })
-    // localStorage.clear()
   }
 }
 </script>
