@@ -32,13 +32,12 @@
             <p class="fs-5">庫存 : {{product.inventory}} {{product.unit}}</p>
           </div>
           <div class="bookPrice mb-4">
-            <!-- <p class="text-primary fs-5 fs-md-4 fw-bold mb-2">定價 : <span class="text-decoration-line-through">NT$ {{product.origin_price}}</span></p> -->
             <p class="text-primary fs-5 fs-md-4 fw-bold">定價 : NT$ {{product.price}}</p>
           </div>
-          <div class="d-flex justify-content-between justify-content-md-start w-100">
-            <div class="btn btn-outline-primary w-90 w-md-auto me-3">
-              <i class="fa-solid fa-bookmark me-3"></i>加入收藏
-              </div>
+          <div class="d-flex justify-content-between justify-content-md-start w-100" @click="toggleFavorite(product)">
+            <div class="btn w-90 w-md-auto me-3" :class="favoriteId.includes(product.id) ? 'btn-primaryDark' : 'btn-outline-primary'">
+              <i class="fa-solid fa-bookmark me-3"></i><span>{{favoriteId.includes(product.id) ? '取消':'加入'}}收藏</span>
+            </div>
             <div class="btn btn-primary text-white w-100 w-md-auto" @click="addToCart(product)">
               <i class="fa-solid fa-cart-plus me-3"></i>加入購書車<span v-show="isLoadingItem === product.id"><i class="fas fa-spinner fa-pulse ms-1"></i></span>
               </div>
@@ -109,7 +108,23 @@ export default {
       isLoading: false,
       cartData: {
         carts: []
-      }
+      },
+      favorite: JSON.parse(localStorage.getItem('favorite')) || [],
+      favoriteId: JSON.parse(localStorage.getItem('favoriteId')) || []
+    }
+  },
+  watch: {
+    favorite: {
+      handler () {
+        localStorage.setItem('favorite', JSON.stringify(this.favorite))
+      },
+      deep: true
+    },
+    favoriteId: {
+      handler () {
+        localStorage.setItem('favoriteId', JSON.stringify(this.favoriteId))
+      },
+      deep: true
     }
   },
   methods: {
@@ -122,30 +137,44 @@ export default {
           // 根據頁面切換，改變頁面title名稱
           document.title = this.product.title
           this.isLoading = false
-        }).catch((err) => {
+        }).catch(() => {
           this.isLoading = false
-          console.log(err)
         })
     },
     addToCart (product, qty = 1) {
-      // 如果選擇的數量>=庫存就return
-      // if (this.itemCartData.qty >= product.inventory) {
-      //   this.$StatusMsg(false, '加入', '已達選取上限')
-      //   return
-      // }
       this.isLoadingItem = product.id
-      this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
-        data: {
-          product_id: product.id,
-          qty
-        }
-      }).then((res) => {
-        this.$emitter.emit('get-cart-list')
-        this.$StatusMsg(res, '加入', '已成功加入購書車')
+      let temp = this.cartData.carts.filter((item) => item.product_id === product.id)
+      temp = { ...temp[0] }
+      const resultQty = temp.qty + qty
+      if (resultQty > product.inventory) {
         this.isLoadingItem = ''
-      }).catch(() => {
         this.$StatusMsg(false, '加入', '加入購書車失敗')
-      })
+      } else {
+        this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
+          data: {
+            product_id: product.id,
+            qty
+          }
+        }).then((res) => {
+          this.$emitter.emit('get-cart-list')
+          this.$StatusMsg(res, '加入', '已成功加入購書車')
+          this.isLoadingItem = ''
+        }).catch(() => {
+          this.$StatusMsg(false, '加入', '加入購書車失敗')
+        })
+      }
+    },
+    toggleFavorite (product) {
+      const favoriteIndex = this.favorite.findIndex((item) => item.id === product.id)
+      if (favoriteIndex === -1) {
+        this.favorite.push(product)
+        this.favoriteId.push(product.id)
+        this.$StatusMsg(true, '收藏', '已成功收藏')
+      } else {
+        this.favorite.splice(favoriteIndex, 1)
+        this.favoriteId.splice(favoriteIndex, 1)
+        this.$StatusMsg(false, '收藏', '已取消收藏')
+      }
     }
   },
   mounted () {

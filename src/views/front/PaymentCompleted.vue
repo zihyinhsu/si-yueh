@@ -30,6 +30,7 @@ export default {
     OrderNav
   },
   methods: {
+    // 倒數功能
     countDown () {
       // 執行一次，count減1
       this.count--

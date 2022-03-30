@@ -1,5 +1,13 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-white bg-white sticky-top box-shadow">
+<div class="sticky-top" id="top">
+  <!-- 首購優惠CTA -->
+  <div class="bg-primary cursor-pointer" @click="goAnchor">
+  <p class="text-center text-white p-2 fs-small fs-md-5">現在完成首購，立享八折優惠!
+    <span class="ms-2"><i class="fa-solid fa-circle-down"></i></span>
+  </p>
+  </div>
+  <!-- nav -->
+  <nav class="navbar navbar-expand-lg navbar-white bg-white box-shadow">
     <div class="container">
       <!-- logo -->
       <router-link class="navbar-brand" to="/">
@@ -20,7 +28,7 @@
 
           </div>
           <!-- cart -->
-          <div class="dropdown-menu dropdown-menu-end vw-87.5 vw-md-27.5 rounded-4 py-0">
+          <div class="dropdown-menu dropdown-menu-end vw-87.5 vw-md-27.5 rounded-4">
             <CartComponent :cart-data="cartData" @get-cart-list="getCartList"></CartComponent>
           </div>
       </div>
@@ -43,9 +51,9 @@
           </li>
         </ul>
       </div>
-
     </div>
   </nav>
+</div>
 </template>
 
 <script>
@@ -55,8 +63,7 @@ export default {
     return {
       cartData: {
         carts: []
-      },
-      itemCartData: {}
+      }
     }
   },
   components: {
@@ -74,14 +81,15 @@ export default {
       this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`)
         .then((res) => {
           this.cartData = res.data.data
-          this.cartData.carts.forEach((item) => {
-            this.itemCartData = item
-          })
           // 每次更新購物車時傳遞出cartData
           this.$emitter.emit('push-cart-data', this.cartData)
         }).catch((err) => {
           console.log(err)
         })
+    },
+    goAnchor () {
+      const anchor = document.querySelector('#cta')
+      document.documentElement.scrollTop = anchor.offsetTop - 150
     }
   },
   mounted () {

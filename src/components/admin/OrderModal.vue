@@ -46,6 +46,10 @@
                                     <th class="text-secondaryDark" scope="row">收件地址</th>
                                     <td class="text-secondaryDark">{{tempOrder.user?.address}}</td>
                                 </tr>
+                                <tr class="text-start" v-if="tempOrder.user?.payment">
+                                    <th class="text-secondaryDark" scope="row">付款方式</th>
+                                    <td class="text-secondaryDark">{{tempOrder.user?.payment}}</td>
+                                </tr>
                                 <tr class="text-start" v-if="tempOrder.message">
                                     <th class="text-secondaryDark" scope="row">備註</th>
                                     <td class="text-secondaryDark">{{tempOrder.message}}</td>

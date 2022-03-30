@@ -19,6 +19,7 @@ $utilities: map-merge(
       property: width,
       class: w,
       values: (
+        10: 10%,
         25: 25%,
         30: 30%,
         35: 35%,
@@ -63,7 +64,8 @@ $utilities: map-merge(
       rfs: true,
       property: top,
       values: $position-values
-    ),"start": (
+    ),
+    "start": (
       responsive: true,//new
       rfs: true,
       property: left,
@@ -98,6 +100,7 @@ $utilities: map-merge(
       responsive: true,//new
       class: vh,
       values: (
+      40: 40vh,
       50: 50vh,
       60: 60vh,
       65: 65vh,

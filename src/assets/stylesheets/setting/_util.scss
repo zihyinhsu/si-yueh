@@ -4,12 +4,16 @@
   background-attachment: fixed;
   }
 }
+.banner img, .second-banner{
+  height: 160px;
+  @include media-breakpoint-up(md) {
+    height: 320px;
+  }
+}
 .second-banner{
   background-image: url('https://blog.libro.fm/wp-content/uploads/ashley-byrd-KVby0S0GaH4-unsplash.jpg"');
 }
-.opacity-0\.9{
-  opacity: 0.9;
-}
+
 // text-shadow
 .text-shadow{
   text-shadow: 0 4px 4px rgba($dark,0.5);
@@ -55,11 +59,6 @@
   background-color: $light;
 }
 
-.size-100{
-  width: 100px;
-  height: 100px;
-}
-
 .accordion-button::after{
   background-image: url('https://icon-library.com/images/white-down-arrow-icon/white-down-arrow-icon-9.jpg') !important;
   background-position: center center;
@@ -73,6 +72,11 @@
   @include media-breakpoint-up(md) {
     letter-spacing:10px
     }
+}
+
+.size-100{
+  width: 100px;
+  height: 100px;
 }
 
 // breakpoint

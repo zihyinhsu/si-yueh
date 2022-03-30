@@ -20,7 +20,7 @@
         <div class="row">
             <!-- sideBar -->
             <div class="col-md-3 mb-5 mb-md-0" :class="{'vh-md-70':filterProducts.length <= 1}">
-              <div class="position-sticky top-15">
+              <div class="position-sticky top-20">
                 <div class="accordion" id="accordion" >
                     <div class="accordion-item border-0">
                         <h2 class="accordion-header" id="panelsStayOpen-headingOne">
@@ -49,8 +49,8 @@
             </div>
             <!-- content -->
             <div class="col-md-9">
-                <ul>
-                  <p class="fs-3 fw-bold vh-70 vh-md-auto py-4 w-100" v-if="filterProducts.length === 0">沒有相符的搜尋結果 Σ( ° △ °)</p>
+                <ul :class="{'vh-50':filterProducts.length === 1}">
+                  <p class="fs-3 fw-bold vh-40 vh-md-60 py-4 w-100" v-if="filterProducts.length === 0">沒有相符的搜尋結果 Σ( ° △ °)</p>
                     <li class="bg-white mb-4 mb-md-8 hoverBoxShadow" v-for="item in filterProducts" :key="item.id">
                         <div class=" d-flex align-items-center w-100 p-3 p-md-5 h-100">
                             <router-link class="text-primary me-4 me-md-5 w-42.5 w-md-30" :to="`/product/${item.id}`">
@@ -58,12 +58,12 @@
                                     :src="item.imageUrl" :alt="item.title">
                                 </router-link>
                                 <div class="bookIntro border-end-md pe-md-1 w-57.5 w-md-45 me-md-4">
-                                    <p class="fw-bold fs-md-4 mb-2 mb-md-3">{{item.title}}</p>
-                                    <p class="fs-small fs-md-5 mb-2 mb-md-3">作者 : {{item.author}}</p>
-                                    <p class="fs-small fs-md-5 mb-2 mb-md-3">出版社 : {{item.publishing_house}}</p>
-                                    <p class="fs-small fs-md-5 mb-2 mb-md-3">出版日期 : {{item.publication_date}}</p>
-                                    <p class="fs-md-3 fw-bold text-primary mb-2 mb-md-3">NT$ {{item.price}}</p>
-                                    <div class="btn btn-primary text-white w-100 w-md-auto" @click="addToCart(item)">
+                                    <p class="fw-bold fs-md-4 mb-1 mb-md-2">{{item.title}}</p>
+                                    <p class="fs-small fs-md-5 mb-1 mb-md-2">作者 : {{item.author}}</p>
+                                    <p class="fs-small fs-md-5 mb-1 mb-md-2">出版社 : {{item.publishing_house}}</p>
+                                    <p class="fs-small fs-md-5 mb-1 mb-md-2">出版日期 : {{item.publication_date}}</p>
+                                    <p class="fs-md-3 fw-bold text-primary mb-1 mb-md-2">NT$ {{item.price}}</p>
+                                    <div class="btn btn-primary text-white w-md-auto fs-small fs-md-5" @click="addToCart(item)">
                                         <i class="fa-solid fa-cart-plus me-3"></i>加入購書車<span v-show="isLoadingItem === item.id"><i class="fas fa-spinner fa-pulse ms-1"></i></span>
                                     </div>
                                 </div>
@@ -136,30 +136,48 @@ export default {
         })
     },
     addToCart (product, qty = 1) {
-      // 如果選擇的數量>=庫存就return
-      // if (this.itemCartData.qty >= product.inventory) {
-      //   this.$StatusMsg(false, '加入', '已達選取上限')
-      //   return
-      // }
+    // 如果選擇的數量>=庫存就return
       this.isLoadingItem = product.id
-      this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
-        data: {
-          product_id: product.id,
-          qty
-        }
-      }).then((res) => {
-        this.$emitter.emit('get-cart-list')
-        this.$StatusMsg(res, '加入', '已成功加入購書車')
+      // 篩選出cartData與指定商品中id相同的資料
+      let temp = this.cartData.carts.filter(item => item.product_id === product.id)
+      // 取陣列中第一個物件
+      temp = { ...temp[0] }
+      const resultQty = temp.qty + qty
+      if (resultQty > product.inventory) {
+        this.$StatusMsg(false, '加入', '加入購書車失敗')
         this.isLoadingItem = ''
-      }).catch((err) => {
-        this.$StatusMsg(err.response, '加入', '加入購書車失敗')
-      })
+      } else {
+        this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
+          data: {
+            product_id: product.id,
+            qty
+          }
+        }).then((res) => {
+          this.$emitter.emit('get-cart-list')
+          this.$StatusMsg(res, '加入', '已成功加入購書車')
+          this.isLoadingItem = ''
+        }).catch(() => {
+          this.$StatusMsg(false, '加入', '加入購書車失敗')
+        })
+      }
     },
     // 判斷當螢幕為手機版時，點擊選單自動收合
     accordionCollapseBack () {
       if (window.matchMedia('(max-width: 767px)').matches) {
         const accordionButton = document.querySelector('.accordion-button')
         accordionButton.click()
+      }
+    }
+  },
+  watch: {
+    search () {
+      if (this.search !== '') {
+        this.pagination.has_pre = false
+        this.pagination.current_page = 1
+        this.pagination.total_pages = 1
+        this.pagination.has_next = false
+      } else if (this.search === '') {
+        this.getProducts()
       }
     }
   },

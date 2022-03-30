@@ -1,5 +1,5 @@
 <template>
-    <div class="toast-container position-fixed top-50 top-md-10 start-50 translate-middle" style="z-index:3000">
+    <div class="toast-container position-fixed top-85 top-md-10 start-50 translate-middle" style="z-index:3000">
             <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true"
             v-for="(msg,i) in messages" :key="i">
             <div class="toast-header">
@@ -17,8 +17,6 @@
 </template>
 
 <script>
-import emitter from '@/methods/emitter.js'
-
 export default {
 
   data () {
@@ -37,7 +35,7 @@ export default {
     }
   },
   mounted () {
-    emitter.on('push-status-msg', (message) => {
+    this.$emitter.on('push-status-msg', (message) => {
       const { style, title, content, icon } = message
       this.messages.push({ style, title, content, icon })
       this.toastShow()

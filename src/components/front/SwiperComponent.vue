@@ -18,7 +18,7 @@
     }"
     class="bookSwiper rounded-4 h-100 p-2">
     <swiper-slide class="swiperSlide" v-for="item in products" :key="item.id"
-      :class="{'d-none': id === item.id }">
+      :class="{'d-none': id === item }">
       <!-- ↑若產品內頁的產品id與推薦書籍id相同則隱藏 -->
         <div class="bookCoverImg position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow">
           <router-link :to="`/product/${item.id}`">
@@ -29,8 +29,10 @@
                 <i class="fa-solid fa-cart-plus me-3"></i>加入購物車 <span v-show="isLoadingItem === item.id">
                   <i class="fas fa-spinner fa-pulse ms-1"></i></span>
                 </div>
-              <div class="bookMark btn btn-sm btn-primaryLight position-absolute top-0 end-0 rounded-circle m-2">
-                <span class="material-icons-outlined text-white fs-5 mt-1">bookmark_border</span>
+              <div class="bookMark btn btn-sm position-absolute top-0 end-0 rounded-circle m-2"
+              @click="toggleFavorite(item)" :class="favoriteId.includes(item.id) ? 'btn-primaryDark':'btn-primaryLight'">
+                <span class="material-icons-outlined text-white fs-5 mt-1" v-if="favoriteId.includes(item.id)">bookmark</span>
+                <span class="material-icons-outlined text-white fs-5 mt-1" v-else>bookmark_border</span>
               </div>
         </div>
         <p class="fs-4">{{item.title}}</p>
@@ -69,7 +71,36 @@ export default {
       swiperShow: false,
       cartData: {
         carts: []
-      }
+      },
+      favorite: JSON.parse(localStorage.getItem('favorite')) || [],
+      favoriteId: JSON.parse(localStorage.getItem('favoriteId')) || []
+    }
+  },
+  watch: {
+    // 監聽產品內頁的category變化
+    category () {
+      this.getProducts(this.category)
+    },
+    // 監聽動態路由變化
+    $route (to) {
+      this.pageId = to.params.id
+      this.$emit('change-page')
+      this.getProducts(this.category)
+    },
+    // 用locolstorage自訂欄位並存取資料
+    favorite: {
+      handler () {
+        // localStorage只接受字串
+        localStorage.setItem('favorite', JSON.stringify(this.favorite))
+        // this.$emitter.emit('push-favorite', this.favorite)
+      },
+      deep: true
+    },
+    favoriteId: {
+      handler () {
+        localStorage.setItem('favoriteId', JSON.stringify(this.favoriteId))
+      },
+      deep: true
     }
   },
   methods: {
@@ -89,36 +120,44 @@ export default {
         })
     },
     addToCart (product, qty = 1) {
-      // 如果選擇的數量>=庫存就return
-      // if () {
-      //   this.$StatusMsg(false, '加入', '已達選取上限')
-      //   return
-      // }
       this.isLoadingItem = product.id
-      this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
-        data: {
-          product_id: product.id,
-          qty
-        }
-      }).then((res) => {
-        this.$emitter.emit('get-cart-list')
-        this.$StatusMsg(res, '加入', '已成功加入購物車')
+      // 篩選出cartData與指定商品中id相同的資料
+      let temp = this.cartData.carts.filter((item) => item.product_id === product.id)
+      // 取陣列中第一個物件
+      temp = { ...temp[0] }
+      const resultQty = temp.qty + qty
+      if (resultQty > product.inventory) {
         this.isLoadingItem = ''
-      }).catch(() => {
-        this.$StatusMsg(false, '加入', '加入購物車失敗')
-      })
-    }
-  },
-  watch: {
-    // 監聽產品內頁的category變化
-    category () {
-      this.getProducts(this.category)
+        this.$StatusMsg(false, '加入', '加入購書車失敗')
+      } else {
+        this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
+          data: {
+            product_id: product.id,
+            qty
+          }
+        }).then((res) => {
+          this.$emitter.emit('get-cart-list')
+          this.$StatusMsg(res, '加入', '已成功加入購物車')
+          this.isLoadingItem = ''
+        }).catch(() => {
+          this.$StatusMsg(false, '加入', '加入購書車失敗')
+        })
+      }
     },
-    // 監聽動態路由變化
-    $route (to) {
-      this.pageId = to.params.id
-      this.$emit('change-page')
-      this.getProducts(this.category)
+    toggleFavorite (product) {
+      // findIndex 會回傳第一個符合條件的陣列元素的索引
+      const favoriteIndex = this.favorite.findIndex((item) => item.id === product.id)
+      // 如果沒有搜到符合的元素，就將資料推進this.favorite裡面
+      if (favoriteIndex === -1) {
+        this.favorite.push(product)
+        this.favoriteId.push(product.id)
+        this.$StatusMsg(true, '收藏', '已成功收藏')
+      } else {
+        // 如果搜到符合的元素，就取消收藏。
+        this.favorite.splice(favoriteIndex, 1)
+        this.favoriteId.splice(favoriteIndex, 1)
+        this.$StatusMsg(false, '收藏', '已取消收藏')
+      }
     }
   },
   mounted () {
@@ -128,7 +167,7 @@ export default {
     this.$emitter.on('push-cart-data', (cartData) => {
       this.cartData = cartData
     })
+    // localStorage.clear()
   }
-
 }
 </script>

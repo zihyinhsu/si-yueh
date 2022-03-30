@@ -68,8 +68,8 @@
                 </div>
             </div>
             <div class="col-md-5 offset-md-1">
-                <form-view ref="form" class="bg-white p-4 p-md-8" v-slot="{ errors }">
-                  <h2 class="bg-light category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 收件人資料</h2>
+                    <form-view ref="form" class="bg-white p-4 p-md-8" v-slot="{ errors }">
+                  <h2 class="bg-light category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 訂購人資料</h2>
                       <div class="mb-3">
                         <label for="email" class="form-label fw-bold">Email<span class="text-danger">*</span></label>
                         <field-view id="email" name="email" type="email" class="form-control"
@@ -78,22 +78,38 @@
                         <error-message name="email" class="invalid-feedback text-start"></error-message>
                       </div>
 
-                      <div class="mb-3">
-                        <label for="name" class="form-label fw-bold">收件人姓名<span class="text-danger">*</span></label>
-                        <field-view id="name" name="姓名" type="text" class="form-control" :class="{ 'is-invalid': errors['姓名'] }"
-                                placeholder="請輸入姓名" rules="required" v-model="form.user.name"></field-view>
-                        <error-message name="姓名" class="invalid-feedback"></error-message>
+                      <div class="row">
+                          <div class="col">
+                            <div class="mb-3">
+                              <label for="name" class="form-label fw-bold">訂購人姓名<span class="text-danger">*</span></label>
+                              <field-view id="name" name="姓名" type="text" class="form-control" :class="{ 'is-invalid': errors['姓名'] }"
+                                      placeholder="請輸入姓名" rules="required" v-model="form.user.name"></field-view>
+                              <error-message name="姓名" class="invalid-feedback"></error-message>
+                            </div>
+                          </div>
+                          <div class="col">
+                             <div class="mb-3">
+                              <label for="tel" class="form-label fw-bold">訂購人電話<span class="text-danger">*</span></label>
+                              <field-view id="tel" name="電話" type="text" class="form-control" :class="{ 'is-invalid': errors['電話'] }"
+                                      placeholder="請輸入電話" :rules="isPhone" v-model="form.user.tel"></field-view>
+                              <error-message name="電話" class="invalid-feedback"></error-message>
+                            </div>
+                          </div>
+                      </div>
+
+                        <div class="mb-3">
+                          <label for="payment" class="form-label fw-bold">付款方式<span class="text-danger">*</span></label>
+                          <field-view id="payment" name="付款方式" as="select" class="form-control" :class="{ 'is-invalid': errors['付款'] }"
+                                rules="required" v-model="form.user.payment">
+                                  <option value="">選擇付款方式</option>
+                                  <option value="信用卡付款">信用卡付款</option>
+                                  <option value="ATM轉帳付款">ATM轉帳付款</option>
+                                  </field-view>
+                          <error-message name="地址" class="invalid-feedback"></error-message>
                       </div>
 
                       <div class="mb-3">
-                        <label for="tel" class="form-label fw-bold">收件人電話<span class="text-danger">*</span></label>
-                        <field-view id="tel" name="電話" type="text" class="form-control" :class="{ 'is-invalid': errors['電話'] }"
-                                placeholder="請輸入電話" :rules="isPhone" v-model="form.user.tel"></field-view>
-                        <error-message name="電話" class="invalid-feedback"></error-message>
-                      </div>
-
-                      <div class="mb-3">
-                        <label for="address" class="form-label fw-bold">收件人地址<span class="text-danger">*</span></label>
+                        <label for="address" class="form-label fw-bold">訂購人地址<span class="text-danger">*</span></label>
                         <field-view id="address" name="地址" type="text" class="form-control" :class="{ 'is-invalid': errors['地址'] }"
                                 placeholder="請輸入地址" rules="required" v-model="form.user.address"></field-view>
                         <error-message name="地址" class="invalid-feedback"></error-message>
@@ -128,6 +144,7 @@ export default {
       discount_price: '',
       form: {
         user: {
+          payment: '',
           name: '',
           email: '',
           tel: '',
