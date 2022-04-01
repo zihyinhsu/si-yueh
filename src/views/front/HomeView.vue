@@ -101,6 +101,10 @@ export default {
     setTimeout(() => {
       this.isLoading = false
     }, 1000)
+    this.$emitter.on('goAnchor', () => {
+      const anchor = document.querySelector('#cta')
+      document.documentElement.scrollTop = anchor.offsetTop - 150
+    })
   }
 }
 </script>

@@ -10,7 +10,7 @@
       <nav aria-label="breadcrumb ">
         <ol class="breadcrumb py-3 py-md-6 m-0">
           <li class="breadcrumb-item"><router-link class="text-secondaryDark fs-small fs-md-5" to="/">首頁</router-link></li>
-          <li class="breadcrumb-item ps-1"><router-link class="text-secondaryDark fs-small fs-md-5" to="/search">{{product.category}}</router-link></li>
+          <li class="breadcrumb-item ps-1"><a href="#" class="text-secondaryDark fs-small fs-md-5" to="/search" @click.prevent="transferCate">{{product.category}}</a></li>
           <li class="breadcrumb-item ps-1 text-secondaryDark active" aria-current="page"><span class="fs-small fw-bold fs-md-5">{{product.title}}</span></li>
         </ol>
       </nav>
@@ -96,8 +96,10 @@
 
 import SwiperComponent from '@/components/front/SwiperComponent.vue'
 import swiperMixin from '@/mixins/swiperMixin'
+import collectionMixin from '@/mixins/collectionMixin'
+
 export default {
-  mixins: [swiperMixin],
+  mixins: [swiperMixin, collectionMixin],
   components: {
     SwiperComponent
   },
@@ -108,23 +110,7 @@ export default {
       isLoading: false,
       cartData: {
         carts: []
-      },
-      favorite: JSON.parse(localStorage.getItem('favorite')) || [],
-      favoriteId: JSON.parse(localStorage.getItem('favoriteId')) || []
-    }
-  },
-  watch: {
-    favorite: {
-      handler () {
-        localStorage.setItem('favorite', JSON.stringify(this.favorite))
-      },
-      deep: true
-    },
-    favoriteId: {
-      handler () {
-        localStorage.setItem('favoriteId', JSON.stringify(this.favoriteId))
-      },
-      deep: true
+      }
     }
   },
   methods: {
@@ -164,17 +150,9 @@ export default {
         })
       }
     },
-    toggleFavorite (product) {
-      const favoriteIndex = this.favorite.findIndex((item) => item.id === product.id)
-      if (favoriteIndex === -1) {
-        this.favorite.push(product)
-        this.favoriteId.push(product.id)
-        this.$StatusMsg(true, '收藏', '已成功收藏')
-      } else {
-        this.favorite.splice(favoriteIndex, 1)
-        this.favoriteId.splice(favoriteIndex, 1)
-        this.$StatusMsg(false, '收藏', '已取消收藏')
-      }
+    transferCate () {
+      this.$router.push('/search')
+      this.$emitter.emit('push-cate', this.product.category)
     }
   },
   mounted () {

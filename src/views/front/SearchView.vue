@@ -113,12 +113,15 @@ export default {
       let url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products`
       if (status === 'category') {
         url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?category=${params}`
+        this.isActive = `${params}`
+        // console.log(this.isActive)
       } else if (!status) {
         url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?page=${params}`
       }
       this.isLoading = true
       this.$http.get(url)
         .then((res) => {
+          // console.log(url)
           this.products = res.data.products
           this.pagination = res.data.pagination
           this.isLoading = false
@@ -235,6 +238,11 @@ export default {
     // 接收來自FrontNavbar的cartData資料
     this.$emitter.on('push-cart-data', (cartData) => {
       this.cartData = cartData
+    })
+    // 接收來自產品內頁的cate資料
+    this.$emitter.on('push-cate', (category) => {
+      this.getProducts(category, 'category')
+      console.log(category)
     })
   }
 }

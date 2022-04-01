@@ -1,5 +1,5 @@
 <template>
-<div class="container pt-7" :class="favoriteId.length <= 2 ? 'vh-70' : 'vh-auto'">
+<div class="container pt-7" :class="favoriteId.length === 0 ? 'vh-70' : 'vh-70 vh-md-auto'">
     <!-- 如果收藏夾為空 -->
     <div class="w-100 d-flex flex-column align-items-center py-5 center"
         v-if="favorite.length===0">
@@ -35,31 +35,15 @@
 </template>
 
 <script>
+import collectionMixin from '@/mixins/collectionMixin'
 export default {
+  mixins: [collectionMixin],
   data () {
     return {
       cartData: {
         carts: []
       },
-      isLoadingItem: '',
-      favorite: JSON.parse(localStorage.getItem('favorite')) || [],
-      favoriteId: JSON.parse(localStorage.getItem('favoriteId')) || []
-    }
-  },
-  watch: {
-    // 用locolstorage來自訂欄位並存取資料
-    favorite: {
-      handler () {
-        // localStorage只接受字串
-        localStorage.setItem('favorite', JSON.stringify(this.favorite))
-      },
-      deep: true
-    },
-    favoriteId: {
-      handler () {
-        localStorage.setItem('favoriteId', JSON.stringify(this.favoriteId))
-      },
-      deep: true
+      isLoadingItem: ''
     }
   },
   methods: {
@@ -86,21 +70,6 @@ export default {
         }).catch(() => {
           this.$StatusMsg(false, '加入', '加入購書車失敗')
         })
-      }
-    },
-    toggleFavorite (product) {
-      // findIndex 會回傳第一個符合條件的陣列元素的索引
-      const favoriteIndex = this.favorite.findIndex((item) => item === product)
-      // 如果沒有搜到符合的元素，就將資料推進this.favorite裡面
-      if (favoriteIndex === -1) {
-        this.favorite.push(product)
-        this.favoriteId.push(product.id)
-        this.$StatusMsg(true, '收藏', '已成功收藏')
-      } else {
-        // 如果搜到符合的元素，就取消收藏。
-        this.favorite.splice(favoriteIndex, 1)
-        this.favoriteId.splice(favoriteIndex, 1)
-        this.$StatusMsg(false, '收藏', '已取消收藏')
       }
     }
   },

@@ -1,7 +1,7 @@
 <template>
 <div class="sticky-top" id="top">
   <!-- 首購優惠CTA -->
-  <div class="bg-primary cursor-pointer" @click="goAnchor">
+  <div class="anchor bg-primary cursor-pointer" @click="goAnchor">
   <p class="text-center text-white p-2 fs-small fs-md-5">現在完成首購，立享八折優惠!
     <span class="ms-2"><i class="fa-solid fa-circle-down"></i></span>
   </p>
@@ -88,8 +88,8 @@ export default {
         })
     },
     goAnchor () {
-      const anchor = document.querySelector('#cta')
-      document.documentElement.scrollTop = anchor.offsetTop - 150
+      this.$router.push('/')
+      this.$emitter.emit('goAnchor')
     }
   },
   mounted () {

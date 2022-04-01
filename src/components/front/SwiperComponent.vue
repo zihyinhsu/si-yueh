@@ -18,7 +18,7 @@
     }"
     class="bookSwiper rounded-4 h-100 p-2">
     <swiper-slide class="swiperSlide" v-for="item in products" :key="item.id"
-      :class="{'d-none': id === item }">
+      :class="{'d-none': id === item.id }" style="width: 196px;">
       <!-- ↑若產品內頁的產品id與推薦書籍id相同則隱藏 -->
         <div class="bookCoverImg position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow">
           <router-link :to="`/product/${item.id}`">
@@ -45,6 +45,7 @@
 
 <script>
 import swiperMixin from '@/mixins/swiperMixin'
+import collectionMixin from '@/mixins/collectionMixin'
 
 export default {
   // category、titlebgColor是在外層元件上自訂的屬性，用來篩選每個元件內的products資料
@@ -62,7 +63,7 @@ export default {
       type: Boolean
     }
   },
-  mixins: [swiperMixin],
+  mixins: [swiperMixin, collectionMixin],
   data () {
     return {
       pageId: this.$route.params.id,
@@ -71,9 +72,7 @@ export default {
       swiperShow: false,
       cartData: {
         carts: []
-      },
-      favorite: JSON.parse(localStorage.getItem('favorite')) || [],
-      favoriteId: JSON.parse(localStorage.getItem('favoriteId')) || []
+      }
     }
   },
   watch: {
@@ -86,21 +85,6 @@ export default {
       this.pageId = to.params.id
       this.$emit('change-page')
       this.getProducts(this.category)
-    },
-    // 用locolstorage自訂欄位並存取資料
-    favorite: {
-      handler () {
-        // localStorage只接受字串
-        localStorage.setItem('favorite', JSON.stringify(this.favorite))
-        // this.$emitter.emit('push-favorite', this.favorite)
-      },
-      deep: true
-    },
-    favoriteId: {
-      handler () {
-        localStorage.setItem('favoriteId', JSON.stringify(this.favoriteId))
-      },
-      deep: true
     }
   },
   methods: {
@@ -142,21 +126,6 @@ export default {
         }).catch(() => {
           this.$StatusMsg(false, '加入', '加入購書車失敗')
         })
-      }
-    },
-    toggleFavorite (product) {
-      // findIndex 會回傳第一個符合條件的陣列元素的索引
-      const favoriteIndex = this.favorite.findIndex((item) => item.id === product.id)
-      // 如果沒有搜到符合的元素，就將資料推進this.favorite裡面
-      if (favoriteIndex === -1) {
-        this.favorite.push(product)
-        this.favoriteId.push(product.id)
-        this.$StatusMsg(true, '收藏', '已成功收藏')
-      } else {
-        // 如果搜到符合的元素，就取消收藏。
-        this.favorite.splice(favoriteIndex, 1)
-        this.favoriteId.splice(favoriteIndex, 1)
-        this.$StatusMsg(false, '收藏', '已取消收藏')
       }
     }
   },
