@@ -69,16 +69,12 @@ export default {
   data () {
     return {
       isLoading: false,
-      isCopied: false
+      isCopied: false,
+      modules: [Autoplay, Pagination]
     }
   },
   components: {
     SwiperComponent
-  },
-  setup () {
-    return {
-      modules: [Autoplay, Pagination]
-    }
   },
   methods: {
     copyCuponCode () {
@@ -94,6 +90,9 @@ export default {
       selection.addRange(range)
       document.execCommand('copy') // 執行瀏覽器複製命令
       this.isCopied = true
+    },
+    hello (content) {
+      console.log(content)
     }
   },
   mounted () {
@@ -102,9 +101,17 @@ export default {
       this.isLoading = false
     }, 1000)
     this.$emitter.on('goAnchor', () => {
-      const anchor = document.querySelector('#cta')
-      document.documentElement.scrollTop = anchor.offsetTop - 150
+      setTimeout(() => {
+        const anchor = document.querySelector('#cta')
+        document.documentElement.scrollTop = anchor.offsetTop - 150
+      }, 500)
     })
+    // this.$nextTick(function () {
+    //   this.$emitter.on('goAnchor', () => {
+    //     const anchor = document.querySelector('#cta')
+    //     document.documentElement.scrollTop = anchor.offsetTop - 150
+    //   })
+    // })
   }
 }
 </script>

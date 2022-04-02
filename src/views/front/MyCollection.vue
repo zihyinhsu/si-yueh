@@ -1,4 +1,7 @@
 <template>
+<LoadingView :active="isLoading">
+    <img src="../../assets/images/loading.gif" style="height:200px;width:200px">
+</LoadingView>
 <div class="container pt-7" :class="favoriteId.length === 0 ? 'vh-70' : 'vh-70 vh-md-auto'">
     <!-- 如果收藏夾為空 -->
     <div class="w-100 d-flex flex-column align-items-center py-5 center"
@@ -43,7 +46,8 @@ export default {
       cartData: {
         carts: []
       },
-      isLoadingItem: ''
+      isLoadingItem: '',
+      isLoading: false
     }
   },
   methods: {
@@ -74,6 +78,10 @@ export default {
     }
   },
   mounted () {
+    this.isLoading = true
+    setTimeout(() => {
+      this.isLoading = false
+    }, 500)
     this.$emitter.emit('get-cart-list')
     // 接收來自FrontNavbar的cartData資料
     this.$emitter.on('push-cart-data', (cartData) => {

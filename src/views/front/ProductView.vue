@@ -35,7 +35,7 @@
             <p class="text-primary fs-5 fs-md-4 fw-bold">定價 : NT$ {{product.price}}</p>
           </div>
           <div class="d-flex justify-content-between justify-content-md-start w-100" @click="toggleFavorite(product)">
-            <div class="btn w-90 w-md-auto me-3" :class="favoriteId.includes(product.id) ? 'btn-primaryDark' : 'btn-outline-primary'">
+            <div class="btn w-90 w-md-auto me-3" :class="favoriteId.includes(product.id) ? 'btn-primaryLight text-white' : 'btn-outline-primary'">
               <i class="fa-solid fa-bookmark me-3"></i><span>{{favoriteId.includes(product.id) ? '取消':'加入'}}收藏</span>
             </div>
             <div class="btn btn-primary text-white w-100 w-md-auto" @click="addToCart(product)">
@@ -152,7 +152,9 @@ export default {
     },
     transferCate () {
       this.$router.push('/search')
-      this.$emitter.emit('push-cate', this.product.category)
+      // 利用localStorage存取資料
+      localStorage.setItem('category', this.product.category)
+      localStorage.setItem('isActive', this.product.category)
     }
   },
   mounted () {

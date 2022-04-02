@@ -109,19 +109,16 @@ export default {
     PagiNation
   },
   methods: {
-    getProducts (params = 1, status) {
+    getProducts (query = 1, status) {
       let url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products`
-      if (status === 'category') {
-        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?category=${params}`
-        this.isActive = `${params}`
-        // console.log(this.isActive)
+      if (status) {
+        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?category=${query}`
       } else if (!status) {
-        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?page=${params}`
+        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?page=${query}`
       }
       this.isLoading = true
       this.$http.get(url)
         .then((res) => {
-          // console.log(url)
           this.products = res.data.products
           this.pagination = res.data.pagination
           this.isLoading = false
@@ -182,6 +179,10 @@ export default {
       } else if (this.search === '') {
         this.getProducts()
       }
+    },
+    productCate () {
+      this.getProducts(this.productCate, 'category')
+      console.log('trigger')
     }
   },
   // 搜尋功能
@@ -232,18 +233,22 @@ export default {
     }
   },
   mounted () {
-    this.getProducts()
     this.getAllProducts()
+    this.getProducts()
     this.$emitter.emit('get-cart-list')
     // 接收來自FrontNavbar的cartData資料
     this.$emitter.on('push-cart-data', (cartData) => {
       this.cartData = cartData
     })
-    // 接收來自產品內頁的cate資料
-    this.$emitter.on('push-cate', (category) => {
+    // 利用localStorage取得資料
+    const category = localStorage.getItem('category') || []
+    const isActive = localStorage.getItem('isActive') || 'all'
+    if (category) {
+      this.isActive = isActive
       this.getProducts(category, 'category')
-      console.log(category)
-    })
+      localStorage.removeItem('category')
+      localStorage.removeItem('isActive')
+    }
   }
 }
 </script>
