@@ -2,7 +2,7 @@
 <LoadingView :active="isLoading">
     <img src="../../assets/images/loading.gif" style="height:200px;width:200px">
 </LoadingView>
-<div class="container pt-7" :class="favoriteId.length === 0 ? 'vh-70' : 'vh-70 vh-md-auto'">
+<div class="container pt-7" :class="favoriteId.length > 0 ? 'vh-auto' : 'vh-70'">
     <!-- 如果收藏夾為空 -->
     <div class="w-100 d-flex flex-column align-items-center py-5 center"
         v-if="favorite.length===0">
