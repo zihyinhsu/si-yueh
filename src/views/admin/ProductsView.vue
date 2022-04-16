@@ -1,14 +1,14 @@
 <template>
-<LoadingView :active="isLoading">
-  <img src="../../assets/images/loading.gif" style="height:200px;width:200px">
+<LoadingView class="loading" :active="isLoading">
+  <img src="../../assets/images/loading.gif" alt="Loading">
 </LoadingView>
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="header d-flex align-items-center">
             <h2 class="category bg-white text-primaryDark fw-bold fs-3 me-4 p-2"># 後台商品管理</h2>
-            <select class="form-select form-select-sm bg-light w-auto" aria-label=".form-select-sm example" style="box-shadow:none"
+            <select class="form-select form-select-sm bg-light box-shadow-none w-auto" aria-label=".form-select-sm example"
             v-model="selectAnswer">
                 <option selected value =''>全部</option>
-                <option :value="item" v-for="(item,i) in category" :key="i">{{item}}</option>
+                <option :value="item" v-for="(item,i) in category" :key="i">{{ item }}</option>
             </select>
         </div>
         <div class="btn btn-primary text-white" @click="openModal ('isCreateNew')">
@@ -27,10 +27,10 @@
         </thead>
         <tbody>
           <tr v-for="item in products" :key="item.id">
-            <th scope="row">{{item.category}}</th>
-            <td>{{item.title}}</td>
-            <td>NT$ {{item.origin_price}}</td>
-            <td>NT$ {{item.price}}</td>
+            <th scope="row">{{ item.category }}</th>
+            <td>{{ item.title }}</td>
+            <td>NT$ {{ item.origin_price }}</td>
+            <td>NT$ {{ item.price }}</td>
             <td class="ps-5">
               <!-- ToggleSwitch -->
                     <label class="switch">
@@ -91,18 +91,16 @@ export default {
   watch: {
     selectAnswer: {
       handler (value) {
-        this.getProducts(value, 'category')
+        this.getProducts(value)
       },
       deep: true
     }
   },
   methods: {
-    getProducts (params = 1, status) {
-      let url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products`
-      if (status === 'category') {
-        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products?category=${params}`
-      } else if (!status) {
-        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products?page=${params}`
+    getProducts (category, page = 1) {
+      let url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`
+      if (category) {
+        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products?category=${category}&page=${page}`
       }
       this.isLoading = true
       this.$http.get(url)
@@ -110,8 +108,7 @@ export default {
           this.products = res.data.products
           this.pagination = res.data.pagination
           this.isLoading = false
-        }).catch((err) => {
-          console.log(err)
+        }).catch(() => {
           this.isLoading = false
         })
     },
@@ -120,8 +117,8 @@ export default {
         .then((res) => {
           this.productsAll = res.data.products
           this.filterCategory()
-        }).catch((err) => {
-          console.log(err)
+        }).catch(() => {
+          this.$StatusMsg(false, '載入', '請重新整理')
         })
     },
     filterCategory () {

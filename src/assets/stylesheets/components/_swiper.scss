@@ -1,0 +1,17 @@
+.swiper-pagination-bullet{
+     background: #fff !important;
+     opacity:0.8 !important;
+}
+.swiper-pagination-bullet-active{
+    background: #5F776B !important;
+}
+.swiper-slide {
+    height: auto !important;
+  }
+
+.swiper-pagination-horizontal{
+    bottom: 0 !important;
+    @include media-breakpoint-up(md) {
+        bottom: 5% !important;
+      }
+}

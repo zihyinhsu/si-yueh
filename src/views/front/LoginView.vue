@@ -1,7 +1,7 @@
 <template>
-<div class="position-relative bg-light vh-82.5">
+<div class="position-relative bg-light window-height">
   <div class="banner">
-      <img class="w-100" src="https://cdn-news.readmoo.com/wp-content/uploads/2020/10/annelies-geneyn-bhBONc07WsI-unsplash.jpg" alt="">
+      <img class="w-100" src="https://cdn-news.readmoo.com/wp-content/uploads/2020/10/annelies-geneyn-bhBONc07WsI-unsplash.jpg" alt="Login">
   </div>
      <div class="container position-absolute top-50 start-50 translate-middle">
         <div class="row justify-content-center">
@@ -40,17 +40,21 @@ export default {
   },
   methods: {
     signIn () {
-      this.$http.post(`${process.env.VUE_APP_API}/admin/signin`, this.user)
-        .then((res) => {
-          const { token, expired } = res.data
-          // token寫入cookie
-          document.cookie = `zyToken=${token}; expires=${new Date(expired)}`
-          // 轉址
-          this.$router.push('/admin/products')
-        }).catch(() => {
-          this.$StatusMsg(false, '登入', '請重新登入')
-          this.user.password = ''
-        })
+      if (this.user.username === '' || this.user.password === '') {
+        this.$StatusMsg(false, '登入', '請輸入帳號或密碼')
+      } else {
+        this.$http.post(`${process.env.VUE_APP_API}/admin/signin`, this.user)
+          .then((res) => {
+            const { token, expired } = res.data
+            // token寫入cookie
+            document.cookie = `zyToken=${token}; expires=${new Date(expired)}`
+            // 轉址
+            this.$router.push('/admin/products')
+          }).catch(() => {
+            this.$StatusMsg(false, '登入', '請重新登入')
+            this.user.password = ''
+          })
+      }
     }
   }
 }

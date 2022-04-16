@@ -1,14 +1,14 @@
 <template>
-  <LoadingView :active="isLoading">
-    <img src="../../assets/images/loading.gif" style="height:200px;width:200px">
+  <LoadingView class="loading" :active="isLoading">
+    <img src="../../assets/images/loading.gif" alt="Loading">
   </LoadingView>
    <div class="bg-light">
      <OrderNav :cartData="cartData"></OrderNav>
-       <div class="container pt-4 pb-5 pb-md-9">
+       <div class="container pt-4 pb-7 pb-md-9">
         <div class="row justify-content-center">
            <!-- 確認訂單 -->
-            <div class="col-md-4">
-                <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 確認訂單</h2>
+            <div class="col-md-4 pb-4">
+                <h2 class="bg-white category fs-4 fs-md-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 確認訂單</h2>
                 <!-- 如果購物車為空 -->
               <div class="w-100 d-flex flex-column align-items-center py-5"
               v-if="cartData.carts.length === 0">
@@ -20,24 +20,24 @@
                 <!-- 購物車品項 -->
                 <li class="d-flex justify-content-between align-items-center border-bottom-1 p-3" v-for="item in cartData.carts" :key="item.id">
                     <div class="d-flex align-items-center w-100">
-                        <router-link class="rounded-1 overflow-hidden me-2 cursor-pointer" :to="`/product/${item.product.id}`" style="width:80px;">
+                        <router-link class="rounded-1 overflow-hidden me-2 cursor-pointer w-30 w-md-25" :to="`/product/${item.product.id}`">
                             <img class="ratio ratio-3x4" :src="item.product.imageUrl" :alt="item.product.title">
                         </router-link>
                         <div class="cart-body w-100 me-4">
-                            <p class="fw-bold">{{item.product.title}}</p>
-                            <p class="fw-bold text-primaryDark">NT$ {{item.product.price}}
+                            <p class="fw-bold">{{ item.product.title }}</p>
+                            <p class="fw-bold text-primaryDark">NT$ {{ item.product.price }}
                               <span class="text-danger fs-small" v-if="item.qty>=item.product.inventory">選取已達上限</span>
                             </p>
                             <div class="input-group">
                                 <div class="input-group w-md-75">
                                     <button class="btn btn-outline-primary minus fs-small" type="button"
-                                    @click="updateCartItem(item, item.qty--)" :class="{'disabled':item.qty<=1}">
+                                    @click="updateCart(item, item.qty--)" :class="{'disabled':item.qty<=1}">
                                         <i class="fa-solid fa-minus"></i>
                                     </button>
                                     <input type="number" class="form-control text-center fs-small" min="1" :max="item.product.inventory"
-                                    v-model.lazy="item.qty" @change="updateCartItem(item)" readonly>
+                                    v-model.lazy="item.qty" @change="updateCart(item)" readonly>
                                     <button class="btn btn-primary plus fs-small" type="button"
-                                     @click="updateCartItem(item,item.qty++)" :class="{'disabled':item.qty>=item.product.inventory}">
+                                     @click="updateCart(item,item.qty++)" :class="{'disabled':item.qty>=item.product.inventory}">
                                         <i class="fa-solid fa-plus text-white"></i>
                                     </button>
                                 </div>
@@ -56,56 +56,53 @@
                       <button class="btn btn-primary text-white" type="button" id="coupon"
                       @click="addCouponCode" :class="{'disabled':cartData.final_total !== cartData.total}">套用優惠券</button>
                     </div>
-                  <p class="text-end mb-3">
-                    小計 : <span class="text-primary fw-bold">NT$ {{cartData.total}}</span>
+                  <p class="text-end" :class="{'mb-3':cartData.final_total !== cartData.total}">
+                    小計 : <span class="text-primary fw-bold">NT$ {{ cartData.total }}</span>
                     </p>
-                    <p class="text-end text-danger mb-3 fw-bold" v-if="cartData.final_total !== cartData.total">折扣 : {{discount_price}}</p>
+                    <p class="text-end text-danger mb-3 fw-bold" v-if="cartData.final_total !== cartData.total">折扣 : {{ discount_price }}</p>
                     <p class="text-secondaryDark fw-bold text-end mb-3 fs-md-4"
                       v-if="cartData.final_total !== cartData.total">
-                      折扣價 : NT${{final_total}}
+                      折扣價 : NT${{ final_total }}
                      </p>
 
                 </div>
             </div>
             <div class="col-md-5 offset-md-1">
                     <form-view ref="form" class="bg-white p-4 p-md-8" v-slot="{ errors }">
-                  <h2 class="bg-light category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 訂購人資料</h2>
+                  <h2 class="bg-light category fs-4 fs-md-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 訂購人資料</h2>
                       <div class="mb-3">
-                        <label for="email" class="form-label fw-bold">Email<span class="text-danger">*</span></label>
-                        <field-view id="email" name="email" type="email" class="form-control"
-                        :class="{ 'is-invalid': errors['email'] }" rules="email" placeholder="請輸入 Email"
+                        <label for="Email" class="form-label fw-bold">Email<span class="text-danger">*</span></label>
+                        <field-view id="Email" name="Email" type="Email" class="form-control"
+                        :class="{ 'is-invalid': errors['Email'] }" rules="required" placeholder="請輸入 Email"
                               v-model="form.user.email" ></field-view>
-                        <error-message name="email" class="invalid-feedback text-start"></error-message>
+                        <error-message name="Email" class="invalid-feedback text-start"></error-message>
                       </div>
 
-                      <div class="row">
-                          <div class="col">
-                            <div class="mb-3">
+                      <div class="d-flex">
+                         <div class="mb-3 me-4">
                               <label for="name" class="form-label fw-bold">訂購人姓名<span class="text-danger">*</span></label>
                               <field-view id="name" name="姓名" type="text" class="form-control" :class="{ 'is-invalid': errors['姓名'] }"
                                       placeholder="請輸入姓名" rules="required" v-model="form.user.name"></field-view>
                               <error-message name="姓名" class="invalid-feedback"></error-message>
                             </div>
-                          </div>
-                          <div class="col">
-                             <div class="mb-3">
+                            <div class="mb-3">
                               <label for="tel" class="form-label fw-bold">訂購人電話<span class="text-danger">*</span></label>
                               <field-view id="tel" name="電話" type="text" class="form-control" :class="{ 'is-invalid': errors['電話'] }"
                                       placeholder="請輸入電話" :rules="isPhone" v-model="form.user.tel"></field-view>
                               <error-message name="電話" class="invalid-feedback"></error-message>
                             </div>
-                          </div>
                       </div>
 
                         <div class="mb-3">
-                          <label for="payment" class="form-label fw-bold">付款方式<span class="text-danger">*</span></label>
-                          <field-view id="payment" name="付款方式" as="select" class="form-control" :class="{ 'is-invalid': errors['付款'] }"
-                                rules="required" v-model="form.user.payment">
-                                  <option value="">選擇付款方式</option>
-                                  <option value="信用卡付款">信用卡付款</option>
-                                  <option value="ATM轉帳付款">ATM轉帳付款</option>
-                                  </field-view>
-                          <error-message name="地址" class="invalid-feedback"></error-message>
+                        <label for="payment" class="form-label fw-bold">付款方式<span class="text-danger">*</span></label>
+                        <field-view id="payment" name="付款方式" as="select" class="form-control"
+                        :class="{ 'is-invalid': errors['付款方式'] }" rules="required" placeholder="請輸入付款方式"
+                              v-model="form.user.payment" >
+                              <option value="">選擇付款方式</option>
+                              <option value="信用卡付款">信用卡付款</option>
+                              <option value="ATM轉帳付款">ATM轉帳付款</option>
+                          </field-view>
+                        <error-message name="付款方式" class="invalid-feedback text-start"></error-message>
                       </div>
 
                       <div class="mb-3">
@@ -117,7 +114,7 @@
 
                       <div class="mb-3">
                         <label for="message" class="form-label fw-bold">備註</label>
-                        <textarea id="message" class="form-control" v-model="form.message" style="min-height:100px; !important"></textarea>
+                        <textarea id="message" class="form-control min-h-25" v-model="form.message"></textarea>
                       </div>
                       <div class="text-end">
                         <button type="submit" class="btn btn-primary text-white w-100"
@@ -127,19 +124,26 @@
             </div>
         </div>
        </div>
+        <div v-if="resentlyViewdProducts.length>0">
+          <div class="container d-flex justify-content-between align-items-center">
+            <h2 class="category bg-white fs-4 fs-md-3 d-inline-block text-primaryDark p-2 fw-bold"># 最近瀏覽</h2>
+            <div class="btn btn-primary text-white" @click="clearRecentlyViewed">
+              <i class="fa-solid fa-trash text-white me-2"></i>清除瀏覽紀錄</div>
+        </div>
+        <SwiperComponent category="最近瀏覽" :titlebgColor="true" :showTitle="false"></SwiperComponent>
+       </div>
    </div>
 </template>
 
 <script>
 import OrderNav from '@/components/front/OrderNav'
+import SwiperComponent from '@/components/front/SwiperComponent.vue'
+import { mapState, mapActions } from 'pinia'
+import cartStore from '@/stores/cartStore'
+import statusStore from '@/stores/statusStore'
 export default {
   data () {
     return {
-      cartData: {
-        carts: {}
-      },
-      isLoading: false,
-      coupon_code: '',
       final_total: '',
       discount_price: '',
       form: {
@@ -152,11 +156,14 @@ export default {
         },
         message: ''
       },
-      orderId: this.$route.params.id
+      orderId: this.$route.params.id,
+      resentlyViewdProducts: JSON.parse(localStorage.getItem('resentlyViewdProducts')) || []
     }
   },
   components: {
-    OrderNav
+    OrderNav,
+    SwiperComponent
+
   },
   watch: {
     cartData: {
@@ -172,59 +179,13 @@ export default {
       deep: true
     }
   },
+  computed: {
+    ...mapState(cartStore, ['cartData', 'coupon_code']),
+    ...mapState(statusStore, ['isLoading'])
+  },
   methods: {
-    getCartList () {
-      this.isLoading = true
-      this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`)
-        .then((res) => {
-          this.cartData = res.data.data
-          this.isLoading = false
-        }).catch((err) => {
-          console.log(err)
-        })
-    },
-    updateCartItem (item, qty = 1) {
-      if (item.qty <= 1) {
-        item.qty = 1
-      } else if (item.qty >= item.product.inventory) {
-        item.qty = item.product.inventory
-      }
-      this.$http.put(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${item.id}`, {
-        data: {
-          product_id: item.product.id,
-          qty: Number(item.qty)
-        }
-      })
-        .then((res) => {
-          this.$emitter.emit('get-cart-list')
-          this.getCartList()
-          this.$StatusMsg(res, '更新', '已成功更新購書車')
-        }).catch(() => {
-          this.$StatusMsg(false, '更新', '更新購書車失敗')
-        })
-    },
-    delCartItem (item) {
-      this.$http.delete(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${item.id}`)
-        .then((res) => {
-          this.$emitter.emit('get-cart-list')
-          this.getCartList()
-          this.$StatusMsg(res, '刪除', '已成功刪除品項')
-        }).catch(() => {
-          this.$StatusMsg(false, '刪除', '刪除品項失敗')
-        })
-    },
-    addCouponCode () {
-      this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/coupon`, {
-        data: { code: this.coupon_code }
-      })
-        .then((res) => {
-          this.getCartList()
-          this.$emit('get-cart-list')
-          this.$StatusMsg(res, '套用', '已套用優惠券')
-        }).catch(() => {
-          this.$StatusMsg(false, '套用', '套用優惠券失敗')
-        })
-    },
+    ...mapActions(cartStore, ['getCartList', 'updateCart', 'delCartItem', 'addCouponCode', 'copyCouponCode']),
+    ...mapActions(statusStore, ['loadingEffect']),
     // 手機驗證
     isPhone (value) {
       const phoneNumber = /^(09)[0-9]{8}$/
@@ -232,24 +193,41 @@ export default {
     },
     // 送出訂單
     onSubmit () {
-      this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/order`, { data: this.form })
-        .then((res) => {
-          this.$StatusMsg(res, '送出', '已成功送出訂單')
-          this.form.message = ''
-          this.getCartList()
-          // 跳轉換頁
-          this.$router.push(`/checkout/${res.data.orderId}`)
-        }).catch(() => {
-          this.$StatusMsg(false, '送出', '送出訂單失敗')
-        })
+      if (this.cartData.carts.length === 0) {
+        this.$StatusMsg(false, '送出', '購書車還是空的呢!')
+      } else {
+        this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/order`, { data: this.form })
+          .then((res) => {
+            this.$StatusMsg(res, '送出', '已成功送出訂單')
+            this.form.message = ''
+            this.getCartList()
+            // 跳轉換頁
+            this.$router.push(`/checkout/${res.data.orderId}`)
+          }).catch(() => {
+            this.$StatusMsg(false, '送出', '送出訂單失敗')
+          })
+      }
+    },
+    // 取得最近瀏覽的資料
+    getResentlyViewdProducts () {
+      this.resentlyViewdProducts = JSON.parse(localStorage.getItem('resentlyViewdProducts')) || []
+    },
+    // 清除最近瀏覽
+    clearRecentlyViewed () {
+      this.loadingEffect()
+      localStorage.removeItem('resentlyViewdProducts')
+      this.getResentlyViewdProducts()
     }
   },
   mounted () {
     this.getCartList()
-    this.$emitter.emit('get-cart-list')
-    this.$emitter.on('push-cart-data', (cartData) => {
-      this.cartData = cartData
-    })
+    this.copyCouponCode()
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.min-h-25{
+  min-height:100px
+}
+</style>

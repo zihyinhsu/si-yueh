@@ -1,7 +1,7 @@
 <template>
     <div class="modal fade" ref="modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal">
-      <div class="modal-content" style="background-color:transparent;">
+      <div class="modal-content background-transparent">
         <div class="modal-header bg-primary text-center p-3">
             <h4 class="modal-title text-white">新增優惠券</h4>
         </div>
@@ -41,10 +41,10 @@
                   </label>
                 <!-- ToggleSwitch -->
         </div>
-        <div class="modal-footer bCoupons-0 bg-white w-100">
+        <div class="modal-footer bg-white w-100">
             <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">取消</button>
             <button type="button" class="btn btn-primary text-white" @click="$emit('update-Coupons',tempCoupons,isCreateNew)">
-                {{isCreateNew?'確定新增':'確定修改'}}</button>
+                {{ isCreateNew?'確定新增':'確定修改' }}</button>
         </div>
       </div>
     </div>
@@ -70,7 +70,7 @@ export default {
         // 將時間格式改為 YYYY-MM-DD
         const dateAndTime = new Date(this.tempCoupons.due_date * 1000)
           .toISOString().split('T')
-        this.due_date = dateAndTime
+        this.due_date = dateAndTime[0]
       },
       deep: true
     },

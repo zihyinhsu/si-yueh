@@ -20,7 +20,7 @@
 
 .text-secondary{
   &:hover{
-    color: $secondaryDark !important;
+    color: $secondaryDark;
   }
 }
 
@@ -43,7 +43,7 @@
 
 .text-primary, .text-hover-primaryDark{
   &:hover{
-    color: $primaryDark !important;
+    color: $primaryDark;
   }
 }
 .btn{
@@ -54,6 +54,22 @@
 
 .hoverBoxShadow{
   &:hover{
-      box-shadow: 2px 2px 10px rgba($dark,0.2) !important ;
+      box-shadow: 2px 2px 10px rgba($dark,0.2);
+      bottom: 0.5%;
+  }
+}
+
+// bookHover
+.bookHover{
+  &:hover{
+    &::after{
+      transition: all 3s ease-out;
+      content:"";
+      position: absolute;
+      width: 100%;
+      height:100%;
+      top: 0%;
+      background-color: rgba($white,0.25);
+    }
   }
 }

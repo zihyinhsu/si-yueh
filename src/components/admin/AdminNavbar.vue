@@ -2,9 +2,9 @@
     <div class="sidebar d-flex flex-column justify-content-between w-25 bg-primaryDark vh-100 p-12">
         <div>
             <router-link to="/">
-                <img class="logo mb-10 w-100" src="../../assets/images/logo_white.png" alt="">
+                <img class="logo mb-10 w-100" src="../../assets/images/logo_white.png" alt="徙閱二手書">
             </router-link>
-            <ul class="navbar-nav flex-column navUnderline w-100 me-3">
+            <ul class="navbar-nav flex-column navActive w-100 me-3">
                 <li class="nav-item d-flex align-items-center px-0 mb-4">
                     <router-link class="nav-link text-white w-100" to="/admin/products">
                     <i class="fa-solid fa-book me-5"></i>商品管理</router-link>

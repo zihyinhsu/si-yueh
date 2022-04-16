@@ -1,9 +1,9 @@
 <template>
     <div class="modal fade" ref="modal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content" style="background-color:transparent;">
+    <div class="modal-content background-transparent">
       <div class="modal-header bg-primary">
-        <h4 class="modal-title text-white">{{isCreateNew ? '新增' : '編輯'}}書籍</h4>
+        <h4 class="modal-title text-white">{{ isCreateNew ? '新增' : '編輯' }}書籍</h4>
       </div>
       <div class="modal-body bg-white">
         <div class="d-flex justify-content-center align-items-center">
@@ -45,7 +45,7 @@
                     </div>
                     <div class="mb-3 col-3">
                       <label for="publication_date" class="form-label">出版日期</label>
-                      <input id="publication_date" type="text" class="form-control" placeholder="請輸入出版日期"
+                      <input id="publication_date" type="date" class="form-control" placeholder="請輸入出版日期"
                       v-model.trim="tempProduct.publication_date">
                     </div>
                   </div>
@@ -110,13 +110,13 @@
              <!-- 圖片上傳 -->
             <div class="tab-pane fade" id="v-pills-imgUpload" role="tabpanel" aria-labelledby="v-pills-imgUpload-tab">
               <div class="d-flex align-items-center">
-                <div class="me-3" style="width:150px;">
+                <div class="bookImg me-3">
                   <p class="fw-bold fs-4 text-center mb-2">書籍主圖</p>
                   <img class="ratio ratio-3x4 rounded-4 bg-light" :src="tempProduct.imageUrl" :alt="tempProduct.title">
                 </div>
-                <div class="me-3" v-if="tempProduct.imgPreviewURL" style="width:150px;">
+                <div class="bookImg me-3" v-if="tempProduct.imgPreviewURL">
                   <p class="fw-bold fs-4 text-center mb-2">圖片預覽</p>
-                  <img class="ratio ratio-3x4 rounded-4" :src="tempProduct.imgPreviewURL">
+                  <img class="ratio ratio-3x4 rounded-4" :src="tempProduct.imgPreviewURL" :alt="tempProduct.title">
                 </div>
                 <div>
                    <p class="fw-bold fs-4 mb-2">圖片上傳</p>
@@ -169,8 +169,9 @@ export default {
   data () {
     return {
       tempProduct: {
-        imgPreviewURL: []
+        imgPreviewURL: ''
       },
+      publication_date: '',
       editor: ClassicEditor,
       editorConfig: {
         toolbar: ['heading', 'bold', 'italic', '|', 'link']
@@ -208,3 +209,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.bookImg{
+  width: 150px;
+}
+</style>

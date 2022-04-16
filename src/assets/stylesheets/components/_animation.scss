@@ -1,0 +1,36 @@
+// 彈跳動畫
+.bounced{
+    animation: bounced 1s ease
+}
+.fadeIn{
+    opacity: 0;
+    transition: 1s ease-out;
+    &:hover{
+        opacity: 1;
+    }
+}
+.moving{
+    animation: moving 5s infinite
+}
+
+@keyframes bounced{
+    0%{
+    transform: translateY(0%);
+    }
+    50%{
+    transform: translateY(-15%);
+    }
+    100%{
+    transform: translateY(0%);
+    }
+}
+
+@keyframes moving{
+    0%{
+    transform: translateX(-200%);
+    }
+    100%{
+    transform: translateX(200%);
+
+    }
+}

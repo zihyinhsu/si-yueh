@@ -23,7 +23,7 @@ export default {
   data () {
     return {
       orderIsPaid: true,
-      count: 6
+      count: 4
     }
   },
   components: {

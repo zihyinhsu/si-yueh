@@ -2,7 +2,8 @@ export default {
   data () {
     return {
       favorite: JSON.parse(localStorage.getItem('favorite')) || [],
-      favoriteId: JSON.parse(localStorage.getItem('favoriteId')) || []
+      favoriteId: JSON.parse(localStorage.getItem('favoriteId')) || [],
+      resentlyViewdProducts: JSON.parse(localStorage.getItem('resentlyViewdProducts')) || []
     }
   },
   watch: {
@@ -19,6 +20,12 @@ export default {
         localStorage.setItem('favoriteId', JSON.stringify(this.favoriteId))
       },
       deep: true
+    },
+    resentlyViewdProducts: {
+      handler () {
+        localStorage.setItem('resentlyViewdProducts', JSON.stringify(this.resentlyViewdProducts))
+      },
+      deep: true
     }
   },
   methods: {
@@ -32,6 +39,24 @@ export default {
         this.favorite.splice(favoriteIndex, 1)
         this.favoriteId.splice(favoriteIndex, 1)
         this.$StatusMsg(false, '收藏', '已取消收藏')
+      }
+    },
+    resentlyViewed (product) {
+      const resentlyViewdIndex = this.resentlyViewdProducts.findIndex((item) => item.id === product.id)
+
+      if (this.resentlyViewdProducts.length >= 10) {
+        // 如果總數量超過10，刪除陣列的第一筆資料
+        this.resentlyViewdProducts.shift()
+        this.resentlyViewdProducts.push(product)
+        // 如果預覽到不同的書籍
+      } else if (resentlyViewdIndex === -1) {
+        this.resentlyViewdProducts.push(product)
+        // 如果預覽到重複的書籍
+      } else if (resentlyViewdIndex !== -1) {
+        // 先刪除重複的資料
+        this.resentlyViewdProducts.splice(resentlyViewdIndex, 1)
+        // 再重新推進最新的位置
+        this.resentlyViewdProducts.push(product)
       }
     }
   }

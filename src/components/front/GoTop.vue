@@ -2,7 +2,7 @@
     <div @click="goTop">
         <div class="position-fixed start-82.5 start-md-90 bottom-5 z-index-3 cursor-pointer"
             :class="yScrollVaule < 50 ? 'd-none':''">
-                <div class="bg-primary px-3 py-2 rounded-1" style="opacity:0.9">
+                <div class="bg-primary px-3 py-2 rounded-1 opacity-0.9">
                     <i class="fa-solid fa-circle-arrow-up text-white"></i>
                 </div>
         </div>
@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   data () {
     return {
@@ -20,10 +22,9 @@ export default {
     goTop () {
       document.documentElement.scrollTop = 0
     },
-    scrollWatch () {
-    // 取得scrollY數值
+    scrollWatch: _.throttle(function () {
       this.yScrollVaule = window.scrollY
-    }
+    }, 250)
   },
   mounted () {
     // 監聽scroll，scrollWatch會寫入轉動網頁的y軸
@@ -31,3 +32,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.opacity-0\.9{
+  opacity:0.9;
+}
+</style>

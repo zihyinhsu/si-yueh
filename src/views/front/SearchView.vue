@@ -1,25 +1,44 @@
+/* eslint-disable vue/no-side-effects-in-computed-properties */
 <template>
-<LoadingView :active="isLoading">
-  <img src="../../assets/images/loading.gif" style="height:200px;width:200px">
+<LoadingView class="loading" :active="isLoading">
+  <img src="../../assets/images/loading.gif" alt="Loading">
 </LoadingView>
-<div class="bg-light">
-    <div class="container h-100 vh-md-auto">
+<div class="bg-light window-height">
+    <div class="container">
         <!-- 搜尋欄 -->
+        <div></div>
         <div class="row py-6 py-md-7">
-            <div class="col-md-6">
-                  <div class="input-group">
-                    <input class="form-control" type="search" v-model.lazy.trim="search"
+            <div class="col d-flex flex-column flex-md-row justify-content-md-between">
+              <form class="autocomplete-container position-relative w-100 mb-4 mb-md-0" >
+                  <div class="input-group w-md-50 me-2">
+                    <input class="form-control" type="search" v-model.trim="search" @keyup="keyboardEvent"
                     placeholder="輸入書籍、作者名稱" aria-label="Search" aria-describedby="button-addon2">
-                    <button class="btn btn-primary" type="submit" id="button-addon2">
+                    <button class="btn btn-primary" type="submit" id="button-addon2" @click="searchProducts"
+                    :class="{'disabled': search===''}">
                         <i class="fa-solid fa-magnifying-glass text-white"></i>
                     </button>
                 </div>
+                <ul class="autoComplete position-absolute box-shadow bg-white w-100 w-md-50 z-index-3"
+                :class=" autoComplete ? '' : 'd-none'">
+                  <li class="searchHover p-2 w-100" v-for="(item,i) in filterProducts" :key="item.id"
+                  :class=" selectedIndex === i ?'bg-light': ''">
+                    <router-link class="text-dark d-inline-block w-100" :to="`/product/${item.id}`">{{item.title}}
+                    </router-link>
+                  </li>
+                </ul>
+                </form>
+                 <select class="form-select form-select-sm bg-light box-shadow-none w-auto"
+                  v-model="selectAnswer">
+                      <option selected value =''>簡易篩選</option>
+                      <option value='publication_date'>年份 : 由新到舊</option>
+                      <option value='price'>價格 : 由高至低</option>
+                  </select>
             </div>
         </div>
         <!-- mainContent -->
-        <div class="row">
+        <div class="row" :class="{'vh-md-60':products.length <= 1}">
             <!-- sideBar -->
-            <div class="col-md-3 mb-5 mb-md-0" :class="{'vh-md-70':filterProducts.length <= 1}">
+            <div class="col-md-3 mb-5 mb-md-0">
               <div class="position-sticky top-20">
                 <div class="accordion" id="accordion" >
                     <div class="accordion-item border-0">
@@ -39,7 +58,7 @@
                                 >全部 ({{productsAll.length}})</li>
                                 <li class="list-group-item cateList" v-for="(item, i) in filterCategory" :key="i"
                                 :class="isActive === item ? 'active' : ''"
-                                 @click="getProducts(item,'category'),(isActive = item), accordionCollapseBack()" >{{item}} ({{filterCateNum[item]}})</li>
+                                 @click="getProducts(item),(isActive = item), accordionCollapseBack()" >{{item}} ({{filterCateNum[item]}})</li>
                             </ul>
                         </div>
                         </div>
@@ -49,9 +68,10 @@
             </div>
             <!-- content -->
             <div class="col-md-9">
-                <ul :class="{'vh-50':filterProducts.length === 1}">
-                  <p class="fs-3 fw-bold vh-40 vh-md-60 py-4 w-100" v-if="filterProducts.length === 0">沒有相符的搜尋結果 Σ( ° △ °)</p>
-                    <li class="bg-white mb-4 mb-md-8 hoverBoxShadow" v-for="item in filterProducts" :key="item.id">
+                <ul :class="{'vh-50':products.length === 1}">
+                  <p class="fs-3 fw-bold vh-40 vh-md-50 py-4 w-100" v-if="products.length === 0">沒有相符的搜尋結果 Σ( ° △ °)</p>
+                    <li class="bg-white mb-4 mb-md-8 hoverBoxShadow" v-for="item in products" :key="item.id"
+                    :class="products.length === 0 ? 'd-none' : ''">
                         <div class=" d-flex align-items-center w-100 p-3 p-md-5 h-100">
                             <router-link class="text-primary me-4 me-md-5 w-42.5 w-md-30" :to="`/product/${item.id}`">
                                 <img class="ratio ratio-3x4 rounded-4"
@@ -70,7 +90,7 @@
                                 <hr>
                                 <div class="bookContent w-55 d-none d-md-block">
                                     <p v-html="item.content"></p>
-                                    <div class="text-end">
+                                    <div class="text-end mt-2">
                                         <router-link class="text-primary w-100" :to="`/product/${item.id}`">繼續閱讀</router-link>
                                     </div>
 
@@ -80,7 +100,8 @@
                 </ul>
                  <!-- pagination -->
                   <PagiNation class="d-flex justify-content-center mb-4 mb-md-6"
-                  :pages="pagination" @update-page="getProducts"></PagiNation>
+                  :pages="pagination" @update-page="getProducts"
+                  v-show="products.length !== 0"></PagiNation>
             </div>
         </div>
     </div>
@@ -90,31 +111,35 @@
 <script>
 import PagiNation from '@/components/front/PagiNation'
 
+import { mapState, mapActions } from 'pinia'
+import cartStore from '@/stores/cartStore'
+import statusStore from '@/stores/statusStore'
+
 export default {
   data () {
     return {
       products: [],
       productsAll: [],
-      pagination: [],
+      pagination: {
+        category: ''
+      },
       isActive: 'all',
-      isLoadingItem: '',
+      isLoading: '',
+      selectedIndex: -1,
       search: '',
-      isLoading: false,
-      cartData: {
-        carts: []
-      }
+      selectAnswer: '',
+      autoComplete: false
     }
   },
   components: {
     PagiNation
   },
   methods: {
-    getProducts (query = 1, status) {
-      let url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products`
-      if (status) {
-        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?category=${query}`
-      } else if (!status) {
-        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?page=${query}`
+    ...mapActions(cartStore, ['addToCart']),
+    getProducts (category, page = 1) {
+      let url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?page=${page}`
+      if (category) {
+        url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?category=${category}&page=${page}`
       }
       this.isLoading = true
       this.$http.get(url)
@@ -122,8 +147,9 @@ export default {
           this.products = res.data.products
           this.pagination = res.data.pagination
           this.isLoading = false
-        }).catch((err) => {
-          console.log(err)
+          this.search = ''
+          this.selectAnswer = ''
+        }).catch(() => {
           this.isLoading = false
         })
     },
@@ -131,35 +157,9 @@ export default {
       this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products/all`)
         .then((res) => {
           this.productsAll = res.data.products
-        }).catch((err) => {
-          console.log(err)
-        })
-    },
-    addToCart (product, qty = 1) {
-    // 如果選擇的數量>=庫存就return
-      this.isLoadingItem = product.id
-      // 篩選出cartData與指定商品中id相同的資料
-      let temp = this.cartData.carts.filter(item => item.product_id === product.id)
-      // 取陣列中第一個物件
-      temp = { ...temp[0] }
-      const resultQty = temp.qty + qty
-      if (resultQty > product.inventory) {
-        this.$StatusMsg(false, '加入', '超過庫存數量')
-        this.isLoadingItem = ''
-      } else {
-        this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, {
-          data: {
-            product_id: product.id,
-            qty
-          }
-        }).then((res) => {
-          this.$emitter.emit('get-cart-list')
-          this.$StatusMsg(res, '加入', '已成功加入購書車')
-          this.isLoadingItem = ''
         }).catch(() => {
-          this.$StatusMsg(false, '加入', '加入購書車失敗')
+          this.$StatusMsg(false, '載入', '請重新整理')
         })
-      }
     },
     // 判斷當螢幕為手機版時，點擊選單自動收合
     accordionCollapseBack () {
@@ -167,36 +167,69 @@ export default {
         const accordionButton = document.querySelector('.accordion-button')
         accordionButton.click()
       }
+    },
+    sortByDate () {
+      if (this.selectAnswer) {
+        this.products.sort((a, b) => b[this.selectAnswer] > a[this.selectAnswer] ? 1 : -1)
+      }
+    },
+    searchProducts () {
+      this.products = this.filterProducts
+      this.autoComplete = false
+    },
+    keyboardEvent (e) {
+      // 按鈕向上
+      if (e.keyCode === 38) {
+        this.selectedIndex--
+      // 按鈕向下
+      } else if (e.keyCode === 40) {
+        this.selectedIndex++
+        // enter
+      } else if (e.keyCode === 13) {
+        this.filterProducts.forEach((item, i) => {
+          if (this.selectedIndex === i) {
+            this.search = item.title
+            this.searchProducts()
+          }
+        })
+      }
     }
   },
   watch: {
     search () {
-      if (this.search !== '') {
-        this.pagination.has_pre = false
+      if (this.search) {
+        this.autoComplete = true
         this.pagination.current_page = 1
         this.pagination.total_pages = 1
         this.pagination.has_next = false
-      } else if (this.search === '') {
-        this.getProducts()
+      } else {
+        this.autoComplete = false
       }
     },
-    productCate () {
-      this.getProducts(this.productCate, 'category')
-      console.log('trigger')
+    selectAnswer: {
+      handler () {
+        this.sortByDate()
+      },
+      deep: true
+    },
+    products () {
+      if (this.products.length <= 1) {
+        this.autoComplete = false
+      }
+      this.products.forEach(item => { item.publication_date = item.publication_date.split('-').join('/') }
+      )
     }
   },
   // 搜尋功能
   computed: {
+    ...mapState(cartStore, ['cartData']),
+    ...mapState(statusStore, ['isLoadingItem']),
     filterProducts () {
       const strArr = this.search.split(' ') // 以空白格切分字串
       const arr = []
       // 比對字串
       strArr.forEach((str) => {
-        let data = this.products
-        if (this.search !== '') {
-          data = this.productsAll
-        }
-        data.forEach((item) => {
+        this.productsAll.forEach((item) => {
           if (item.title.includes(str) || item.author.includes(str)) {
             arr.push(item)
           }
@@ -205,13 +238,6 @@ export default {
       // 如果輸入兩個關鍵字就會出現重複的資料，所以需要刪除重複資料。
       // 過濾出重複的元素
       return [...new Set(arr)]
-      // 另一種方法 : findIndex
-      // const filterArr = arr.filter((item, i) => {
-      //   // 將 當前陣列的索引 與 findIndex() 回傳出的索引值進行比對，但 findIndex() 的方法 只會回傳 第一個 符合條件的陣列元素的索引
-      //   const index = arr.findIndex((book) => book.title === item.title)
-      //   return i === index
-      // })
-      // return filterArr
     },
     filterCategory () {
       // 提取出category
@@ -236,19 +262,25 @@ export default {
     this.getAllProducts()
     this.getProducts()
     this.$emitter.emit('get-cart-list')
-    // 接收來自FrontNavbar的cartData資料
-    this.$emitter.on('push-cart-data', (cartData) => {
-      this.cartData = cartData
-    })
     // 利用localStorage取得資料
-    const category = localStorage.getItem('category') || []
-    const isActive = localStorage.getItem('isActive') || 'all'
-    if (category) {
-      this.isActive = isActive
-      this.getProducts(category, 'category')
-      localStorage.removeItem('category')
-      localStorage.removeItem('isActive')
-    }
+    setTimeout(() => {
+      const category = localStorage.getItem('category')
+      const isActive = localStorage.getItem('isActive') || 'all'
+      if (category) {
+        this.isActive = isActive
+        this.getProducts(category)
+        localStorage.removeItem('category')
+        localStorage.removeItem('isActive')
+      }
+    }, 500)
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.searchHover{
+  &:hover{
+    background-color: #FAF9F9;
+  }
+}
+</style>

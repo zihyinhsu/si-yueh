@@ -1,13 +1,7 @@
 <template >
-<router-view/>
+<RouterView/>
 </template>
 
 <style lang="scss">
 @import "./assets/stylesheets/all.scss"
 </style>
-
-<script>
-
-export default {
-}
-</script>

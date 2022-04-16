@@ -23,12 +23,15 @@
 .logo {
   display:block; /*使a成為區塊元素可以長寬高*/
   // background-image: url('../images/logo.png') no-repeat; /*設定要使用的圖片，且不要重複*/
-  width: 165px; /*需求的寬度*/
+  width: 130px; /*需求的寬度*/
   // height: 56px; /*需求的高度*/
   text-indent: 101%; /*讓文字首行縮排到範圍外*/
   overflow: hidden; /*超過範圍的就自動隱藏*/
   white-space: nowrap; /*不要斷行就一排，所以只有"首行"*/
-  background-size: cover;
+  // background-size: cover;
+  @include media-breakpoint-up(md) {
+    width: 165px;
+  }
 }
 
 //googleMap
@@ -40,22 +43,11 @@
       display:block;
   }
 }
+.loading img{
+  height:200px;
+  width:200px;
+}
 
-// loader
-.loadPage{
-  min-width: 100%;
-  min-height: 100%;
-  background-color: $white;
-  opacity:0.7;
-  transition:  3s ease-in-out; 
-}
-.loadPage,.loader {
-	position: fixed;
-	top: 50%;
-	left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-	z-index: 10 !important;
-}
 .ball-beat > div {
   background-color: $primary;
 }

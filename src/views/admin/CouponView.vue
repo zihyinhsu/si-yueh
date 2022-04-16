@@ -1,6 +1,6 @@
 <template>
-<LoadingView :active="isLoading">
-  <img src="../../assets/images/loading.gif" style="height:200px;width:200px">
+<LoadingView class="loading" :active="isLoading">
+  <img src="../../assets/images/loading.gif" alt="Loading">
 </LoadingView>
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="header d-flex align-items-center">
@@ -22,9 +22,9 @@
         </thead>
         <tbody>
           <tr v-for="item in coupons" :key="item.id">
-            <td>{{item.title}}</td>
-            <td>{{item.percent}} %</td>
-            <td>{{$filters.date(item.due_date)}}</td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.percent }} %</td>
+            <td>{{ $filters.date(item.due_date) }}</td>
             <td class="ps-5">
               <!-- ToggleSwitch -->
                     <label class="switch">
@@ -108,7 +108,6 @@ export default {
         method = 'put'
         url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/coupon/${item.id}`
       }
-      console.log(method, url, item)
       this.isLoading = true
       this.$http[method](url, { data: item })
         .then((res) => {

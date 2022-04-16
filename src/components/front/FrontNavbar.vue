@@ -19,9 +19,10 @@
       <div class="cart dropdown ms-auto cursor-pointer order-lg-3">
         <div class="text-secondaryDark" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
           <div class="d-flex">
-              <div class="position-relative me-md-2">
+              <div class="position-relative me-md-2" :class="{'bounced':isBounced}">
                 <i class="fa-solid fa-cart-shopping"></i>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">{{cartData.carts.length}}</span>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"
+                v-if="cartData.carts.length != 0">{{ cartData.carts.length }}</span>
               </div>
               <span class="d-none d-md-block">購書車</span>
           </div>
@@ -29,24 +30,35 @@
           </div>
           <!-- cart -->
           <div class="dropdown-menu dropdown-menu-end vw-87.5 vw-md-27.5 rounded-4">
-            <CartComponent :cart-data="cartData" @get-cart-list="getCartList"></CartComponent>
+            <CartComponent @get-cart-list="getCartList"></CartComponent>
           </div>
       </div>
       <!-- 漢堡選單 -->
-      <button class="navbar-toggler" type="button" style="box-shadow:none" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-      <i class="fa-solid fa-bars text-secondaryDark"></i>
+      <button class="navbar-toggler box-shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"
+      @click="navIconChange = !navIconChange">
+      <span v-if="navIconChange">
+        <i class="fa-solid fa-x text-secondaryDark"></i>
+      </span>
+      <span v-else>
+        <i class="fa-solid fa-bars text-secondaryDark"></i>
+      </span>
     </button>
       <!-- 摺疊 -->
       <div class="collapse navbar-collapse" id="navbar">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item me-5 py-1" @click="navCollapseBack">
+          <li class="nav-item me-md-5 py-1" @click="navCollapseBack">
             <router-link class="nav-link text-secondaryDark" to="/search">
-            <i class="fa-solid fa-magnifying-glass me-2"></i>全站搜尋
+            <i class="fa-solid fa-magnifying-glass me-2"></i>書籍查詢
             </router-link>
           </li>
-          <li class="nav-item me-5 py-1" @click="navCollapseBack">
+          <li class="nav-item me-md-5 py-1" @click="navCollapseBack">
             <router-link class="nav-link text-secondaryDark" to="/collection">
-            <i class="fa-solid fa-bookmark me-2"></i>我的收藏
+            <i class="fa-solid fa-bookmark me-2"></i>收藏書單
+            </router-link>
+          </li>
+          <li class="nav-item me-md-5 py-1" @click="navCollapseBack">
+            <router-link class="nav-link text-secondaryDark" to="/orderSearch">
+            <i class="fa-solid fa-file me-2"></i>訂單查詢
             </router-link>
           </li>
         </ul>
@@ -58,34 +70,33 @@
 
 <script>
 import CartComponent from '@/components/front/CartComponent.vue'
+
+// 匯入 mapState、 mapActions 方法
+import { mapState, mapActions } from 'pinia'
+import cartStore from '@/stores/cartStore'
+import statusStore from '@/stores/statusStore'
+
 export default {
   data () {
     return {
-      cartData: {
-        carts: []
-      }
+      navIconChange: false
     }
   },
   components: {
     CartComponent
   },
+  computed: {
+    ...mapState(cartStore, ['cartData']),
+    ...mapState(statusStore, ['isBounced'])
+  },
   methods: {
+    ...mapActions(cartStore, ['getCartList']),
     // 判斷當螢幕為手機版時，點擊後選單自動收合
     navCollapseBack () {
       if (window.matchMedia('(max-width: 767px)').matches) {
         const navbarToggle = document.querySelector('.navbar-toggler')
         navbarToggle.click()
       }
-    },
-    getCartList () {
-      this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`)
-        .then((res) => {
-          this.cartData = res.data.data
-          // 每次更新購物車時傳遞出cartData
-          this.$emitter.emit('push-cart-data', this.cartData)
-        }).catch((err) => {
-          console.log(err)
-        })
     },
     goAnchor () {
       this.$router.push('/')

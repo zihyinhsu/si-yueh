@@ -1,4 +1,6 @@
 import { createApp } from 'vue'
+// pinia
+import { createPinia } from 'pinia'
 
 // bootstrap
 import 'bootstrap'
@@ -61,8 +63,11 @@ setLocale('zh_TW')
 
 // vee-validate //
 
+// pinia
+const pinia = createPinia()
 const app = createApp(App)
 
+app.use(pinia)
 app.use(router)
 app.config.globalProperties.$StatusMsg = $StatusMsg
 app.config.globalProperties.$emitter = emitter

@@ -20,6 +20,8 @@ $utilities: map-merge(
       class: w,
       values: (
         10: 10%,
+        15: 15%,
+        20: 20%,
         25: 25%,
         30: 30%,
         35: 35%,
@@ -104,10 +106,8 @@ $utilities: map-merge(
       50: 50vh,
       60: 60vh,
       65: 65vh,
-      67\.5: 67.5vh,
       70: 70vh,
       80: 80vh,
-      82\.5: 82.5vh,
       85: 85vh,
       90: 90vh,
       100: 100vh,
@@ -177,6 +177,7 @@ $utilities: map-merge(
         1:1,
         2:2,
         3:3,
+        3000:3000,
       )
     ),
     "object-position": (
