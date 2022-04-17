@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import throttle from 'lodash/throttle'
 
 export default {
   data () {
@@ -22,7 +22,7 @@ export default {
     goTop () {
       document.documentElement.scrollTop = 0
     },
-    scrollWatch: _.throttle(function () {
+    scrollWatch: throttle(function () {
       this.yScrollVaule = window.scrollY
     }, 250)
   },

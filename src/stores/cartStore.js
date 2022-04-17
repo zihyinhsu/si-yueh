@@ -5,7 +5,7 @@ import { defineStore } from 'pinia'
 import emitter from '@/methods/emitter.js'
 import statusMsg from '@/methods/StatusMsg.js'
 
-import _ from 'lodash'
+import debounce from 'lodash/debounce'
 import statusStore from './statusStore'
 const status = statusStore()
 // 這裡帶入兩個參數，一個是store 名稱、另一個是屬性參數
@@ -75,7 +75,7 @@ export default defineStore('cartStore', {
           statusMsg(false, '刪除', '刪除所有品項失敗')
         })
     },
-    addToCart: _.debounce(function (product, qty = 1) {
+    addToCart: debounce(function (product, qty = 1) {
       // 如果選擇的數量>=庫存就return
       status.isLoadingItem = product.id
       // 篩選出cartData與指定商品中id相同的資料

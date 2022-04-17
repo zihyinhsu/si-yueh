@@ -11,7 +11,7 @@
 
 <script>
 import { canUseShare, share, generateUrl } from 'csr-social-share'
-import _ from 'lodash'
+import throttle from 'lodash/throttle'
 
 export default {
   data () {
@@ -46,7 +46,7 @@ export default {
       }
       share(this.shareDataInfo)
     },
-    scrollWatch: _.throttle(function () {
+    scrollWatch: throttle(function () {
       this.yScrollVaule = window.scrollY
     }, 250)
   },

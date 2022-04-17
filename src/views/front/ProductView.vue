@@ -32,7 +32,7 @@
             <p class="fs-5">庫存 : {{product.inventory}} {{product.unit}}</p>
           </div>
           <div class="bookPrice mb-4">
-            <p class="text-primary fs-5 fs-md-4 fw-bold">定價 : NT$ {{product.price}}</p>
+            <p class="text-primary fs-4 fw-bold">定價 : NT$ {{product.price}}</p>
           </div>
           <div class="d-flex justify-content-between justify-content-md-start w-100">
             <div class="btn w-85 w-md-auto me-3" :class="favoriteId.includes(product.id) ? 'btn-primaryLight text-white' : 'btn-outline-primary'"

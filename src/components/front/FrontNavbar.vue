@@ -19,7 +19,7 @@
       <div class="cart dropdown ms-auto cursor-pointer order-lg-3">
         <div class="text-secondaryDark" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
           <div class="d-flex">
-              <div class="position-relative me-md-2" :class="{'bounced':isBounced}">
+              <div class="position-relative me-1 me-md-3" :class="{'bounced':isBounced}">
                 <i class="fa-solid fa-cart-shopping"></i>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"
                 v-if="cartData.carts.length != 0">{{ cartData.carts.length }}</span>
