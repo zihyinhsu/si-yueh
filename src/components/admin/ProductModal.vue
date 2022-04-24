@@ -189,13 +189,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .bookImg{
   width: 150px;
 }
-.ck.ck-editor__main {
-  .ck-editor__editable {
-    height: 100px !important;
-  }
+.ck-editor__editable {
+  height: 100px !important;
 }
 </style>

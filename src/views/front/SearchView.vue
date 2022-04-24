@@ -95,7 +95,6 @@
               </div>
             </li>
           </ul>
-          <!-- pagination -->
           <PagiNation class="d-flex justify-content-center mb-4 mb-md-6"
             :pages="pagination" @update-page="getProducts"
             v-if="products.length !== 0"></PagiNation>

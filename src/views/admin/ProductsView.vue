@@ -35,18 +35,18 @@
       <td>NT$ {{ item.price }}</td>
       <td class="ps-5">
         <!-- ToggleSwitch -->
-              <label class="switch">
-                <input type="checkbox"
-                @change="updateProducts(item,false)"
-                v-model="item.is_enabled"
-                :true-value="1" :false-value="0">
-                <span class="slider"></span>
-            </label>
-          <!-- ToggleSwitch -->
+        <label class="switch">
+          <input type="checkbox"
+          @change="updateProducts(item,false)"
+          v-model="item.is_enabled"
+          :true-value="1" :false-value="0">
+          <span class="slider"></span>
+        </label>
+        <!-- ToggleSwitch -->
       </td>
       <td>
         <div class="d-flex">
-            <div class="editBtn d-flex align-items-center" @click="openModal ('edit', item)">
+          <div class="editBtn d-flex align-items-center" @click="openModal ('edit', item)">
             <i class="fa-solid fa-pencil cursor-pointer text-primary fs-4 me-6"></i>
           </div>
           <div class="delBtn d-flex align-items-center" @click="openModal ('delete', item)">
