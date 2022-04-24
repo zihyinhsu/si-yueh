@@ -1,3 +1,5 @@
+import { mapActions } from 'pinia'
+import statusStore from '@/stores/statusStore'
 export default {
   data () {
     return {
@@ -29,16 +31,17 @@ export default {
     }
   },
   methods: {
+    ...mapActions(statusStore, ['pushMsg']),
     toggleFavorite (product) {
       const favoriteIndex = this.favorite.findIndex((item) => item.id === product.id)
       if (favoriteIndex === -1) {
         this.favorite.push(product)
         this.favoriteId.push(product.id)
-        this.$StatusMsg(true, '收藏', '已成功收藏')
+        this.pushMsg(true, '收藏', '已成功收藏')
       } else {
         this.favorite.splice(favoriteIndex, 1)
         this.favoriteId.splice(favoriteIndex, 1)
-        this.$StatusMsg(false, '收藏', '已取消收藏')
+        this.pushMsg(false, '收藏', '已取消收藏')
       }
     },
     resentlyViewed (product) {

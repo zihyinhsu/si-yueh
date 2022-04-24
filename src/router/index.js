@@ -74,6 +74,7 @@ const routes = [
   {
     path: '/admin',
     component: () => import('../views/admin/AdminView.vue'),
+    redirect: '/admin/products',
     children: [
       {
         path: 'products',

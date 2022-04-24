@@ -1,5 +1,5 @@
 <template>
-    <LoadingView class="loading" :active="isLoading">
+  <LoadingView class="loading" :active="isLoading">
     <img src="../../assets/images/loading.gif" alt="Loading">
   </LoadingView>
   <div class="bg-light">
@@ -10,12 +10,12 @@
           <div class="position-sticky top-20">
             <!-- 訂單編號 -->
              <div class="mb-8">
-              <div class="d-flex mb-4">
-                <p class="bg-white text-primary fw-bold fs-4 fs-md-3 p-2"># 訂單編號</p>
-              </div>
-              <p class="fs-small text-danger mb-2">請記得複製以保存您的訂單編號，便於查找訂單狀態</p>
-              <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
-                <p ref="orderId" class="fs-5 fw-bold text-primaryDark mb-2 mb-md-0">{{ order.id }}</p>
+                <div class="d-flex mb-4">
+                  <p class="bg-white text-primary fw-bold fs-4 fs-md-3 p-2"># 訂單編號</p>
+                </div>
+                <p class="fs-small text-danger mb-2">請記得複製以保存您的訂單編號，便於查找訂單狀態</p>
+                <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
+                  <p ref="orderId" class="fs-5 fw-bold text-primaryDark mb-2 mb-md-0">{{ order.id }}</p>
                 <div class="btn btn btn-primary w-100 w-md-auto text-white fs-small" @click="copyOrderId(order.id)"> 複製訂單編號</div>
               </div>
             </div>
@@ -24,25 +24,25 @@
               <p class="bg-white text-primary fw-bold fs-4 fs-md-3 p-2"># 訂單內容</p>
             </div>
             <ul>
-                <li class="d-flex justify-content-between align-items-center border-bottom-1 mb-4" v-for="item in order.products" :key="item.id">
-                    <div class="d-flex align-items-center w-90 p-3">
-                        <img class="ratio ratio-3x4 rounded-4 w-20 me-4" :src="item.product.imageUrl" :alt="item.product.title">
-                        <div class="cart-body text-start ">
-                            <p class="fw-bold">{{ item.product.title }}</p>
-                            <p class="fw-bold">{{ item.product.author }}</p>
-                            <p class="fw-bold text-primaryDark">NT$ {{ item.product.price }}</p>
-                            <p class="text-danger fw-bold" v-if="item.coupon">已套用優惠券</p>
-                        </div>
-                    </div>
-                    <p class="w-10">x {{ item.qty }}</p>
-                </li>
-                <!-- 小計 -->
-                  <div>
-                      <p class="text-secondaryDark fw-bold text-end mb-3 fs-md-4">
-                        總計金額 : NT${{ Math.round(order.total) }}
-                      </p>
+              <li class="d-flex justify-content-between align-items-center border-bottom-1 mb-4" v-for="item in order.products" :key="item.id">
+                <div class="d-flex align-items-center w-90 p-3">
+                  <img class="ratio ratio-3x4 rounded-4 w-20 me-4" :src="item.product.imageUrl" :alt="item.product.title">
+                  <div class="cart-body text-start ">
+                    <p class="fw-bold">{{ item.product.title }}</p>
+                    <p class="fw-bold">{{ item.product.author }}</p>
+                    <p class="fw-bold text-primaryDark">NT$ {{ item.product.price }}</p>
+                    <p class="text-danger fw-bold" v-if="item.coupon">已套用優惠券</p>
                   </div>
+                </div>
+                <p class="w-10">x {{ item.qty }}</p>
+              </li>
             </ul>
+             <!-- 小計 -->
+            <div>
+              <p class="text-secondaryDark fw-bold text-end mb-3 fs-md-4">
+                總計金額 : NT${{ Math.round(order.total) }}
+              </p>
+            </div>
           </div>
         </div>
         <!-- 收件人資料 -->
@@ -67,19 +67,17 @@
                     <label for="address" class="form-label fw-bold">收件人地址<span class="text-danger">*</span></label>
                     <input id="address" name="地址" type="text" class="form-control border-0" :value="order.user.address" disabled>
                   </div>
-
                   <div class="mb-3">
                     <label for="payment" class="form-label fw-bold">付款方式<span class="text-danger">*</span></label>
                     <input id="payment" name="付款方式" type="text" class="form-control border-0" :value="order.user.payment" disabled>
                   </div>
-
                   <div class="mb-3">
                     <label for="message" class="form-label fw-bold">備註</label>
                     <textarea id="message" class="form-control min-h-25 border-0" :value="order.message" disabled></textarea>
                   </div>
                   <div class="text-end">
-                            <button type="submit" class="btn btn-primary text-white w-100"
-                            @click.prevent="pay">確認付款</button>
+                    <button type="submit" class="btn btn-primary text-white w-100"
+                    @click.prevent="pay">確認付款</button>
                   </div>
             </form>
         </div>
@@ -89,6 +87,8 @@
 </template>
 
 <script>
+import { mapActions } from 'pinia'
+import statusStore from '@/stores/statusStore'
 import OrderNav from '@/components/front/OrderNav'
 
 export default {
@@ -107,6 +107,7 @@ export default {
     OrderNav
   },
   methods: {
+    ...mapActions(statusStore, ['pushMsg']),
     getOrders (id) {
       this.isLoading = true
       this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/order/${id}`)
@@ -124,7 +125,7 @@ export default {
       this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/pay/${this.orderId}`)
         .then((res) => {
           this.isLoading = false
-          this.$StatusMsg(res, '更新', '已付款成功')
+          this.pushMsg(res, '更新', '已付款成功')
           // 頁面跳轉
           this.$router.push('/payment')
         })
@@ -132,7 +133,7 @@ export default {
     copyOrderId (text) {
       navigator.clipboard.writeText(text)
         .then(() => {
-          this.$StatusMsg(true, '複製', '您已成功複製優惠碼!')
+          this.pushMsg(true, '複製', '您已成功複製優惠碼!')
         })
     }
   },

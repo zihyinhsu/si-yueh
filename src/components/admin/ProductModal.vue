@@ -1,176 +1,162 @@
 <template>
-    <div class="modal fade" ref="modal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content background-transparent">
-      <div class="modal-header bg-primary">
-        <h4 class="modal-title text-white">{{ isCreateNew ? '新增' : '編輯' }}書籍</h4>
-      </div>
-      <div class="modal-body bg-white">
-        <div class="d-flex justify-content-center align-items-center">
-          <div class="nav flex-column w-15 nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <button class="nav-link fw-bold w-100 active" id="v-pills-info-tab" data-bs-toggle="pill" data-bs-target="#v-pills-info" type="button" role="tab" aria-controls="v-pills-info" aria-selected="true">商品資訊</button>
-            <button class="nav-link fw-bold w-100" id="v-pills-detail-tab" data-bs-toggle="pill" data-bs-target="#v-pills-detail" type="button" role="tab" aria-controls="v-pills-detail" aria-selected="false">商品詳情</button>
-            <button class="nav-link fw-bold w-100" id="v-pills-imgUpload-tab" data-bs-toggle="pill" data-bs-target="#v-pills-imgUpload" type="button" role="tab" aria-controls="v-pills-imgUpload" aria-selected="false">圖片上傳</button>
-          </div>
-          <div class="tab-content w-85" id="v-pills-tabContent">
-            <!-- 商品資訊 -->
-            <div class="tab-pane fade show active" id="v-pills-info" role="tabpanel" aria-labelledby="v-pills-info-tab">
-                <div class="row">
-                  <div class="mb-3 col-md-6">
-                       <label for="title" class="form-label">標題</label>
-                    <input id="title" type="text" class="form-control" placeholder="請輸入標題" v-model.trim="tempProduct.title">
-                    </div>
-                    <div class="mb-3 col-md-6">
-                      <label for="subtitle" class="form-label">副標題</label>
-                      <input id="subtitle" type="text" class="form-control" placeholder="請輸入副標題"
-                              v-model.trim="tempProduct.subTitle">
-                    </div>
-                  </div>
-
-                   <div class="row">
-                    <div class="mb-3 col-3">
-                      <label for="category" class="form-label">類別</label>
-                      <input id="category" type="text" class="form-control" placeholder="請輸入類別"
-                              v-model.trim="tempProduct.category">
-                    </div>
-                    <div class="mb-3 col-3">
-                      <label for="author" class="form-label">作者</label>
-                      <input id="author" type="text" class="form-control" placeholder="請輸入作者"
-                      v-model.trim="tempProduct.author">
-                    </div>
-                    <div class="mb-3 col-3">
-                      <label for="publishing_house" class="form-label">出版社</label>
-                      <input id="publishing_house" type="text" class="form-control" placeholder="請輸入出版社"
-                             v-model.trim="tempProduct.publishing_house">
-                    </div>
-                    <div class="mb-3 col-3">
-                      <label for="publication_date" class="form-label">出版日期</label>
-                      <input id="publication_date" type="date" class="form-control" placeholder="請輸入出版日期"
-                      v-model.trim="tempProduct.publication_date">
-                    </div>
-                  </div>
-
+  <div class="modal fade" ref="modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content background-transparent">
+        <div class="modal-header bg-primary">
+          <h4 class="modal-title text-white">{{ isCreateNew ? '新增' : '編輯' }}書籍</h4>
+        </div>
+        <div class="modal-body bg-white">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="nav flex-column w-15 nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <button class="nav-link fw-bold w-100 active" id="v-pills-info-tab" data-bs-toggle="pill" data-bs-target="#v-pills-info" type="button" role="tab" aria-controls="v-pills-info" aria-selected="true">商品資訊</button>
+              <button class="nav-link fw-bold w-100" id="v-pills-detail-tab" data-bs-toggle="pill" data-bs-target="#v-pills-detail" type="button" role="tab" aria-controls="v-pills-detail" aria-selected="false">商品詳情</button>
+              <button class="nav-link fw-bold w-100" id="v-pills-imgUpload-tab" data-bs-toggle="pill" data-bs-target="#v-pills-imgUpload" type="button" role="tab" aria-controls="v-pills-imgUpload" aria-selected="false">圖片上傳</button>
+            </div>
+            <div class="tab-content w-85" id="v-pills-tabContent">
+              <!-- 商品資訊 -->
+              <div class="tab-pane fade show active" id="v-pills-info" role="tabpanel" aria-labelledby="v-pills-info-tab">
                   <div class="row">
-                    <div class="mb-3 col-md-3">
-                      <label for="origin_price" class="form-label">定價</label>
-                      <input id="origin_price" type="number" min="0" class="form-control" placeholder="請輸入定價"
-                      v-model.number="tempProduct.origin_price">
+                    <div class="mb-3 col-md-6">
+                      <label for="title" class="form-label">標題</label>
+                      <input id="title" type="text" class="form-control" placeholder="請輸入標題" v-model.trim="tempModalData.title">
+                      </div>
+                      <div class="mb-3 col-md-6">
+                        <label for="subtitle" class="form-label">副標題</label>
+                        <input id="subtitle" type="text" class="form-control" placeholder="請輸入副標題"
+                          v-model.trim="tempModalData.subTitle">
+                      </div>
                     </div>
-                    <div class="mb-3 col-md-3">
-                      <label for="price" class="form-label">售價</label>
-                      <input id="price" type="number" min="0" class="form-control"
-                             placeholder="請輸入售價" v-model.number="tempProduct.price">
+                    <div class="row">
+                      <div class="mb-3 col-3">
+                        <label for="category" class="form-label">類別</label>
+                        <input id="category" type="text" class="form-control" placeholder="請輸入類別"
+                          v-model.trim="tempModalData.category">
+                      </div>
+                      <div class="mb-3 col-3">
+                        <label for="author" class="form-label">作者</label>
+                        <input id="author" type="text" class="form-control" placeholder="請輸入作者"
+                        v-model.trim="tempModalData.author">
+                      </div>
+                      <div class="mb-3 col-3">
+                        <label for="publishing_house" class="form-label">出版社</label>
+                        <input id="publishing_house" type="text" class="form-control" placeholder="請輸入出版社"
+                          v-model.trim="tempModalData.publishing_house">
+                      </div>
+                      <div class="mb-3 col-3">
+                        <label for="publication_date" class="form-label">出版日期</label>
+                        <input id="publication_date" type="date" class="form-control" placeholder="請輸入出版日期"
+                        v-model.trim="tempModalData.publication_date">
+                      </div>
                     </div>
-                    <div class="mb-3 col-md-3">
-                      <label for="inventory" class="form-label">庫存</label>
-                      <input id="inventory" type="number" min="0"  class="form-control" placeholder="請輸入庫存"
-                      v-model.number="tempProduct.inventory">
-                      <!-- // 為何不是number -->
+                    <div class="row">
+                      <div class="mb-3 col-md-3">
+                        <label for="origin_price" class="form-label">定價</label>
+                        <input id="origin_price" type="number" min="0" class="form-control" placeholder="請輸入定價"
+                        v-model.number="tempModalData.origin_price">
+                      </div>
+                      <div class="mb-3 col-md-3">
+                        <label for="price" class="form-label">售價</label>
+                        <input id="price" type="number" min="0" class="form-control"
+                          placeholder="請輸入售價" v-model.number="tempModalData.price">
+                      </div>
+                      <div class="mb-3 col-md-3">
+                        <label for="inventory" class="form-label">庫存</label>
+                        <input id="inventory" type="number" min="0"  class="form-control" placeholder="請輸入庫存"
+                        v-model.number="tempModalData.inventory">
+                      </div>
+                      <div class="mb-3 col-md-3">
+                        <label for="unit" class="form-label">單位</label>
+                        <input id="unit" type="text" class="form-control" placeholder="請輸入單位"
+                        v-model.trim="tempModalData.unit">
+                      </div>
                     </div>
-                    <div class="mb-3 col-md-3">
-                      <label for="unit" class="form-label">單位</label>
-                      <input id="unit" type="text" class="form-control" placeholder="請輸入單位"
-                      v-model.trim="tempProduct.unit">
-                    </div>
-                  </div>
-            </div>
-             <!-- 商品詳情 -->
-            <div class="tab-pane fade" id="v-pills-detail" role="tabpanel" aria-labelledby="v-pills-detail-tab">
-              <div class="row w-100">
-                <div class="mb-3 col">
-                       <label for="content" class="form-label">書籍簡介</label>
-                       <ckeditor :editor="editor" :config="editorConfig" v-model="tempProduct.content"></ckeditor>
-                    </div>
+              </div>
+              <!-- 商品詳情 -->
+              <div class="tab-pane fade" id="v-pills-detail" role="tabpanel" aria-labelledby="v-pills-detail-tab">
+                <div class="row w-100">
                   <div class="mb-3 col">
-                       <label for="description" class="form-label">詳細書訊</label>
-                       <ckeditor :editor="editor" :config="editorConfig" v-model="tempProduct.description"></ckeditor>
-                    </div>
-              </div>
-              <div class="row w-100">
-                 <div class="col-6 mb-3">
-                       <label for="author_intro" class="form-label">作者簡介</label>
-                       <ckeditor :editor="editor" :config="editorConfig" v-model="tempProduct.author_intro"></ckeditor>
-                    </div>
-                    <div class="mb-3 col">
-                       <label for="table_contents" class="form-label">目錄</label>
-                        <ckeditor :editor="editor" :config="editorConfig" v-model="tempProduct.table_contents"></ckeditor>
-                    </div>
-              </div>
-                 <div class="row w-100">
-                   <div class="col-6 mb-3">
-                       <label for="translator_intro" class="form-label">譯者簡介</label>
-                        <ckeditor :editor="editor" :config="editorConfig" v-model="tempProduct.translator_intro"></ckeditor>
-                    </div>
-                    <div class="col">
-                       <label for="illustrator_intro" class="form-label">繪者簡介</label>
-                        <ckeditor :editor="editor" :config="editorConfig" v-model="tempProduct.illustrator_intro"></ckeditor>
-                    </div>
-              </div>
-            </div>
-             <!-- 圖片上傳 -->
-            <div class="tab-pane fade" id="v-pills-imgUpload" role="tabpanel" aria-labelledby="v-pills-imgUpload-tab">
-              <div class="d-flex align-items-center">
-                <div class="bookImg me-3">
-                  <p class="fw-bold fs-4 text-center mb-2">書籍主圖</p>
-                  <img class="ratio ratio-3x4 rounded-4 bg-light" :src="tempProduct.imageUrl" :alt="tempProduct.title">
+                    <label for="content" class="form-label">書籍簡介</label>
+                    <ckeditor :editor="editor" :config="editorConfig" v-model="tempModalData.content"></ckeditor>
+                  </div>
+                  <div class="mb-3 col">
+                    <label for="description" class="form-label">詳細書訊</label>
+                    <ckeditor :editor="editor" :config="editorConfig" v-model="tempModalData.description"></ckeditor>
+                  </div>
                 </div>
-                <div class="bookImg me-3" v-if="tempProduct.imgPreviewURL">
-                  <p class="fw-bold fs-4 text-center mb-2">圖片預覽</p>
-                  <img class="ratio ratio-3x4 rounded-4" :src="tempProduct.imgPreviewURL" :alt="tempProduct.title">
+                <div class="row w-100">
+                  <div class="col-6 mb-3">
+                    <label for="author_intro" class="form-label">作者簡介</label>
+                    <ckeditor :editor="editor" :config="editorConfig" v-model="tempModalData.author_intro"></ckeditor>
+                  </div>
+                  <div class="mb-3 col">
+                    <label for="table_contents" class="form-label">目錄</label>
+                    <ckeditor :editor="editor" :config="editorConfig" v-model="tempModalData.table_contents"></ckeditor>
+                  </div>
                 </div>
-                <div>
-                   <p class="fw-bold fs-4 mb-2">圖片上傳</p>
-                    <input type="text" class="form-control mb-2" v-model="tempProduct.imageUrl" placeholder="請輸入圖片連結">
+                <div class="row w-100">
+                  <div class="col-6 mb-3">
+                    <label for="translator_intro" class="form-label">譯者簡介</label>
+                    <ckeditor :editor="editor" :config="editorConfig" v-model="tempModalData.translator_intro"></ckeditor>
+                  </div>
+                  <div class="col">
+                    <label for="illustrator_intro" class="form-label">繪者簡介</label>
+                    <ckeditor :editor="editor" :config="editorConfig" v-model="tempModalData.illustrator_intro"></ckeditor>
+                  </div>
+                </div>
+              </div>
+              <!-- 圖片上傳 -->
+              <div class="tab-pane fade" id="v-pills-imgUpload" role="tabpanel" aria-labelledby="v-pills-imgUpload-tab">
+                <div class="d-flex align-items-center">
+                  <div class="bookImg me-3">
+                    <p class="fw-bold fs-4 text-center mb-2">書籍主圖</p>
+                    <img class="ratio ratio-3x4 rounded-4 bg-light" :src="tempModalData.imageUrl" :alt="tempModalData.title">
+                  </div>
+                  <div class="bookImg me-3" v-if="tempModalData.imgPreviewURL">
+                    <p class="fw-bold fs-4 text-center mb-2">圖片預覽</p>
+                    <img class="ratio ratio-3x4 rounded-4" :src="tempModalData.imgPreviewURL" :alt="tempModalData.title">
+                  </div>
+                  <div>
+                    <p class="fw-bold fs-4 mb-2">圖片上傳</p>
+                    <input type="text" class="form-control mb-2" v-model="tempModalData.imageUrl" placeholder="請輸入圖片連結">
                     <!-- 上傳圖片 -->
                     <div class="input-group mb-5">
                       <input type="file" class="form-control" ref="fileInput" id="imgUploadInput" aria-describedby="imgUploadFileAddon" aria-label="Upload" @change="chooseImg">
                       <button class="btn btn-primary text-white" type="button" id="imgUploadFileAddon" @click.prevent="upload">確認上傳</button>
                     </div>
-                    <!-- 是否上架 -->
-                     <!-- ToggleSwitch -->
-                     <p class="fw-bold fs-4 mb-2">是否上架</p>
+                    <!-- ToggleSwitch -->
+                    <p class="fw-bold fs-4 mb-2">是否上架</p>
                     <label class="switch">
                       <input type="checkbox"
-                      v-model="tempProduct.is_enabled"
+                      v-model="tempModalData.is_enabled"
                       :true-value="1" :false-value="0">
                       <span class="slider"></span>
-                  </label>
-                <!-- ToggleSwitch -->
+                    </label>
+                    <!-- ToggleSwitch -->
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="modal-footer bg-white">
-        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary text-white" @click="$emit('update-products',tempProduct,isCreateNew)">確認</button>
+        <div class="modal-footer bg-white">
+          <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary text-white" @click="$emit('update-products',tempModalData,isCreateNew)">確認</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
-<style lang="scss">
-// ckeditor
-.ck.ck-editor__main {
-  .ck-editor__editable {
-    height: 100px !important;
-  }
-}
-</style>
-
 <script>
+import { mapActions } from 'pinia'
+import statusStore from '@/stores/statusStore'
 import modalMixin from '@/mixins/modalMixin'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 export default {
   mixins: [modalMixin],
-  props: ['temp', 'isCreateNew'],
+  props: ['isCreateNew'],
   data () {
     return {
-      tempProduct: {
-        imgPreviewURL: ''
-      },
       publication_date: '',
       editor: ClassicEditor,
       editorConfig: {
@@ -178,19 +164,12 @@ export default {
       }
     }
   },
-  watch: {
-    temp: {
-      handler () {
-        this.tempProduct = JSON.parse(JSON.stringify(this.temp))
-      },
-      deep: true
-    }
-  },
   methods: {
+    ...mapActions(statusStore, ['pushMsg']),
     // 圖片預覽效果
     chooseImg (e) {
       const [file] = e.target.files
-      this.tempProduct.imgPreviewURL = window.URL.createObjectURL(file)
+      this.tempModalData.imgPreviewURL = window.URL.createObjectURL(file)
     },
     // 圖片上傳
     upload () {
@@ -199,11 +178,11 @@ export default {
       formData.append('file-to-upload', file)
       this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/upload`, formData)
         .then(res => {
-          this.$StatusMsg(res, '上傳', '圖片已成功上傳')
-          this.tempProduct.imageUrl = res.data.imageUrl
-          this.tempProduct.imgPreviewURL = ''
+          this.pushMsg(res, '上傳', '圖片已成功上傳')
+          this.tempModalData.imageUrl = res.data.imageUrl
+          this.tempModalData.imgPreviewURL = ''
         }).catch(() => {
-          this.$StatusMsg(false, '上傳', '圖片上傳失敗')
+          this.pushMsg(false, '上傳', '圖片上傳失敗')
         })
     }
   }
@@ -213,5 +192,10 @@ export default {
 <style lang="scss" scoped>
 .bookImg{
   width: 150px;
+}
+.ck.ck-editor__main {
+  .ck-editor__editable {
+    height: 100px !important;
+  }
 }
 </style>

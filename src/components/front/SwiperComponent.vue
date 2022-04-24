@@ -1,14 +1,15 @@
 <template>
-<div class="container py-7">
+  <div class="container py-7">
     <h2 class="category fs-4 fs-md-3 d-inline-block text-primaryDark p-2 fw-bold mb-7"
     :class="{'bg-light': titlebgColor }"
     v-if="showTitle" style="background-color:white"
-    ># {{category}}</h2>
+    ># {{ category }}</h2>
     <swiper
     :slidesPerView="1.7"
     :spaceBetween="20"
-    :pagination="{
-      clickable: true,
+    :autoplay="{
+      delay: 5000,
+      disableOnInteraction: false,
     }"
     :breakpoints="{
       '768': {
@@ -16,33 +17,34 @@
         spaceBetween: 24,
       },
     }"
+    :modules="modules"
     class="bookSwiper rounded-4 h-100 p-2">
-    <swiper-slide class="swiperSlide bookCoverImg d-flex flex-column" v-for="item in products" :key="item.id"
+      <swiper-slide class="swiperSlide bookCoverImg d-flex flex-column" v-for="item in products" :key="item.id"
       :class="{'d-none': id === item.id }" style="max-width: 196px;">
       <!-- ↑若產品內頁的產品id與推薦書籍id相同則隱藏 -->
         <div class="position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow">
           <router-link class="bookHover fadeIn" :to="`/product/${item.id}`">
             <img class="ratio ratio-3x4" :src="item.imageUrl" :alt="item.title">
-            </router-link>
-            <div class="btn btn-primary position-absolute bottom-0 w-100 text-white"
+          </router-link>
+          <div class="btn btn-primary position-absolute bottom-0 w-100 text-white"
             @click="addToCart(item)">
-                <i class="fa-solid fa-cart-plus me-3"></i>加入購書車 <span v-show="isLoadingItem === item.id">
-                  <i class="fas fa-spinner fa-pulse ms-1"></i></span>
-                </div>
-              <div class="bookMark btn btn-sm position-absolute top-0 end-0 rounded-circle m-2"
-              @click="toggleFavorite(item)" :class="favoriteId.includes(item.id) ? 'btn-primaryDark':'btn-primaryLight'">
-                <span class="material-icons-outlined text-white fs-5 mt-1" v-if="favoriteId.includes(item.id)">bookmark</span>
-                <span class="material-icons-outlined text-white fs-5 mt-1" v-else>bookmark_border</span>
-              </div>
+            <i class="fa-solid fa-cart-plus me-3"></i>加入購書車 <span v-show="isLoadingItem === item.id">
+            <i class="fas fa-spinner fa-pulse ms-1"></i></span>
+          </div>
+          <div class="bookMark btn btn-sm position-absolute top-0 end-0 rounded-circle m-2"
+            @click="toggleFavorite(item)" :class="favoriteId.includes(item.id) ? 'btn-primaryDark':'btn-primaryLight'">
+            <span class="material-icons-outlined text-white fs-5 mt-1" v-if="favoriteId.includes(item.id)">bookmark</span>
+            <span class="material-icons-outlined text-white fs-5 mt-1" v-else>bookmark_border</span>
+          </div>
         </div>
-          <section class="flex-grow-1">
-            <p class="fw-bold fs-4">{{ item.title }}</p>
-            <p>{{ item.author }}</p>
-          </section>
-          <p class="text-primary fw-bold fs-3">NT$ {{ item.price }}</p>
-        </swiper-slide>
-  </swiper>
-</div>
+        <div class="flex-grow-1">
+          <router-link class="text-primaryDark d-block fw-bold text-truncate fs-4" :to="`/product/${item.id}`">{{ item.title }}</router-link>
+          <p>{{ item.author }}</p>
+        </div>
+        <p class="text-primary fw-bold fs-3">NT$ {{ item.price }}</p>
+      </swiper-slide>
+    </swiper>
+  </div>
 </template>
 
 <script>
@@ -90,6 +92,7 @@ export default {
   },
   methods: {
     ...mapActions(cartStore, ['addToCart']),
+    ...mapActions(statusStore, ['pushMsg']),
     getProducts (category) {
       let url = ''
       if (category === '最近瀏覽') {
@@ -105,7 +108,7 @@ export default {
         .then((res) => {
           this.products = res.data.products
         }).catch(() => {
-          this.$StatusMsg(false, '載入', '請重新整理')
+          this.pushMsg(false, '載入', '請重新整理')
         })
     }
   },
@@ -115,7 +118,6 @@ export default {
   },
   mounted () {
     this.getProducts(this.category)
-    this.$emitter.emit('get-cart-list')
   }
 }
 </script>

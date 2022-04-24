@@ -7,21 +7,48 @@ export default defineStore('statusStore', {
   state: () => ({
     isLoadingItem: '',
     isLoading: false,
-    isBounced: false
+    isBounced: false,
+    messages: [],
+    message: {}
   }),
-
-  // 對應 computed (物件形式)
-  getters: {
-
-  },
-
   // 對應 methods (物件形式)
   actions: {
     loadingEffect () {
       this.isLoading = true
       setTimeout(() => {
         this.isLoading = false
-      }, 500)
+      }, 1000)
+    },
+    toastShow () {
+      setTimeout(() => {
+        this.messages.shift()
+      }, 1500)
+    },
+    clearToast (index) {
+      this.messages.splice(index, 1)
+    },
+    pushMsg (res = true, title = '更新', content) {
+      if (res) {
+        this.message = {
+          style: 'primary',
+          title: `${title}成功`,
+          content: content,
+          icon: 'fa-circle-check'
+        }
+      } else {
+        this.message = {
+          style: 'danger',
+          title: `${title}失敗`,
+          content: content,
+          icon: 'fa-circle-xmark'
+        }
+      }
+      this.statusMsg(this.message)
+    },
+    statusMsg (message) {
+      const { style, title, content, icon } = message
+      this.messages.push({ style, title, content, icon })
+      this.toastShow()
     }
   }
 })

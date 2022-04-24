@@ -1,8 +1,8 @@
 <template>
     <FrontNavbar/>
     <ToastMsg/>
-    <GoTop/>
     <ShareButton/>
+    <GoTop/>
     <RouterView/>
     <FooterComponent/>
 </template>
@@ -11,8 +11,8 @@
 import FrontNavbar from '@/components/front/FrontNavbar.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import ToastMsg from '@/components/ToastMsg.vue'
-import GoTop from '@/components/front/GoTop.vue'
 import ShareButton from '@/components/front/ShareButton.vue'
+import GoTop from '@/components/front/GoTop.vue'
 
 export default {
   components: {

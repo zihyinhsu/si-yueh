@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, markRaw } from 'vue'
 // pinia
 import { createPinia } from 'pinia'
 
@@ -20,9 +20,6 @@ import 'material-icons'
 // ck editor5
 import CKEditor from '@ckeditor/ckeditor5-vue'
 
-// methods > statusMsg
-import $StatusMsg from '@/methods/StatusMsg'
-
 // vue-loading-overlay
 import Loading from 'vue-loading-overlay' // component
 import 'vue-loading-overlay/dist/vue-loading.css' // style
@@ -42,7 +39,6 @@ import {
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json'
 
 import { date } from '@/methods/filters.js'
-import emitter from '@/methods/emitter.js'
 
 import App from './App.vue'
 import router from './router'
@@ -68,9 +64,12 @@ const pinia = createPinia()
 const app = createApp(App)
 
 app.use(pinia)
+// 在每個store 添加 pinia
+pinia.use(({ store }) => {
+  store.$router = markRaw(router)
+})
 app.use(router)
-app.config.globalProperties.$StatusMsg = $StatusMsg
-app.config.globalProperties.$emitter = emitter
+
 app.config.globalProperties.$filters = { date }
 
 app.use(VueAxios, axios)
