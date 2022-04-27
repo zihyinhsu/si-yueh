@@ -216,6 +216,10 @@ export default {
       localStorage.removeItem('resentlyViewdProducts')
       this.getResentlyViewdProducts()
     }
+  },
+  mounted () {
+    this.final_total = Math.round(this.cartData.final_total)
+    this.discount_price = this.final_total - this.cartData.total
   }
 }
 </script>
