@@ -19,7 +19,7 @@
         <div class="cart dropdown ms-auto cursor-pointer order-lg-3">
           <div class="text-secondaryDark" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="d-flex">
-              <div class="position-relative me-1 me-md-3" :class="{'bounced':isBounced}">
+              <div class="position-relative me-2 me-md-3" :class="{'bounced':isBounced}">
                 <i class="fa-solid fa-cart-shopping"></i>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"
                 v-if="cartData.carts.length != 0">{{ cartData.carts.length }}</span>
@@ -33,7 +33,7 @@
           </div>
         </div>
         <!-- 漢堡選單 -->
-        <button class="navbar-toggler box-shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"
+        <button class="navbar-toggler box-shadow-none px-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"
         @click="navIconChange = !navIconChange">
           <span v-if="navIconChange">
             <i class="fa-solid fa-x text-secondaryDark"></i>

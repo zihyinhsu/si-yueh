@@ -33,7 +33,7 @@
 }
 
 .collectionImg img{
-  height:230px;
+  height:220px;
   @include media-breakpoint-up(md) {
     height: 294px;
   }
@@ -79,7 +79,7 @@
 }
 
 .dropdown-menu-end[data-bs-popper] {
-  right: -198% !important;
+  right: -140% !important;
   margin-top: 1rem;
   @include media-breakpoint-up(md) {
     right: -2% !important;
@@ -111,6 +111,27 @@
   height: 100px;
 }
 
+.mt-lg-n15{
+  @include media-breakpoint-up(md) {
+    margin-top: -60px;
+  }
+}
+.markLine{
+  position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    z-index:-1;
+    height: 0.8rem;
+    top: 0.4rem;
+    background: $primaryLight;
+    width: 100%;
+    right: 0%;
+    @include media-breakpoint-up(md) {
+      top: 0.8rem;
+    }
+  }
+}
 // breakpoint
 @include media-breakpoint-up(md) {
   .fs-md-display{

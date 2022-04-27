@@ -50,12 +50,13 @@ export default {
       if (this.resentlyViewdProducts.length >= 10) {
         // 如果總數量超過10，刪除陣列的第一筆資料
         this.resentlyViewdProducts.shift()
+      }
+      // 如果預覽到不同的書籍
+      if (resentlyViewdIndex === -1) {
         this.resentlyViewdProducts.push(product)
-        // 如果預覽到不同的書籍
-      } else if (resentlyViewdIndex === -1) {
-        this.resentlyViewdProducts.push(product)
-        // 如果預覽到重複的書籍
-      } else if (resentlyViewdIndex !== -1) {
+      }
+      // 如果預覽到重複的書籍
+      if (resentlyViewdIndex !== -1) {
         // 先刪除重複的資料
         this.resentlyViewdProducts.splice(resentlyViewdIndex, 1)
         // 再重新推進最新的位置

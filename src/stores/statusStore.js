@@ -5,7 +5,7 @@ import { defineStore } from 'pinia'
 export default defineStore('statusStore', {
   // 對應 data
   state: () => ({
-    isLoadingItem: '',
+    isLoadingItem: false || '',
     isLoading: false,
     isBounced: false,
     messages: [],
@@ -17,6 +17,12 @@ export default defineStore('statusStore', {
       this.isLoading = true
       setTimeout(() => {
         this.isLoading = false
+      }, 1000)
+    },
+    loadingItemEffect () {
+      this.isLoadingItem = true
+      setTimeout(() => {
+        this.isLoadingItem = false
       }, 1000)
     },
     toastShow () {

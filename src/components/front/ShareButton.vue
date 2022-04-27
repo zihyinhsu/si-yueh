@@ -26,7 +26,7 @@ export default {
       if (navigator.share) {
         navigator.share({
           title: '徙閱二手書',
-          text: '嗨嗨我的好朋朋，這裡推薦一個可以便宜買書又讚讚的網站給妳~',
+          text: '徙閱二手書致力於傳遞惜書、愛書的精神，邀請你一起體驗文字的力量與閱讀的樂趣。',
           url: 'https://zihyinhsu.github.io/si-yueh/#/'
         })
           .then(() => this.pushMsg(true, '分享', '已成功分享'))

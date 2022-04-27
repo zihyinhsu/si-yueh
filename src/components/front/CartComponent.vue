@@ -7,7 +7,7 @@
       <div class="cart-body overflow-auto h-100 max-h-70vh p-2">
         <ul class="h-100">
           <div class="d-flex justify-content-end p-2" v-if="cartData.carts.length">
-            <div class="btn btn-outline-secondary"
+            <div class="btn btn-light text-primaryDark fw-bold"
             @click="delAllCart(cartData.carts)">清空購書車
             <span v-show="isLoadingItem === cartData.carts.id">
               <i class="fas fa-spinner fa-pulse ms-1"></i></span></div>
@@ -23,7 +23,7 @@
           <!-- 購書車品項 -->
           <li class="d-flex justify-content-between align-items-center border-bottom-1 p-3" v-for="item in cartData.carts" :key="item.id">
             <div class="d-flex align-items-center w-100">
-              <router-link class="rounded-1 overflow-hidden cursor-pointer me-2 w-40" :to="`/product/${item.product.id}`">
+              <router-link class="rounded-1 overflow-hidden cursor-pointer me-2 w-40 w-md-30" :to="`/product/${item.product.id}`">
                   <img class="ratio ratio-3x4" :src="item.product.imageUrl" :alt="item.product.title">
               </router-link>
               <div class="cart-body w-100 me-4">

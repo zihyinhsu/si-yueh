@@ -26,24 +26,24 @@
           <td>
               <ul class="list-unstyled">
                   <li v-for="(product,i) in item.products" :key="i">
-                  <span class="fw-bold">{{ product.product.title }}</span> / {{ product.qty }} {{ product.product.unit }}
+                    <span class="fw-bold">{{ product.product.title }}</span> / {{ product.qty }} {{ product.product.unit }}
                   </li>
               </ul>
           </td>
           <td>NT$ {{ Math.round(item.total) }}</td>
           <td class="ps-5">
             <!-- ToggleSwitch -->
-                  <label class="switch">
-                    <input type="checkbox"
-                    v-model="item.is_paid"
-                    @change="updatePaid(item)">
-                    <span class="slider"></span>
-                </label>
-              <!-- ToggleSwitch -->
+            <label class="switch">
+              <input type="checkbox"
+              v-model="item.is_paid"
+              @change="updatePaid(item)">
+              <span class="slider"></span>
+            </label>
+            <!-- ToggleSwitch -->
           </td>
           <td>
           <div class="d-flex">
-                <div class="editBtn d-flex align-items-center" @click="openModal('edit',item)">
+            <div class="editBtn d-flex align-items-center" @click="openModal('edit',item)">
               <i class="fa-solid fa-pencil cursor-pointer text-primary fs-4 me-6"></i>
             </div>
             <div class="delBtn d-flex align-items-center" @click="openModal('delete',item)">

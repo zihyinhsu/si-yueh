@@ -77,13 +77,14 @@
                   <img class="ratio ratio-3x4 rounded-4" :src="item.imageUrl" :alt="item.title">
                 </router-link>
                 <div class="bookIntro border-end-md pe-md-1 w-57.5 w-md-45 me-md-4">
-                  <p class="fw-bold fs-md-4 mb-1 mb-md-2">{{ item.title }}</p>
+                  <router-link class="text-primaryDark fw-bold fs-md-4 mb-1 mb-md-2" :to="`/product/${item.id}`">{{ item.title }}</router-link>
+                  <!-- <p class="fw-bold fs-md-4 mb-1 mb-md-2">{{ item.title }}</p> -->
                   <p class="fs-small fs-md-5 mb-1 mb-md-2">作者 : {{ item.author }}</p>
                   <p class="fs-small fs-md-5 mb-1 mb-md-2">出版社 : {{ item.publishing_house }}</p>
                   <p class="fs-small fs-md-5 mb-1 mb-md-2">出版日期 : {{ item.publication_date }}</p>
                   <p class="fs-md-3 fw-bold text-primary mb-1 mb-md-2">NT$ {{ item.price }}</p>
                   <div class="btn btn-primary text-white w-md-auto fs-small fs-md-5" @click="addToCart(item)">
-                    <i class="fa-solid fa-cart-plus me-3"></i>加入購書車<span v-show="isLoadingItem === item.id"><i class="fas fa-spinner fa-pulse ms-1"></i></span>
+                  <i class="fa-solid fa-cart-plus me-3"></i>加入購書車<span v-show="isLoadingItem === item.id"><i class="fas fa-spinner fa-pulse ms-1"></i></span>
                   </div>
                 </div>
                 <div class="bookContent w-55 d-none d-md-block">
