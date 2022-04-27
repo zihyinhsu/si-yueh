@@ -10,7 +10,8 @@ export default defineStore('cartStore', {
   // 對應 data
   state: () => ({
     cartData: {
-      carts: []
+      carts: [],
+      final_total: ''
     },
     coupon_code: ''
   }),
