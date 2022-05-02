@@ -25,15 +25,7 @@
   background-image: url('https://blog.libro.fm/wp-content/uploads/ashley-byrd-KVby0S0GaH4-unsplash.jpg');
 }
 
-.bookCoverImg img{
-  height: 250px;
-  @include media-breakpoint-up(md) {
-    height: 294px;
-  }
-}
-
-.collectionImg img{
-  height:220px;
+.bookCoverImg img, .collectionImg img{
   @include media-breakpoint-up(md) {
     height: 294px;
   }
@@ -134,13 +126,6 @@
 }
 // breakpoint
 @include media-breakpoint-up(md) {
-  .fs-md-display{
-    font-size: 50px;
-  }
-  .size-md-150{
-    width: 150px;
-    height: 150px;
-  }
   .accordion-collapse {
     &:not(.show){
       display: block;

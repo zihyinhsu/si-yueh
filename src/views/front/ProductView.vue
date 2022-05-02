@@ -16,7 +16,7 @@
         <!-- 書籍基本資料 -->
         <div class="row justify-content-center align-items-center border-bottom border-2 px-0 pt-3 pb-9">
           <div class="col-8 col-md-3 mb-5 mb-md-0">
-            <img class="ratio ratio-3x4 rounded-4 hoverBoxShadow" :src="product.imageUrl" :alt="product.title">
+            <img class="ratio ratio-3x4 rounded-4 box-shadow" :src="product.imageUrl" :alt="product.title">
           </div>
           <div class="col-md-4 mb-4 mb-md-0 border-end-md-2">
             <div class="bookTitle mb-4">

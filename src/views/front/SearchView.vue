@@ -78,7 +78,6 @@
                 </router-link>
                 <div class="bookIntro border-end-md pe-md-1 w-57.5 w-md-45 me-md-4">
                   <router-link class="text-primaryDark fw-bold fs-md-4 mb-1 mb-md-2" :to="`/product/${item.id}`">{{ item.title }}</router-link>
-                  <!-- <p class="fw-bold fs-md-4 mb-1 mb-md-2">{{ item.title }}</p> -->
                   <p class="fs-small fs-md-5 mb-1 mb-md-2">作者 : {{ item.author }}</p>
                   <p class="fs-small fs-md-5 mb-1 mb-md-2">出版社 : {{ item.publishing_house }}</p>
                   <p class="fs-small fs-md-5 mb-1 mb-md-2">出版日期 : {{ item.publication_date }}</p>
@@ -191,10 +190,15 @@ export default {
     keyboardEvent (e) {
       // 按鈕向上
       if (e.keyCode === 38) {
-        this.selectedIndex--
+        if (this.selectedIndex !== 0) {
+          this.selectedIndex--
+        }
       // 按鈕向下
       } else if (e.keyCode === 40) {
-        this.selectedIndex++
+        const filterLastIndex = this.filterProducts.length - 1
+        if (this.selectedIndex !== filterLastIndex) {
+          this.selectedIndex++
+        }
         // enter
       } else if (e.keyCode === 13) {
         this.filterProducts.forEach((item, i) => {
@@ -219,6 +223,7 @@ export default {
         this.pagination.has_next = false
       } else {
         this.autoComplete = false
+        this.selectedIndex = -1
       }
     },
     selectValue: {
@@ -276,7 +281,7 @@ export default {
   mounted () {
     this.getAllProducts()
     this.getProducts()
-    // 利用localStorage取得資料
+    // 利用localStorage取得產品內層資料
     setTimeout(() => {
       const category = localStorage.getItem('category')
       const isActive = localStorage.getItem('isActive') || 'all'

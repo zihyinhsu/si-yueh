@@ -22,9 +22,9 @@
       <swiper-slide class="swiperSlide bookCoverImg d-flex flex-column" v-for="item in products" :key="item.id"
       :class="{'d-none': id === item.id }" style="max-width: 196px;">
       <!-- ↑若產品內頁的產品id與推薦書籍id相同則隱藏 -->
-        <div class="position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow">
+        <div class="position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow hoverCard">
           <router-link class="bookHover fadeIn" :to="`/product/${item.id}`">
-            <img class="ratio ratio-3x4" :src="item.imageUrl" :alt="item.title">
+            <img class="ratio ratio-3x4" v-lazy="item.imageUrl" :alt="item.title">
           </router-link>
           <div class="btn btn-primary position-absolute bottom-0 w-100 text-white"
             @click="addToCart(item)">
@@ -96,8 +96,7 @@ export default {
     getProducts (category) {
       let url = ''
       if (category === '最近瀏覽') {
-        // 讓最新預覽的商品排在最前面
-        this.products = this.resentlyViewdProducts.reverse()
+        this.products = this.resentlyViewdProducts
         return
       } else if (category === '最新上架') {
         url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products`

@@ -13,6 +13,14 @@
     animation: moving 5s infinite
 }
 
+.hoverCard{
+  bottom: 0%;
+  transition: all 0.2s;
+  &:hover{
+    bottom: 0.5%;
+  }
+}
+
 @keyframes bounced{
     0%{
     transform: translateY(0%);

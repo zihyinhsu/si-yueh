@@ -28,32 +28,32 @@
         </div>
       </div>
       <div class="row row-cols-2 row-cols-md-5 px-md-3">
-          <draggable v-model="perPageData" tag="transition-group" item-key="id">
-            <template #item="{element}">
-              <div class="col d-flex flex-column pb-7 pb-md-10">
-                <div class="collectionImg position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow">
-                  <router-link class="bookHover fadeIn" :to="`/product/${element.id}`">
-                    <img class="ratio ratio-3x4" :src="element.imageUrl" :alt="element.title">
-                  </router-link>
-                  <div class="btn btn-primary position-absolute bottom-0 w-100 text-white fs-small fs-md-5"
-                  @click="addToCart(element)">
-                    <i class="fa-solid fa-cart-plus me-3"></i>加入購書車 <span v-show="isLoadingItem === element.id">
-                    <i class="fas fa-spinner fa-pulse ms-1"></i></span>
-                  </div>
-                  <div class="bookMark btn btn-sm position-absolute top-0 end-0 rounded-circle m-2"
-                  @click="toggleFavorite(element)" :class="favorite.includes(element) ? 'btn-primaryDark':'btn-primaryLight'">
-                    <span class="material-icons-outlined text-white fs-5 mt-1" v-if="favorite.includes(element)">bookmark</span>
-                    <span class="material-icons-outlined text-white fs-5 mt-1" v-else>bookmark_border</span>
-                  </div>
+        <draggable v-model="perPageData" tag="transition-group" item-key="id">
+          <template #item="{element}">
+            <div class="col d-flex flex-column pb-7 pb-md-10">
+              <div class="collectionImg position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow hoverCard">
+                <router-link class="bookHover fadeIn" :to="`/product/${element.id}`">
+                  <img class="ratio ratio-3x4" :src="element.imageUrl" :alt="element.title">
+                </router-link>
+                <div class="btn btn-primary position-absolute bottom-0 w-100 text-white fs-small fs-md-5"
+                @click="addToCart(element)">
+                  <i class="fa-solid fa-cart-plus me-3"></i>加入購書車 <span v-show="isLoadingItem === element.id">
+                  <i class="fas fa-spinner fa-pulse ms-1"></i></span>
                 </div>
-                <div class="flex-grow-1">
-                  <router-link class="text-primaryDark d-block fw-bold text-truncate fs-4" :to="`/product/${element.id}`">{{ element.title }}</router-link>
-                  <p>{{ element.author }}</p>
+                <div class="bookMark btn btn-sm position-absolute top-0 end-0 rounded-circle m-2"
+                @click="toggleFavorite(element)" :class="favorite.includes(element) ? 'btn-primaryDark':'btn-primaryLight'">
+                  <span class="material-icons-outlined text-white fs-5 mt-1" v-if="favorite.includes(element)">bookmark</span>
+                  <span class="material-icons-outlined text-white fs-5 mt-1" v-else>bookmark_border</span>
                 </div>
-                <p class="text-primary fw-bold fs-3">NT$ {{ element.price }}</p>
               </div>
-            </template>
-          </draggable>
+              <div class="flex-grow-1">
+                <router-link class="text-primaryDark d-block fw-bold text-truncate fs-4" :to="`/product/${element.id}`">{{ element.title }}</router-link>
+                <p>{{ element.author }}</p>
+              </div>
+              <p class="text-primary fw-bold fs-3">NT$ {{ element.price }}</p>
+            </div>
+          </template>
+        </draggable>
       </div>
       <PagiNation class="d-flex justify-content-center"
         :pages="pagination" @update-page="getProducts" v-if="favorite.length !== 0"></PagiNation>
