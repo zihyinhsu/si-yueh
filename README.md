@@ -50,7 +50,7 @@
 
 使用 localStorage 來做收藏功能，並加入拖曳 與 儲存排序功能。
 
-![](https://i.imgur.com/O0htW9e.gif)
+![](https://github.com/zihyinhsu/si-yueh/blob/master/20220502_210404.gif?raw=true)
 
 ### 最近瀏覽 功能
 ![](https://storage.googleapis.com/vue-course-api.appspot.com/zy123/1651494375704.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=SETnMqoaaqccClClUFH%2BviaC6Cc%2BUv3PSz6wTlil7aQF9DnF38xSGQRlPnwBjEW0FidMc%2Bd%2FBL1k1n5tV20S%2Ba2xtdQmFb6N1tWaOLNjd8BC2%2Bap5dPSTy69Dp02MXRX4XuM0t9qNdKgdtOSwm6o%2BoM1MGmPcvVS69SJq%2BqyUJbzVjG98kuW19p8Sv8pTs%2BNKDg61HyQedLcMbQB0XbqqlmDyKGgX6bqyPnBnPLb%2BvFFEpLknTbb7gkkFB6x5XE%2BrRu3CyNjTFz3d6MlKDozsG9fp58wfKfW144WfPbRCojszb7ih9H4l83y3qWYigSi7tza%2Ff5Ts1kxoEO0t811HQ%3D%3D)
