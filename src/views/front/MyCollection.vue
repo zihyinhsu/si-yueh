@@ -32,7 +32,7 @@
           <template #item="{element}">
             <div class="col d-flex flex-column pb-7 pb-md-10">
               <div class="collectionImg position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow hoverCard">
-                <router-link class="bookHover fadeIn" :to="`/product/${element.id}`">
+                <router-link class="bookHover" :to="`/product/${element.id}`">
                   <img class="ratio ratio-3x4" :src="element.imageUrl" :alt="element.title">
                 </router-link>
                 <div class="btn btn-primary position-absolute bottom-0 w-100 text-white fs-small fs-md-5"

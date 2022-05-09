@@ -1,8 +1,6 @@
 import { createApp, markRaw } from 'vue'
 // pinia
 import { createPinia } from 'pinia'
-// lazy load
-import VueLazyLoad from 'vue3-lazyload'
 
 // bootstrap
 import 'bootstrap'
@@ -76,7 +74,6 @@ app.config.globalProperties.$filters = { date }
 
 app.use(VueAxios, axios)
 app.use(CKEditor)
-app.use(VueLazyLoad)
 app.component('LoadingView', Loading)
 app.component('FormView', Form)
 app.component('FieldView', Field)

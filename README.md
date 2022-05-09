@@ -23,9 +23,9 @@
 - `Vue Router`
 - `Vue Axios`
 - `vue-loading-overlay`
+- `vue-skeletor`
 - `vue.draggable.next`
 - `Vee Validation`
-- `VueLazyLoad`
 - `pinia`
 - `Bootstrap 5`
 - `lodash`

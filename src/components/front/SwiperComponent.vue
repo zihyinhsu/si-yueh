@@ -23,8 +23,9 @@
       :class="{'d-none': id === item.id }" style="max-width: 196px;">
       <!-- ↑若產品內頁的產品id與推薦書籍id相同則隱藏 -->
         <div class="position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow hoverCard">
-          <router-link class="bookHover fadeIn" :to="`/product/${item.id}`">
-            <img class="ratio ratio-3x4" v-lazy="item.imageUrl" :alt="item.title">
+          <router-link class="bookHover" :to="`/product/${item.id}`">
+            <Skeletor v-if="skeletorLoading" class="vue-skeletor--rect w-100 h-100"/>
+            <img class="ratio ratio-3x4" :src="item.imageUrl" :alt="item.title">
           </router-link>
           <div class="btn btn-primary position-absolute bottom-0 w-100 text-white"
             @click="addToCart(item)">
@@ -55,6 +56,7 @@ import { mapState, mapActions } from 'pinia'
 import cartStore from '@/stores/cartStore'
 import statusStore from '@/stores/statusStore'
 
+import { Skeletor } from 'vue-skeletor'
 export default {
   // category、titlebgColor是在外層元件上自訂的屬性，用來篩選每個元件內的products資料
   props: {
@@ -75,7 +77,8 @@ export default {
   data () {
     return {
       pageId: this.$route.params.id,
-      products: []
+      products: [],
+      skeletorLoading: true
     }
   },
   watch: {
@@ -90,6 +93,7 @@ export default {
       this.getProducts(this.category)
     }
   },
+  components: { Skeletor },
   methods: {
     ...mapActions(cartStore, ['addToCart']),
     ...mapActions(statusStore, ['pushMsg']),
@@ -105,6 +109,9 @@ export default {
       }
       this.$http.get(url)
         .then((res) => {
+          setTimeout(() => {
+            this.skeletorLoading = false
+          }, 500)
           this.products = res.data.products
         }).catch(() => {
           this.pushMsg(false, '載入', '請重新整理')
@@ -120,3 +127,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  @import "vue-skeletor/dist/vue-skeletor.css";
+  .vue-skeletor {
+    background-color: #e9ecef;
+  }
+  .vue-skeletor--text {
+    border-radius: 0;
+  }
+</style>

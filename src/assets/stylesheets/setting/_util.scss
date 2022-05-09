@@ -26,6 +26,7 @@
 }
 
 .bookCoverImg img, .collectionImg img{
+  height: 260px;
   @include media-breakpoint-up(md) {
     height: 294px;
   }
