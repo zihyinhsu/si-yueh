@@ -16,22 +16,25 @@
         <!-- 書籍基本資料 -->
         <div class="row justify-content-center align-items-center border-bottom border-2 px-0 pt-3 pb-9">
           <div class="col-8 col-md-3 mb-5 mb-md-0">
-            <img class="ratio ratio-3x4 rounded-4 box-shadow" :src="product.imageUrl" :alt="product.title">
+            <Skeletor v-if="isLoading" class="ratio ratio-3x4 rounded-4" as="div"/>
+            <img v-else class="ratio ratio-3x4 rounded-4 box-shadow" :src="product.imageUrl" :alt="product.title">
           </div>
           <div class="col-md-4 mb-4 mb-md-0 border-end-md-2">
             <div class="bookTitle mb-4">
+              <Skeletor v-if="isLoading" as="div"/>
               <h2 class="fs-3 fw-bold mb-1">{{ product.title }}</h2>
+              <Skeletor v-if="isLoading" width="50%" class="me-10" as="div"/>
               <p class="fs-4 mb-2" v-if="product.subTitle">{{ product.subTitle }}</p>
-              <span class="bg-primary text-white fs-5 px-2 py-1">{{ product.category }}</span>
+              <p class="bg-primary text-white fs-5 px-2 py-1 d-inline-block">{{ product.category }}</p>
             </div>
             <div class="bookData mb-4">
-              <p class="fs-5 mb-2">作者 : {{ product.author }}</p>
-              <p class="fs-5 mb-2">出版社 : {{ product.publishing_house }}</p>
-              <p class="fs-5 mb-2">出版日期 : {{ product.publication_date }}</p>
-              <p class="fs-5">庫存 : {{ product.inventory }} {{ product.unit }}</p>
+              <p class="fs-5 mb-2">作者 : <Skeletor v-if="isLoading" width="25%"/> {{ product.author }}</p>
+              <p class="fs-5 mb-2">出版社 : <Skeletor v-if="isLoading" width="25%"/> {{ product.publishing_house }}</p>
+              <p class="fs-5 mb-2">出版日期 : <Skeletor v-if="isLoading" width="25%"/> {{ product.publication_date }}</p>
+              <p class="fs-5">庫存 : <Skeletor v-if="isLoading" width="25%"/> {{ product.inventory }} {{ product.unit }}</p>
             </div>
             <div class="bookPrice mb-4">
-              <p class="text-primary fs-4 fw-bold">定價 : NT$ {{ product.price }}</p>
+              <p class="text-primary fs-4 fw-bold">定價 : NT$ <Skeletor v-if="isLoading" width="25%"/> {{ product.price }}</p>
             </div>
             <div class="d-flex justify-content-between justify-content-md-start w-100">
               <div class="btn w-85 w-md-auto me-3" :class="favoriteId.includes(product.id) ? 'btn-primaryLight text-white' : 'btn-outline-primary'"
@@ -44,8 +47,13 @@
             </div>
           </div>
           <div class="col-md-5 mt-4 mt-md-0">
-            <div class="bookIntroContent">
-              <p class="fs-5 fs-md-4 fw-bold text-center" v-html="product.content"></p>
+            <div class="bookIntroContent d-flex flex-column justify-content-center align-items-center">
+              <Skeletor v-if="isLoading" width="75%" as="div"/>
+              <br v-if="isLoading">
+              <Skeletor v-if="isLoading" width="75%" as="div"/>
+              <br v-if="isLoading">
+              <Skeletor v-if="isLoading" width="75%" as="div"/>
+              <p class="fs-5 fs-md-4 fw-bold" v-html="product.content"></p>
             </div>
           </div>
         </div>
@@ -57,10 +65,19 @@
       <div class="col-md-7 mb-6 mb-md-0">
         <div class="mb-12">
           <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 詳細書訊</h2>
+          <Skeletor v-if="isLoading"/>
+          <Skeletor v-if="isLoading"/>
+          <Skeletor v-if="isLoading"/>
+          <Skeletor v-if="isLoading"/>
+          <Skeletor v-if="isLoading"/>
+          <Skeletor v-if="isLoading"/>
           <p v-html="product.description"></p>
         </div>
         <div v-if="product.table_contents">
           <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 目錄</h2>
+          <Skeletor v-if="isLoading"/>
+          <Skeletor v-if="isLoading"/>
+          <Skeletor v-if="isLoading"/>
           <p v-html="product.table_contents"></p>
         </div>
       </div>
@@ -68,14 +85,23 @@
         <div class="position-sticky top-20">
           <div :class="{'mb-6': product.translator_intro}">
             <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 作者簡介</h2>
+            <Skeletor v-if="isLoading"/>
+            <Skeletor v-if="isLoading"/>
+            <Skeletor v-if="isLoading"/>
             <p v-html="product.author_intro"></p>
           </div>
           <div :class="{'mb-6': product.illustrator_intro}" v-if="product.translator_intro">
             <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 譯者簡介</h2>
+            <Skeletor v-if="isLoading"/>
+            <Skeletor v-if="isLoading"/>
+            <Skeletor v-if="isLoading"/>
             <p v-html="product.translator_intro"></p>
           </div>
           <div v-if="product.illustrator_intro">
             <h2 class="bg-white category fs-3 d-inline-block text-primaryDark p-2 fw-bold mb-6"># 繪者簡介</h2>
+            <Skeletor v-if="isLoading"/>
+            <Skeletor v-if="isLoading"/>
+            <Skeletor v-if="isLoading"/>
             <p v-html="product.illustrator_intro"></p>
           </div>
         </div>

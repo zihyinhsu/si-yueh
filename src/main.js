@@ -2,6 +2,9 @@ import { createApp, markRaw } from 'vue'
 // pinia
 import { createPinia } from 'pinia'
 
+// vue-skeletor
+import { Skeletor } from 'vue-skeletor'
+
 // bootstrap
 import 'bootstrap'
 
@@ -74,6 +77,7 @@ app.config.globalProperties.$filters = { date }
 
 app.use(VueAxios, axios)
 app.use(CKEditor)
+app.component(Skeletor.name, Skeletor)
 app.component('LoadingView', Loading)
 app.component('FormView', Form)
 app.component('FieldView', Field)

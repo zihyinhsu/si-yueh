@@ -29,7 +29,7 @@
       </swiper-slide>
       <swiper-slide>
         <router-link to="/product/-Myka4NeeZmHgOA5ynp2">
-          <img src="https://storage.googleapis.com/vue-course-api.appspot.com/zy123/1650811878977.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=lVqGsRJAeO41Go1SZt7gpS6%2BdZeqG1%2FwHTesvz7IF1YJzKZDL8kSosBK%2F1h2M2Jl7yaYsI0oxGm%2B9tIF7pDMjSi8WLKf0y9xq9i9cfglIGuLHnB2HoiM1WGluyE68vlkQTnWbauSwZwL4PbYk7Y91dstGqgcp7yIJuc%2Fb6qIPVLVnZ12QHq46f3fH1xNvx3y05%2FtK6dJjkslkw22sYluPGFGKM2aEq7SxKVxB03MrsYontTSN0NVM8slveqQs7Hv2chqFUhd9OgUmjqSKtA%2FO69m%2FxLZswVuOI%2FrzSlrRnAHrK%2BEQxhNUS2EGgFlxcxw8foz9hNlB2BwTTVPL3zssQ%3D%3D">
+          <img src="https://storage.googleapis.com/vue-course-api.appspot.com/zy123/1652155238738.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=kKoKaL2ZNu9BGANQwc6qMn1HcnCxxG9PBZxy6WbSnPP4v8XCQWCmoh3YKKEIY5%2BFELU4PAxNMIwpyFHZyAFwIKOd5bqIoLe12fcnE3ojw3udJA3%2BX7yHcqR2fGgUFQ8zTnXVY2YO8HnN0Fv7qbBTz6tDBLnu4E%2BRNKtkQwfN%2BjlkT9Kc%2Fdy2NQWwfrGDVwX5JR3OwDY69H%2BBXLKO6le3Wi6gIzsV7z7%2Bhva%2BiRar%2F327bwTMKBSVibeHiZctx7Zua7bmjYC6mI3K%2BIeyvQyUWHRBQ2t5jzetCsWu4AL%2F9zcx75RfP0FXhH9H6t9BUTymWtb%2FlYw04ap6papp%2FBXO4Q%3D%3D">
         </router-link>
       </swiper-slide>
     </swiper>

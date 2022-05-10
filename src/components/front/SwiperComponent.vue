@@ -24,7 +24,7 @@
       <!-- ↑若產品內頁的產品id與推薦書籍id相同則隱藏 -->
         <div class="position-relative rounded-4 overflow-hidden mb-3 hoverBoxShadow hoverCard">
           <router-link class="bookHover" :to="`/product/${item.id}`">
-            <Skeletor v-if="skeletorLoading" class="vue-skeletor--rect w-100 h-100"/>
+            <Skeletor v-if="isLoading" class="h-100" as="div"/>
             <img class="ratio ratio-3x4" :src="item.imageUrl" :alt="item.title">
           </router-link>
           <div class="btn btn-primary position-absolute bottom-0 w-100 text-white"
@@ -56,7 +56,6 @@ import { mapState, mapActions } from 'pinia'
 import cartStore from '@/stores/cartStore'
 import statusStore from '@/stores/statusStore'
 
-import { Skeletor } from 'vue-skeletor'
 export default {
   // category、titlebgColor是在外層元件上自訂的屬性，用來篩選每個元件內的products資料
   props: {
@@ -77,8 +76,7 @@ export default {
   data () {
     return {
       pageId: this.$route.params.id,
-      products: [],
-      skeletorLoading: true
+      products: []
     }
   },
   watch: {
@@ -93,7 +91,6 @@ export default {
       this.getProducts(this.category)
     }
   },
-  components: { Skeletor },
   methods: {
     ...mapActions(cartStore, ['addToCart']),
     ...mapActions(statusStore, ['pushMsg']),
@@ -109,10 +106,8 @@ export default {
       }
       this.$http.get(url)
         .then((res) => {
-          setTimeout(() => {
-            this.skeletorLoading = false
-          }, 500)
           this.products = res.data.products
+          this.loadingEffect()
         }).catch(() => {
           this.pushMsg(false, '載入', '請重新整理')
         })
@@ -120,7 +115,7 @@ export default {
   },
   computed: {
     ...mapState(cartStore, ['cartData']),
-    ...mapState(statusStore, ['isLoadingItem', 'isLoading'])
+    ...mapState(statusStore, ['isLoadingItem', 'isLoading', 'loadingEffect'])
   },
   mounted () {
     this.getProducts(this.category)
@@ -128,7 +123,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import "vue-skeletor/dist/vue-skeletor.css";
   .vue-skeletor {
     background-color: #e9ecef;
